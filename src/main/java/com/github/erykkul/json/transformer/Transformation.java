@@ -114,10 +114,10 @@ public class Transformation {
     private JsonValue merge(final TransformationContext ctx, final JsonValue sourceValue, final JsonValue result,
             final Value v) {
         switch (sourceValue.getValueType()) {
-            case JsonValue.ValueType.ARRAY:
+            case ARRAY:
                 return arrayMerge(ctx, sourceValue.asJsonArray(), result.asJsonArray(), v);
 
-            case JsonValue.ValueType.OBJECT:
+            case OBJECT:
                 return v.copy(ctx, sourceValue.asJsonObject(), result.asJsonObject());
 
             default:
