@@ -30,13 +30,14 @@ public class TransformerFactory {
                 : t.transformations.stream().map(this::toTransformation).toList());
     }
 
-    public Transformer createFromFile(String file) throws IOException {
-        String content = Files.readString(Paths.get(file));
+    public Transformer createFromFile(final String file) throws IOException {
+        final String content = Files.readString(Paths.get(file));
         return createFromJsonString(content);
     }
 
     public Transformation toTransformation(final TransformationVO t) {
-        return new Transformation(t.merge == null ? false : t.merge, t.selfTranform == null ? false : t.selfTranform, t.sourcePointer == null ? "" : t.sourcePointer,
+        return new Transformation(t.merge == null ? false : t.merge, t.selfTranform == null ? false : t.selfTranform,
+                t.sourcePointer == null ? "" : t.sourcePointer,
                 t.targetPointer == null ? "" : t.targetPointer,
                 t.values == null ? Collections.emptyList() : t.values.stream().map(this::toValue).toList());
     }

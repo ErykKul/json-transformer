@@ -25,9 +25,9 @@ public interface CustomValueCopyFunction {
     };
 
     // TODO:
-    //generate uuid
-    //concat values
-    //filter on field value
-    //select first
-    //delete
+    // generate uuid
+    // concat values
+    // filter on field value
+    // select first
+    // delete
 }

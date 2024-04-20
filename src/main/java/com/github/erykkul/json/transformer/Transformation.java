@@ -19,7 +19,8 @@ public class Transformation {
     private final String targetPointer;
     private final List<Value> values;
 
-    public Transformation(final boolean merge, final boolean selfTranform, final String sourcePointer, final String targetPointer,
+    public Transformation(final boolean merge, final boolean selfTranform, final String sourcePointer,
+            final String targetPointer,
             final List<Value> values) {
         this.merge = merge;
         this.selfTranform = selfTranform;
@@ -66,7 +67,7 @@ public class Transformation {
                     ctx.getGlobalTo(), fromArray.get(i).asJsonObject(), resultObject);
             final JsonValue transformed = transform(localContext, remainingSourcePointers, remainingTargetPointers,
                     doFlatten);
-            
+
             if (merge && !ValueType.ARRAY.equals(transformed.getValueType()) && resultArray.size() > i) {
                 result = Json.createArrayBuilder(resultArray).set(i, transformed).build();
             } else if (doFlatten && ValueType.ARRAY.equals(transformed.getValueType())) {
