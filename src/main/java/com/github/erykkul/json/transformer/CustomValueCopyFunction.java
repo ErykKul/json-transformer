@@ -30,5 +30,5 @@ public interface CustomValueCopyFunction {
     // filter on field value
     // select first
     // delete
-    // fix not existing .getValue(pointer) calls in the code
+    // fix not existing .getValue(pointer) and pointer.replace(x, y) calls in the code
 }
