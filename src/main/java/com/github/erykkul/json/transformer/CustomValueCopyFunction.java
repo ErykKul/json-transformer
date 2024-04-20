@@ -12,8 +12,6 @@ import jakarta.json.JsonValue;
 
 @FunctionalInterface
 public interface CustomValueCopyFunction {
-    JsonValue copy(TransformationContext ctx, JsonObject from, JsonObject to, String valuePointer, String funcArg);
-
     CustomValueCopyFunction FILTER_UNIQUE = (ctx, from, to, valuePointer, funcArg) -> {
         final JsonArray toFilter = to.getValue(valuePointer).asJsonArray();
         final Set<JsonValue> items = new HashSet<>();
@@ -23,6 +21,8 @@ public interface CustomValueCopyFunction {
         final JsonArray result = Json.createArrayBuilder(filtered).build();
         return Json.createPointer(valuePointer).replace(to, result);
     };
+
+    JsonValue copy(TransformationContext ctx, JsonObject from, JsonObject to, String valuePointer, String funcArg);
 
     // TODO:
     // generate uuid

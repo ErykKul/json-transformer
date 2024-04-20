@@ -13,6 +13,23 @@ import jakarta.json.bind.Jsonb;
 import jakarta.json.bind.JsonbBuilder;
 
 public class TransformerFactory {
+    public static class TransformerVO {
+        public List<TransformationVO> transformations;
+    }
+
+    public static class TransformationVO {
+        public Boolean merge;
+        public Boolean selfTranform;
+        public String sourcePointer;
+        public String targetPointer;
+        public List<ValueVO> values;
+    }
+
+    public static class ValueVO {
+        public String valuePointer;
+        public String valueExpression;
+    }
+
     private final Map<String, CustomValueCopyFunction> functions = new HashMap<>();
 
     public TransformerFactory() {
@@ -46,22 +63,5 @@ public class TransformerFactory {
     public Value toValue(final ValueVO v) {
         return new Value(v.valuePointer == null ? "" : v.valuePointer,
                 v.valueExpression == null ? "" : v.valueExpression, functions);
-    }
-
-    public static class TransformerVO {
-        public List<TransformationVO> transformations;
-    }
-
-    public static class TransformationVO {
-        public Boolean merge;
-        public Boolean selfTranform;
-        public String sourcePointer;
-        public String targetPointer;
-        public List<ValueVO> values;
-    }
-
-    public static class ValueVO {
-        public String valuePointer;
-        public String valueExpression;
     }
 }
