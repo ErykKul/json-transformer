@@ -1,7 +1,6 @@
 {
     "transformations": [
         {
-            "merge": false,
             "sourcePointer": "/files[i]",
             "targetPointer": "/paths",
             "values": [
@@ -23,7 +22,6 @@
             ]
         },
         {
-            "merge": false,
             "sourcePointer": "/files[i]",
             "targetPointer": "/paths",
             "values": [
@@ -34,7 +32,6 @@
             ]
         },
         {
-            "merge": false,
             "sourcePointer": "/files[i]",
             "targetPointer": "/paths",
             "values": [
@@ -45,7 +42,6 @@
             ]
         },
         {
-            "merge": false,
             "sourcePointer": "/authors[i]/organizations[i]",
             "targetPointer": "/creators[i]/affiliations",
             "values": [
@@ -67,7 +63,6 @@
             ]
         },
         {
-            "merge": false,
             "sourcePointer": "/authors[i]/organizations[i]",
             "targetPointer": "/flattened",
             "values": [
