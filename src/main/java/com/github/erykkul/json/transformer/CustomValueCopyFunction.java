@@ -30,4 +30,5 @@ public interface CustomValueCopyFunction {
     // filter on field value
     // select first
     // delete
+    // fix not existing .getValue(pointer) calls in the code
 }
