@@ -47,9 +47,9 @@ public class Transformation {
         }
 
         final List<String> remainingSourcePointers = sourcePointers.subList(1, sourcePointers.size());
-        final List<String> remainingTargetPointers = targetPointers.size() == 0 ? Collections.emptyList()
+        final List<String> remainingTargetPointers = targetPointers.isEmpty() ? Collections.emptyList()
                 : targetPointers.subList(1, targetPointers.size());
-        final String rootOrTargetPointer = targetPointers.size() == 0 ? "" : targetPointers.get(0);
+        final String rootOrTargetPointer = targetPointers.isEmpty() ? "" : targetPointers.get(0);
         final JsonObject fixedLocalTo = Utils.fixTargetPath(ctx.getLocalTo(),
                 merge ? ValueType.OBJECT : ValueType.ARRAY, rootOrTargetPointer);
         final JsonArray fromArray = ctx.getLocalFrom().getValue(sourcePointers.get(0)).asJsonArray();
