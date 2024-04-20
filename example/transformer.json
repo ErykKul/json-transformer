@@ -1,0 +1,81 @@
+{
+    "transformations": [
+        {
+            "merge": false,
+            "sourcePointer": "/files[i]",
+            "targetPointer": "/paths",
+            "values": [
+                {
+                    "valuePointer": "/x",
+                    "valueExpression": "/path"
+                }
+            ]
+        },
+        {
+            "merge": true,
+            "sourcePointer": "/files",
+            "targetPointer": "/paths",
+            "values": [
+                {
+                    "valuePointer": "/y",
+                    "valueExpression": "/path"
+                }
+            ]
+        },
+        {
+            "merge": false,
+            "sourcePointer": "/files[i]",
+            "targetPointer": "/paths",
+            "values": [
+                {
+                    "valuePointer": "/z",
+                    "valueExpression": "/path"
+                }
+            ]
+        },
+        {
+            "merge": false,
+            "sourcePointer": "/files[i]",
+            "targetPointer": "/paths",
+            "values": [
+                {
+                    "valuePointer": "",
+                    "valueExpression": "/path"
+                }
+            ]
+        },
+        {
+            "merge": false,
+            "sourcePointer": "/authors[i]/organizations[i]",
+            "targetPointer": "/creators[i]/affiliations",
+            "values": [
+                {
+                    "valuePointer": "",
+                    "valueExpression": ""
+                }
+            ]
+        },
+        {
+            "merge": true,
+            "sourcePointer": "/authors[i]/organizations",
+            "targetPointer": "/creators[i]/affiliations",
+            "values": [
+                {
+                    "valuePointer": "/orgName",
+                    "valueExpression": "/name"
+                }
+            ]
+        },
+        {
+            "merge": false,
+            "sourcePointer": "/authors[i]/organizations[i]",
+            "targetPointer": "/flattened",
+            "values": [
+                {
+                    "valuePointer": "/org",
+                    "valueExpression": "/name"
+                }
+            ]
+        }
+    ]
+}
