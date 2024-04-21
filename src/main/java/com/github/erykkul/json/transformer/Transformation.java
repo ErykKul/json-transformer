@@ -50,21 +50,24 @@ public class Transformation {
         final List<String> remainingTargetPointers = targetPointers.isEmpty() ? Collections.emptyList()
                 : targetPointers.subList(1, targetPointers.size());
         final String rootOrTargetPointer = targetPointers.isEmpty() ? "" : targetPointers.get(0);
-        final JsonObject fixedLocalTo = Utils.fixTargetPath(ctx.getLocalTo(),
+        final JsonValue fixedLocalTo = Utils.fixTargetPath(ctx.getLocalTo(),
                 merge ? ValueType.OBJECT : ValueType.ARRAY, rootOrTargetPointer);
-        final JsonArray fromArray = ctx.getLocalFrom().getValue(sourcePointers.get(0)).asJsonArray();
+        final JsonValue fromValue = Utils.getValue(ctx.getLocalFrom(), sourcePointers.get(0));
+        if (!ValueType.ARRAY.equals(fromValue.getValueType())) {
+            return fixedLocalTo;
+        }
+        final JsonArray fromArray = fromValue.asJsonArray();
         final boolean doFlatten = flatten || targetPointers.size() == 1;
 
-        JsonValue result = fixedLocalTo.getValue(rootOrTargetPointer);
+        JsonValue result = Utils.getValue(fixedLocalTo, rootOrTargetPointer);
         for (int i = 0; i < fromArray.size(); i++) {
             if (!ValueType.ARRAY.equals(result.getValueType())) {
                 result = JsonArray.EMPTY_JSON_ARRAY;
             }
             final JsonArray resultArray = result.asJsonArray();
-            final JsonObject resultObject = resultArray.size() > i ? resultArray.get(i).asJsonObject()
-                    : JsonObject.EMPTY_JSON_OBJECT;
+            final JsonValue resultObject = resultArray.size() > i ? resultArray.get(i) : JsonObject.EMPTY_JSON_OBJECT;
             final TransformationContext localContext = new TransformationContext(ctx.getGlobalFrom(),
-                    ctx.getGlobalTo(), fromArray.get(i).asJsonObject(), resultObject);
+                    ctx.getGlobalTo(), fromArray.get(i), resultObject);
             final JsonValue transformed = transform(localContext, remainingSourcePointers, remainingTargetPointers,
                     doFlatten);
 
@@ -77,62 +80,59 @@ public class Transformation {
                 result = Json.createArrayBuilder(resultArray).add(transformed).build();
             }
         }
-        return Json.createPointer(rootOrTargetPointer).replace(fixedLocalTo, result);
+        return Utils.replace(fixedLocalTo, rootOrTargetPointer, result);
     }
 
     private JsonValue doTransform(final TransformationContext ctx, final String sourcePointer,
             final String targetPointer) {
-        final JsonValue sourceValue = ctx.getLocalFrom().getValue(sourcePointer);
+        final JsonValue sourceValue = Utils.getValue(ctx.getLocalFrom(), sourcePointer);
+        if (Utils.isEmpty(sourceValue)) {
+            return ctx.getLocalTo();
+        }
         if (merge) {
-            final JsonObject fixedTo = Utils.fixTargetPath(ctx.getLocalTo(), sourceValue.getValueType(), targetPointer);
-            JsonValue result = fixedTo.getValue(targetPointer);
+            final JsonValue fixedTo = Utils.fixTargetPath(ctx.getLocalTo(), sourceValue.getValueType(), targetPointer);
+            JsonValue result = Utils.getValue(fixedTo, targetPointer);
             for (final Value v : values) {
                 result = merge(ctx, sourceValue, result, v);
             }
-            if (JsonObject.EMPTY_JSON_OBJECT.equals(fixedTo)) {
+            if (Utils.isEmpty(fixedTo)) {
                 return result;
             }
-            return Json.createPointer(targetPointer).replace(fixedTo, result);
+            return Utils.replace(fixedTo, targetPointer, result);
         } else if (ValueType.ARRAY.equals(sourceValue.getValueType())) {
             throw new RuntimeException(
                     "source must be an object but it is an array, flatten it with \"[i]\" at the end of the sourcePointer field of the transformation or use \"merge\" transformation");
         } else {
             JsonValue result = JsonObject.EMPTY_JSON_OBJECT;
             for (final Value v : values) {
-                result = v.copy(ctx, sourceValue.asJsonObject(), result.asJsonObject());
+                result = v.copy(ctx, sourceValue, result);
             }
-            final JsonObject fixedTo = Utils.fixTargetPath(ctx.getLocalTo(), JsonValue.ValueType.ARRAY, targetPointer);
-            if (!ValueType.ARRAY.equals(fixedTo.getValueType())) {
+            final JsonValue fixedTo = Utils.fixTargetPath(ctx.getLocalTo(), JsonValue.ValueType.ARRAY, targetPointer);
+            final JsonValue targetArray = Utils.getValue(fixedTo, targetPointer);
+            if (!ValueType.ARRAY.equals(targetArray.getValueType())) {
                 return result;
             }
-            final JsonArray target = Json.createArrayBuilder(fixedTo.getValue(targetPointer).asJsonArray()).add(result)
-                    .build();
-            return Json.createPointer(targetPointer).replace(fixedTo, target);
+            final JsonArray target = Json.createArrayBuilder(targetArray.asJsonArray()).add(result).build();
+            return Utils.replace(fixedTo, targetPointer, target);
         }
     }
 
     private JsonValue merge(final TransformationContext ctx, final JsonValue sourceValue, final JsonValue result,
             final Value v) {
-        switch (sourceValue.getValueType()) {
-            case ARRAY:
-                return arrayMerge(ctx, sourceValue.asJsonArray(), result.asJsonArray(), v);
-
-            case OBJECT:
-                return v.copy(ctx, sourceValue.asJsonObject(), result.asJsonObject());
-
-            default:
-                throw new RuntimeException(
-                        "unsupported merge to: " + sourceValue.getValueType() + " from: " + result.getValueType());
+        if (ValueType.ARRAY.equals(sourceValue.getValueType())) {
+            return arrayMerge(ctx, sourceValue.asJsonArray(),
+                    ValueType.ARRAY.equals(result.getValueType()) ? result.asJsonArray() : JsonArray.EMPTY_JSON_ARRAY,
+                    v);
         }
+        return v.copy(ctx, sourceValue, result);
     }
 
     private JsonArray arrayMerge(final TransformationContext ctx, final JsonArray sourceArray,
             final JsonArray resultArray, final Value v) {
         final JsonArrayBuilder builder = Json.createArrayBuilder();
         for (int i = 0; i < sourceArray.size(); i++) {
-            final JsonObject result = i < resultArray.size() ? resultArray.get(i).asJsonObject()
-                    : JsonObject.EMPTY_JSON_OBJECT;
-            builder.add(v.copy(ctx, sourceArray.get(i).asJsonObject(), result));
+            final JsonValue result = i < resultArray.size() ? resultArray.get(i) : JsonObject.EMPTY_JSON_OBJECT;
+            builder.add(v.copy(ctx, sourceArray.get(i), result));
         }
         return builder.build();
     }

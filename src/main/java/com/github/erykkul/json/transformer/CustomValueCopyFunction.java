@@ -7,22 +7,25 @@ import java.util.stream.Collectors;
 
 import jakarta.json.Json;
 import jakarta.json.JsonArray;
-import jakarta.json.JsonObject;
 import jakarta.json.JsonValue;
+import jakarta.json.JsonValue.ValueType;
 
 @FunctionalInterface
 public interface CustomValueCopyFunction {
     CustomValueCopyFunction FILTER_UNIQUE = (ctx, from, to, valuePointer, funcArg) -> {
-        final JsonArray toFilter = to.getValue(valuePointer).asJsonArray();
+        final JsonValue toFilter = Utils.getValue(to, valuePointer);
+        if (Utils.isEmpty(toFilter) || ValueType.ARRAY.equals(toFilter.getValueType())) {
+            return to;
+        }
         final Set<JsonValue> items = new HashSet<>();
-        final List<JsonValue> filtered = toFilter.stream()
-                .filter(x -> items.add(x.asJsonObject().getValue(funcArg)))
+        final List<JsonValue> filtered = toFilter.asJsonArray().stream()
+                .filter(x -> items.add(Utils.getValue(x, funcArg)))
                 .collect(Collectors.toList());
         final JsonArray result = Json.createArrayBuilder(filtered).build();
-        return Json.createPointer(valuePointer).replace(to, result);
+        return Utils.replace(to, valuePointer, result);
     };
 
-    JsonValue copy(TransformationContext ctx, JsonObject from, JsonObject to, String valuePointer, String funcArg);
+    JsonValue copy(TransformationContext ctx, JsonValue from, JsonValue to, String valuePointer, String funcArg);
 
     // TODO:
     // generate uuid
@@ -30,5 +33,4 @@ public interface CustomValueCopyFunction {
     // filter on field value
     // select first
     // delete
-    // fix not existing .getValue(pointer) and pointer.replace(x, y) calls in the code
 }

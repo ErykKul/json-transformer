@@ -4,7 +4,6 @@ import static org.junit.Assert.fail;
 
 import org.junit.Test;
 
-import java.io.IOException;
 import java.io.StringReader;
 import java.nio.file.Files;
 import java.nio.file.Paths;
@@ -24,7 +23,7 @@ public class TransformerTest {
             jsonReader.close();
             final Transformer transformer = factory.createFromFile("example/transformer.json");
             System.out.println(transformer.transform(object, JsonObject.EMPTY_JSON_OBJECT));
-        } catch (final IOException e) {
+        } catch (final Exception e) {
             e.printStackTrace();
             fail();
         }
