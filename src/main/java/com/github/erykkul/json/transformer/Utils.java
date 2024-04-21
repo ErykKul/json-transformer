@@ -60,6 +60,14 @@ public class Utils {
         return Json.createPointer(at).containsValue(toJsonStructure(in));
     }
 
+    public static boolean isArray(final JsonValue js) {
+        return ARRAY.equals(js.getValueType());
+    }
+
+    public static boolean isObject(final JsonValue js) {
+        return OBJECT.equals(js.getValueType());
+    }
+
     private static JsonStructure toJsonStructure(final JsonValue in) {
         if (isArray(in)) {
             return in.asJsonArray();
@@ -68,13 +76,5 @@ public class Utils {
             return in.asJsonObject();
         }
         return EMPTY_JSON_OBJECT;
-    }
-
-    public static boolean isArray(final JsonValue js) {
-        return ARRAY.equals(js.getValueType());
-    }
-
-    public static boolean isObject(final JsonValue js) {
-        return OBJECT.equals(js.getValueType());
     }
 }

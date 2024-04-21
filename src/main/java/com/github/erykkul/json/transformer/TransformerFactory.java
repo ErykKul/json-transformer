@@ -55,9 +55,9 @@ public class TransformerFactory {
 
     public Transformation toTransformation(final TransformationVO t) {
         return new Transformation(t.merge == null ? false : t.merge, t.selfTranform == null ? false : t.selfTranform,
-                t.sourcePointer == null ? "" : t.sourcePointer,
-                t.targetPointer == null ? "" : t.targetPointer,
-                t.values == null ? Collections.emptyList() : t.values.stream().map(this::toValue).collect(Collectors.toList()));
+                t.sourcePointer == null ? "" : t.sourcePointer, t.targetPointer == null ? "" : t.targetPointer,
+                t.values == null ? Collections.emptyList()
+                        : t.values.stream().map(this::toValue).collect(Collectors.toList()));
     }
 
     public Value toValue(final ValueVO v) {
