@@ -1,9 +1,14 @@
 package com.github.erykkul.json.transformer;
 
+import static jakarta.json.JsonValue.EMPTY_JSON_ARRAY;
+import static jakarta.json.JsonValue.EMPTY_JSON_OBJECT;
+import static jakarta.json.JsonValue.NULL;
+import static jakarta.json.JsonValue.ValueType.ARRAY;
+import static jakarta.json.JsonValue.ValueType.OBJECT;
+
 import jakarta.json.Json;
 import jakarta.json.JsonStructure;
 import jakarta.json.JsonValue;
-import jakarta.json.JsonValue.ValueType;
 
 public class Utils {
 
@@ -16,10 +21,10 @@ public class Utils {
                 path = path + "/" + fields[i];
             }
             if (!containsValue(result, path)) {
-                if (i < fields.length - 1 || JsonValue.ValueType.OBJECT.equals(t)) {
-                    result = add(result, path, JsonValue.EMPTY_JSON_OBJECT);
+                if (i < fields.length - 1 || OBJECT.equals(t)) {
+                    result = add(result, path, EMPTY_JSON_OBJECT);
                 } else {
-                    result = add(result, path, JsonValue.EMPTY_JSON_ARRAY);
+                    result = add(result, path, EMPTY_JSON_ARRAY);
                 }
             }
         }
@@ -27,13 +32,12 @@ public class Utils {
     }
 
     public static boolean isEmpty(final JsonValue value) {
-        return value == null || JsonValue.EMPTY_JSON_ARRAY.equals(value) || JsonValue.EMPTY_JSON_OBJECT.equals(value)
-                || JsonValue.NULL.equals(value);
+        return value == null || EMPTY_JSON_ARRAY.equals(value) || EMPTY_JSON_OBJECT.equals(value) || NULL.equals(value);
     }
 
     public static JsonValue getValue(final JsonValue from, final String pointer) {
         if (!containsValue(from, pointer)) {
-            return JsonValue.EMPTY_JSON_OBJECT;
+            return EMPTY_JSON_OBJECT;
         }
         return Json.createPointer(pointer).getValue(toJsonStructure(from));
     }
@@ -57,12 +61,20 @@ public class Utils {
     }
 
     private static JsonStructure toJsonStructure(final JsonValue in) {
-        if (ValueType.ARRAY.equals(in.getValueType())) {
+        if (isArray(in)) {
             return in.asJsonArray();
         }
-        if (ValueType.OBJECT.equals(in.getValueType())) {
+        if (isObject(in)) {
             return in.asJsonObject();
         }
-        return JsonValue.EMPTY_JSON_OBJECT;
+        return EMPTY_JSON_OBJECT;
+    }
+
+    public static boolean isArray(final JsonValue js) {
+        return ARRAY.equals(js.getValueType());
+    }
+
+    public static boolean isObject(final JsonValue js) {
+        return OBJECT.equals(js.getValueType());
     }
 }

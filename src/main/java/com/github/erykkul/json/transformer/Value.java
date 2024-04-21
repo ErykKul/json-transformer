@@ -1,10 +1,11 @@
 package com.github.erykkul.json.transformer;
 
+import static jakarta.json.JsonValue.ValueType.OBJECT;
+
 import java.util.Map;
 
 import jakarta.json.Json;
 import jakarta.json.JsonValue;
-import jakarta.json.JsonValue.ValueType;
 
 public class Value {
     private final String valuePointer;
@@ -21,8 +22,7 @@ public class Value {
     public JsonValue copy(final TransformationContext ctx, final JsonValue from, final JsonValue to) {
         if (valueExpression.startsWith("\"")) {
             final String literal = valueExpression.substring(1, valueExpression.length() - 1);
-            return Utils.add(Utils.fixTargetPath(to, ValueType.OBJECT, valuePointer), valuePointer,
-                    Json.createValue(literal));
+            return Utils.add(Utils.fixTargetPath(to, OBJECT, valuePointer), valuePointer, Json.createValue(literal));
         } else if (valueExpression.startsWith("func(")) {
             final String function = valueExpression.substring("func(".length(), valueExpression.length() - 1);
             final String[] functionParts = function.split("\\(");
@@ -37,6 +37,6 @@ public class Value {
         if (!"".equals(valueExpression) && "".equals(valuePointer)) {
             return result;
         }
-        return Utils.add(Utils.fixTargetPath(to, ValueType.OBJECT, valuePointer), valuePointer, result);
+        return Utils.add(Utils.fixTargetPath(to, OBJECT, valuePointer), valuePointer, result);
     }
 }

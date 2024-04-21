@@ -136,25 +136,32 @@
     ],
     "flattened": [
         {
-            "org": "a"
+            "org": "a",
+            "orgName": "a"
         },
         {
-            "org": "b"
+            "org": "b",
+            "orgName": "b"
         },
         {
-            "org": "c"
+            "org": "c",
+            "orgName": "c"
         },
         {
-            "org": "d"
+            "org": "d",
+            "orgName": "d"
         },
         {
-            "org": "d"
+            "org": "d",
+            "orgName": "d"
         },
         {
-            "org": "b"
+            "org": "b",
+            "orgName": "b"
         },
         {
-            "org": "c"
+            "org": "c",
+            "orgName": "c"
         }
     ]
 }

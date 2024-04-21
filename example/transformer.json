@@ -71,6 +71,17 @@
                     "valueExpression": "/name"
                 }
             ]
+        },
+        {
+            "merge": true,
+            "sourcePointer": "/authors[i]/organizations",
+            "targetPointer": "/flattened",
+            "values": [
+                {
+                    "valuePointer": "/orgName",
+                    "valueExpression": "/name"
+                }
+            ]
         }
     ]
 }

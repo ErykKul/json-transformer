@@ -8,13 +8,12 @@ import java.util.stream.Collectors;
 import jakarta.json.Json;
 import jakarta.json.JsonArray;
 import jakarta.json.JsonValue;
-import jakarta.json.JsonValue.ValueType;
 
 @FunctionalInterface
 public interface CustomValueCopyFunction {
     CustomValueCopyFunction FILTER_UNIQUE = (ctx, from, to, valuePointer, funcArg) -> {
         final JsonValue toFilter = Utils.getValue(to, valuePointer);
-        if (Utils.isEmpty(toFilter) || ValueType.ARRAY.equals(toFilter.getValueType())) {
+        if (Utils.isEmpty(toFilter) || Utils.isArray(toFilter)) {
             return to;
         }
         final Set<JsonValue> items = new HashSet<>();
