@@ -98,29 +98,24 @@ public class Transformation {
     private JsonValue doTransform(final TransformationContext ctx, final String sourcePointer,
             final String targetPointer) {
         final JsonValue sourceValue = Utils.getValue(ctx.getLocalFrom(), sourcePointer);
+        final JsonValue fixedTo = Utils.fixTargetPath(ctx.getLocalTo(), sourceValue.getValueType(), targetPointer);
         if (Utils.isEmpty(sourceValue)) {
             return ctx.getLocalTo();
         }
-        if (merge) {
-            final JsonValue fixedTo = Utils.fixTargetPath(ctx.getLocalTo(), sourceValue.getValueType(), targetPointer);
+        if (merge || Utils.isArray(sourceValue)) {
             JsonValue result = Utils.getValue(fixedTo, targetPointer);
             for (final Value v : values) {
-                result = merge(ctx, sourceValue, result, v);
+                result = copy(ctx, sourceValue, result, v);
             }
             if (Utils.isEmpty(fixedTo)) {
                 return result;
             }
             return Utils.replace(fixedTo, targetPointer, result);
-        } else if (Utils.isArray(sourceValue)) {
-            throw new RuntimeException(
-                    "Transforming using the sourcePointer " + sourcePointer
-                            + " failed: the source is an array, but it should be an object, flatten it by adding \"[i]\" at the end of the sourcePointer field of the transformation or use \"merge\"=true in the transformation");
         } else {
             JsonValue result = EMPTY_JSON_OBJECT;
             for (final Value v : values) {
                 result = v.copy(ctx, sourceValue, result);
             }
-            final JsonValue fixedTo = Utils.fixTargetPath(ctx.getLocalTo(), ARRAY, targetPointer);
             final JsonValue targetArray = Utils.getValue(fixedTo, targetPointer);
             if (!Utils.isArray(targetArray)) {
                 return result;
@@ -130,20 +125,23 @@ public class Transformation {
         }
     }
 
-    private JsonValue merge(final TransformationContext ctx, final JsonValue sourceValue, final JsonValue result,
+    private JsonValue copy(final TransformationContext ctx, final JsonValue sourceValue, final JsonValue result,
             final Value v) {
         if (Utils.isArray(sourceValue)) {
-            return arrayMerge(ctx, sourceValue.asJsonArray(),
+            return arrayCopy(ctx, sourceValue.asJsonArray(),
                     Utils.isArray(result) ? result.asJsonArray() : EMPTY_JSON_ARRAY, v);
         }
         return v.copy(ctx, sourceValue, result);
     }
 
-    private JsonArray arrayMerge(final TransformationContext ctx, final JsonArray sourceArray,
+    private JsonArray arrayCopy(final TransformationContext ctx, final JsonArray sourceArray,
             final JsonArray resultArray, final Value v) {
         final JsonArrayBuilder builder = Json.createArrayBuilder();
+        if (!merge) {
+            builder.addAll(Json.createArrayBuilder(resultArray));
+        }
         for (int i = 0; i < sourceArray.size(); i++) {
-            final JsonValue result = i < resultArray.size() ? resultArray.get(i) : EMPTY_JSON_OBJECT;
+            final JsonValue result = merge && i < resultArray.size() ? resultArray.get(i) : EMPTY_JSON_OBJECT;
             builder.add(v.copy(ctx, sourceArray.get(i), result));
         }
         return builder.build();
