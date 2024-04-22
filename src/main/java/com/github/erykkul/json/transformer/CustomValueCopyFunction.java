@@ -74,4 +74,5 @@ public interface CustomValueCopyFunction {
     // TODO:
     // filter on field value
     // select first
+    // apply and log
 }
