@@ -13,7 +13,7 @@ import jakarta.json.JsonValue;
 public interface CustomValueCopyFunction {
     CustomValueCopyFunction FILTER_UNIQUE = (ctx, from, to, valuePointer, funcArg) -> {
         final JsonValue toFilter = Utils.getValue(to, valuePointer);
-        if (Utils.isEmpty(toFilter) || Utils.isArray(toFilter)) {
+        if (!Utils.isArray(toFilter) || Utils.isEmpty(toFilter)) {
             return to;
         }
         final Set<JsonValue> items = new HashSet<>();

@@ -82,6 +82,17 @@
                     "valueExpression": "/name"
                 }
             ]
+        },
+        {
+            "merge": true,
+            "sourcePointer": "",
+            "targetPointer": "",
+            "values": [
+                {
+                    "valuePointer": "/flattened",
+                    "valueExpression": "func(filterUnique(/orgName))"
+                }
+            ]
         }
     ]
 }

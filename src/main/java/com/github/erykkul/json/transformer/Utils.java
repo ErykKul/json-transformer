@@ -7,6 +7,7 @@ import static jakarta.json.JsonValue.ValueType.ARRAY;
 import static jakarta.json.JsonValue.ValueType.OBJECT;
 
 import jakarta.json.Json;
+import jakarta.json.JsonException;
 import jakarta.json.JsonStructure;
 import jakarta.json.JsonValue;
 
@@ -57,7 +58,11 @@ public class Utils {
         if (isEmpty(in)) {
             return false;
         }
-        return Json.createPointer(at).containsValue(toJsonStructure(in));
+        try {
+            return Json.createPointer(at).containsValue(toJsonStructure(in));
+        } catch (JsonException e) {
+            return false;
+        }
     }
 
     public static boolean isArray(final JsonValue js) {
