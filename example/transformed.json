@@ -17,26 +17,6 @@
             "y": "a/ab/file1.txt"
         },
         {
-            "x": "a/ac/file1.txt",
-            "y": "a/ac/file1.txt"
-        },
-        {
-            "x": "d/file1.txt",
-            "y": "d/file1.txt"
-        },
-        {
-            "x": "e/f/g/file1.txt",
-            "y": "e/f/g/file1.txt"
-        },
-        {
-            "x": "a/file2.txt",
-            "y": "a/file2.txt"
-        },
-        {
-            "x": "a/file3.txt",
-            "y": "a/file3.txt"
-        },
-        {
             "z": "a/file1.txt"
         },
         {
@@ -48,30 +28,10 @@
         {
             "z": "a/ab/file1.txt"
         },
-        {
-            "z": "a/ac/file1.txt"
-        },
-        {
-            "z": "d/file1.txt"
-        },
-        {
-            "z": "e/f/g/file1.txt"
-        },
-        {
-            "z": "a/file2.txt"
-        },
-        {
-            "z": "a/file3.txt"
-        },
         "a/file1.txt",
         "b/file1.txt",
         "c/file1.txt",
-        "a/ab/file1.txt",
-        "a/ac/file1.txt",
-        "d/file1.txt",
-        "e/f/g/file1.txt",
-        "a/file2.txt",
-        "a/file3.txt"
+        "a/ab/file1.txt"
     ],
     "creators": [
         {

@@ -70,21 +70,6 @@
         },
         {
             "path": "a/ab/file1.txt"
-        },
-        {
-            "path": "a/ac/file1.txt"
-        },
-        {
-            "path": "d/file1.txt"
-        },
-        {
-            "path": "e/f/g/file1.txt"
-        },
-        {
-            "path": "a/file2.txt"
-        },
-        {
-            "path": "a/file3.txt"
         }
     ]
 }
