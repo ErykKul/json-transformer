@@ -85,6 +85,7 @@
         },
         {
             "merge": true,
+            "selfTranform" : true,
             "sourcePointer": "",
             "targetPointer": "",
             "values": [
