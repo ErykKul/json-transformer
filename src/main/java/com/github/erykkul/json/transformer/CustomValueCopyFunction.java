@@ -75,4 +75,5 @@ public interface CustomValueCopyFunction {
     // filter on field value
     // select first
     // apply and log
+    // make factory thread safe
 }
