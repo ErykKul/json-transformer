@@ -10,10 +10,9 @@ import jakarta.json.JsonValue;
 public class Value {
     private final String valuePointer;
     private final String valueExpression;
-    private final Map<String, CustomValueCopyFunction> functions;
+    private final Map<String, ValueFunction> functions;
 
-    public Value(final String valuePointer, final String valueExpression,
-            final Map<String, CustomValueCopyFunction> functions) {
+    public Value(final String valuePointer, final String valueExpression, final Map<String, ValueFunction> functions) {
         this.valuePointer = valuePointer;
         this.valueExpression = valueExpression;
         this.functions = functions;

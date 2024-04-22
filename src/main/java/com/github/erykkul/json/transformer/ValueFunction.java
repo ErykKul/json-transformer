@@ -14,9 +14,9 @@ import jakarta.json.JsonValue;
 import jakarta.json.JsonValue.ValueType;
 
 @FunctionalInterface
-public interface CustomValueCopyFunction {
+public interface ValueFunction {
 
-    CustomValueCopyFunction FILTER_UNIQUE = (ctx, from, to, valuePointer, funcArg) -> {
+    ValueFunction FILTER_UNIQUE = (ctx, from, to, valuePointer, funcArg) -> {
         final JsonValue value = Utils.getValue(from, valuePointer);
         if (!Utils.isArray(value) || Utils.isEmpty(value)) {
             return to;
@@ -28,11 +28,11 @@ public interface CustomValueCopyFunction {
         return Utils.replace(to, valuePointer, Json.createArrayBuilder(filtered).build());
     };
 
-    CustomValueCopyFunction GENERATE_UUID = (ctx, from, to, valuePointer, funcArg) -> {
+    ValueFunction GENERATE_UUID = (ctx, from, to, valuePointer, funcArg) -> {
         return Utils.replace(to, valuePointer, Json.createValue(UUID.randomUUID().toString()));
     };
 
-    CustomValueCopyFunction CONCAT = (ctx, from, to, valuePointer, funcArg) -> {
+    ValueFunction CONCAT = (ctx, from, to, valuePointer, funcArg) -> {
         final JsonValue value = Utils.getValue(from, valuePointer);
         if (Utils.isEmpty(value)) {
             return to;
@@ -48,16 +48,16 @@ public interface CustomValueCopyFunction {
                 (result, x) -> Json.createValue(concat.apply(result, x))));
     };
 
-    CustomValueCopyFunction REMOVE = (ctx, from, to, valuePointer, funcArg) -> {
+    ValueFunction REMOVE = (ctx, from, to, valuePointer, funcArg) -> {
         return Utils.remove(to, valuePointer);
     };
 
-    CustomValueCopyFunction COUNT = (ctx, from, to, valuePointer, funcArg) -> {
+    ValueFunction COUNT = (ctx, from, to, valuePointer, funcArg) -> {
         final JsonValue value = Utils.getValue(from, valuePointer);
         return Utils.replace(to, valuePointer, Json.createValue(Utils.stream(value).count()));
     };
 
-    CustomValueCopyFunction TOTAL = (ctx, from, to, valuePointer, funcArg) -> {
+    ValueFunction TOTAL = (ctx, from, to, valuePointer, funcArg) -> {
         final JsonValue value = Utils.getValue(from, valuePointer);
         if (Utils.isEmpty(value)) {
             return to;

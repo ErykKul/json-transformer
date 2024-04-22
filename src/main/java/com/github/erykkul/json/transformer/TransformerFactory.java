@@ -30,18 +30,18 @@ public class TransformerFactory {
         public String valueExpression;
     }
 
-    private final Map<String, CustomValueCopyFunction> functions = new HashMap<>();
+    private final Map<String, ValueFunction> functions = new HashMap<>();
 
     public TransformerFactory() {
-        functions.put("filterUnique", CustomValueCopyFunction.FILTER_UNIQUE);
-        functions.put("generateUUID", CustomValueCopyFunction.GENERATE_UUID);
-        functions.put("concat", CustomValueCopyFunction.CONCAT);
-        functions.put("remove", CustomValueCopyFunction.REMOVE);
-        functions.put("count", CustomValueCopyFunction.COUNT);
-        functions.put("total", CustomValueCopyFunction.TOTAL);
+        functions.put("filterUnique", ValueFunction.FILTER_UNIQUE);
+        functions.put("generateUUID", ValueFunction.GENERATE_UUID);
+        functions.put("concat", ValueFunction.CONCAT);
+        functions.put("remove", ValueFunction.REMOVE);
+        functions.put("count", ValueFunction.COUNT);
+        functions.put("total", ValueFunction.TOTAL);
     }
 
-    public TransformerFactory addCustomFunction(final String name, final CustomValueCopyFunction function) {
+    public TransformerFactory addValueFunction(final String name, final ValueFunction function) {
         functions.put(name, function);
         return this;
     }
