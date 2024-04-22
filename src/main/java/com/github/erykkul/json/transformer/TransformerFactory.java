@@ -34,6 +34,11 @@ public class TransformerFactory {
 
     public TransformerFactory() {
         functions.put("filterUnique", CustomValueCopyFunction.FILTER_UNIQUE);
+        functions.put("generateUUID", CustomValueCopyFunction.GENERATE_UUID);
+        functions.put("concat", CustomValueCopyFunction.CONCAT);
+        functions.put("remove", CustomValueCopyFunction.REMOVE);
+        functions.put("count", CustomValueCopyFunction.COUNT);
+        functions.put("total", CustomValueCopyFunction.TOTAL);
     }
 
     public TransformerFactory addCustomFunction(final String name, final CustomValueCopyFunction function) {

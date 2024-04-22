@@ -49,42 +49,34 @@ public class Transformation {
         if (sourcePointers.size() == 1) {
             return doTransform(ctx, sourcePointers.get(0), String.join("[i]", targetPointers));
         }
+        final JsonValue fromValue = Utils.getValue(ctx.getLocalFrom(), sourcePointers.get(0));
+        final String rootOrTargetPointer = targetPointers.isEmpty() ? "" : targetPointers.get(0);
+        final JsonValue fixedLocalTo = Utils.fixTargetPath(ctx.getLocalTo(), merge ? OBJECT : ARRAY,
+                rootOrTargetPointer);
+        if (!Utils.isArray(fromValue)) {
+            return fixedLocalTo;
+        }
 
         final List<String> remainingSourcePointers = sourcePointers.subList(1, sourcePointers.size());
         final List<String> remainingTargetPointers = targetPointers.isEmpty() ? Collections.emptyList()
                 : targetPointers.subList(1, targetPointers.size());
-        final String rootOrTargetPointer = targetPointers.isEmpty() ? "" : targetPointers.get(0);
-        final JsonValue fixedLocalTo = Utils.fixTargetPath(ctx.getLocalTo(), merge ? OBJECT : ARRAY,
-                rootOrTargetPointer);
-        final JsonValue fromValue = Utils.getValue(ctx.getLocalFrom(), sourcePointers.get(0));
-        if (!Utils.isArray(fromValue)) {
-            return fixedLocalTo;
-        }
-        final JsonArray fromArray = fromValue.asJsonArray();
         final boolean doFlatten = flatten || targetPointers.size() == 1;
-
+        final JsonArray fromArray = fromValue.asJsonArray();
         JsonValue result = Utils.getValue(fixedLocalTo, rootOrTargetPointer);
         int flattenedMergeIdx = 0;
         for (int i = 0; i < fromArray.size(); i++) {
-            if (!Utils.isArray(result)) {
-                result = EMPTY_JSON_ARRAY;
-            }
+            result = Utils.isArray(result) ? result : EMPTY_JSON_ARRAY;
             final JsonArray resultArray = result.asJsonArray();
             final JsonValue resultObject = resultArray.size() > i ? resultArray.get(i) : EMPTY_JSON_OBJECT;
             final TransformationContext localContext = new TransformationContext(ctx.getGlobalFrom(),
                     ctx.getGlobalTo(), fromArray.get(i), resultObject);
             final JsonValue transformed = transform(localContext, remainingSourcePointers, remainingTargetPointers,
                     doFlatten);
-
-            if (doFlatten && merge && Utils.isArray(transformed) && Utils.isArray(result)) {
+            if (doFlatten && merge && Utils.isArray(transformed)) {
                 result = mergeValues(transformed.asJsonArray(), result.asJsonArray(), flattenedMergeIdx);
                 flattenedMergeIdx += transformed.asJsonArray().size();
-            } else if (merge && !Utils.isArray(transformed)) {
-                if (resultArray.size() > i) {
-                    result = Json.createArrayBuilder(resultArray).set(i, transformed).build();
-                } else {
-                    result = Json.createArrayBuilder(resultArray).add(transformed).build();
-                }
+            } else if (merge && !Utils.isArray(transformed) && resultArray.size() > i) {
+                result = Json.createArrayBuilder(resultArray).set(i, transformed).build();
             } else if (doFlatten && Utils.isArray(transformed)) {
                 result = Json.createArrayBuilder(resultArray)
                         .addAll(Json.createArrayBuilder(transformed.asJsonArray())).build();

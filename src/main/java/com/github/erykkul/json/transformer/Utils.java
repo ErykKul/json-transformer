@@ -6,6 +6,8 @@ import static jakarta.json.JsonValue.NULL;
 import static jakarta.json.JsonValue.ValueType.ARRAY;
 import static jakarta.json.JsonValue.ValueType.OBJECT;
 
+import java.util.stream.Stream;
+
 import jakarta.json.Json;
 import jakarta.json.JsonException;
 import jakarta.json.JsonStructure;
@@ -53,9 +55,29 @@ public class Utils {
     public static JsonValue add(final JsonValue in, final String at, final JsonValue value) {
         try {
             return Json.createPointer(at).add(toJsonStructure(in), value);
-        } catch (JsonException e) {
+        } catch (final JsonException e) {
             return in;
         }
+    }
+
+    public static JsonValue remove(final JsonValue in, final String at) {
+        if (!containsValue(in, at)) {
+            return in;
+        }
+        return Json.createPointer(at).remove(toJsonStructure(in));
+    }
+
+    public static Stream<JsonValue> stream(final JsonValue in) {
+        if (!isEmpty(in)) {
+            return Stream.empty();
+        }
+        if (isArray(in)) {
+            return in.asJsonArray().stream();
+        }
+        if (isObject(in)) {
+            in.asJsonObject().values().stream();
+        }
+        return Stream.of(in);
     }
 
     public static boolean containsValue(final JsonValue in, final String at) {
@@ -64,7 +86,7 @@ public class Utils {
         }
         try {
             return Json.createPointer(at).containsValue(toJsonStructure(in));
-        } catch (JsonException e) {
+        } catch (final JsonException e) {
             return false;
         }
     }
