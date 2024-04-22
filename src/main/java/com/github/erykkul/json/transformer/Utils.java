@@ -51,7 +51,11 @@ public class Utils {
     }
 
     public static JsonValue add(final JsonValue in, final String at, final JsonValue value) {
-        return Json.createPointer(at).add(toJsonStructure(in), value);
+        try {
+            return Json.createPointer(at).add(toJsonStructure(in), value);
+        } catch (JsonException e) {
+            return in;
+        }
     }
 
     public static boolean containsValue(final JsonValue in, final String at) {
