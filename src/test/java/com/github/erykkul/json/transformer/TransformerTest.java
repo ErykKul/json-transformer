@@ -26,7 +26,6 @@ public class TransformerTest {
         System.out.println("*****");
         return result;
     };
-    public static final TransformerFactory FACTORY = TransformerFactory.factory();
     public static final TransformerFactory FACTORY_WITH_LOGGER = TransformerFactory.factory(Map.of("withLogger", LOGGER));
 
     @Test
