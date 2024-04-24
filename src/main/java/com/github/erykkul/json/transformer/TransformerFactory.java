@@ -30,15 +30,23 @@ public class TransformerFactory {
         public String valueExpression;
     }
 
+    public static TransformerFactory factory() {
+        return new TransformerFactory();
+    }
+
+    public static TransformerFactory factory(final Map<String, ValueFunction> functions) {
+        return new TransformerFactory(functions);
+    }
+
     private final Map<String, ValueFunction> functions;
 
-    public TransformerFactory(final Map<String, ValueFunction> functions) {
+    private TransformerFactory(final Map<String, ValueFunction> functions) {
         final Map<String, ValueFunction> result = builtin();
         result.putAll(functions);
         this.functions = Collections.unmodifiableMap(result);
     }
 
-    public TransformerFactory() {
+    private TransformerFactory() {
         this(Collections.emptyMap());
     }
 
@@ -65,6 +73,10 @@ public class TransformerFactory {
     public Value toValue(final ValueVO v) {
         return new Value(v.valuePointer == null ? "" : v.valuePointer,
                 v.valueExpression == null ? "" : v.valueExpression);
+    }
+
+    public Map<String, ValueFunction> getFunctions() {
+        return functions;
     }
 
     private Map<String, ValueFunction> builtin() {

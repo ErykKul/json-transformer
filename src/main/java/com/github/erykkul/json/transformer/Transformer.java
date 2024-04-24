@@ -11,8 +11,8 @@ public class Transformer {
         this.transformations = transformations;
     }
 
-    public JsonObject transform(final JsonObject from, final JsonObject to) {
-        JsonObject result = to;
+    public JsonObject transform(final JsonObject from) {
+        JsonObject result = JsonObject.EMPTY_JSON_OBJECT;
         for (final Transformation t : transformations) {
             result = t.transform(from, result);
         }
