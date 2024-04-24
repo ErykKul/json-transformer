@@ -91,7 +91,7 @@
             "values": [
                 {
                     "valuePointer": "/flattened",
-                    "valueExpression": "func(filterUnique(/orgName))"
+                    "valueExpression": "func(withLogger(func(filterUnique(/orgName))))"
                 }
             ]
         }

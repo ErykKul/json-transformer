@@ -74,5 +74,4 @@ public interface ValueFunction {
     // TODO:
     // filter on field value
     // select first
-    // apply and log
 }
