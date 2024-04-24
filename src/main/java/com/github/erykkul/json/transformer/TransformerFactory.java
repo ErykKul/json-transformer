@@ -30,20 +30,16 @@ public class TransformerFactory {
         public String valueExpression;
     }
 
-    private final Map<String, ValueFunction> functions = new HashMap<>();
+    private final Map<String, ValueFunction> functions;
 
-    public TransformerFactory() {
-        functions.put("filterUnique", ValueFunction.FILTER_UNIQUE);
-        functions.put("generateUUID", ValueFunction.GENERATE_UUID);
-        functions.put("concat", ValueFunction.CONCAT);
-        functions.put("remove", ValueFunction.REMOVE);
-        functions.put("count", ValueFunction.COUNT);
-        functions.put("total", ValueFunction.TOTAL);
+    public TransformerFactory(final Map<String, ValueFunction> functions) {
+        final Map<String, ValueFunction> result = builtin();
+        result.putAll(functions);
+        this.functions = Collections.unmodifiableMap(result);
     }
 
-    public TransformerFactory addValueFunction(final String name, final ValueFunction function) {
-        functions.put(name, function);
-        return this;
+    public TransformerFactory() {
+        this(Collections.emptyMap());
     }
 
     public Transformer createFromJsonString(final String json) {
@@ -62,11 +58,23 @@ public class TransformerFactory {
         return new Transformation(t.merge == null ? false : t.merge, t.selfTranform == null ? false : t.selfTranform,
                 t.sourcePointer == null ? "" : t.sourcePointer, t.targetPointer == null ? "" : t.targetPointer,
                 t.values == null ? Collections.emptyList()
-                        : t.values.stream().map(this::toValue).collect(Collectors.toList()));
+                        : t.values.stream().map(this::toValue).collect(Collectors.toList()),
+                functions);
     }
 
     public Value toValue(final ValueVO v) {
         return new Value(v.valuePointer == null ? "" : v.valuePointer,
-                v.valueExpression == null ? "" : v.valueExpression, functions);
+                v.valueExpression == null ? "" : v.valueExpression);
+    }
+
+    private Map<String, ValueFunction> builtin() {
+        final Map<String, ValueFunction> result = new HashMap<>();
+        result.put("filterUnique", ValueFunction.FILTER_UNIQUE);
+        result.put("generateUUID", ValueFunction.GENERATE_UUID);
+        result.put("concat", ValueFunction.CONCAT);
+        result.put("remove", ValueFunction.REMOVE);
+        result.put("count", ValueFunction.COUNT);
+        result.put("total", ValueFunction.TOTAL);
+        return result;
     }
 }

@@ -8,6 +8,8 @@ import static jakarta.json.JsonValue.ValueType.OBJECT;
 import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
+import java.util.Map;
+import java.util.stream.Collectors;
 
 import jakarta.json.Json;
 import jakarta.json.JsonArray;
@@ -16,32 +18,44 @@ import jakarta.json.JsonObject;
 import jakarta.json.JsonValue;
 
 public class Transformation {
-
     private final boolean merge;
     private final boolean selfTranform;
     private final String sourcePointer;
     private final String targetPointer;
     private final List<Value> values;
+    private final Map<String, ValueFunction> functions;
 
     public Transformation(final boolean merge, final boolean selfTranform, final String sourcePointer,
-            final String targetPointer,
-            final List<Value> values) {
+            final String targetPointer, final List<Value> values, final Map<String, ValueFunction> functions) {
         this.merge = merge;
         this.selfTranform = selfTranform;
         this.sourcePointer = sourcePointer;
         this.targetPointer = targetPointer;
         this.values = values;
+        this.functions = functions;
     }
 
     public JsonObject transform(final JsonObject from, final JsonObject to) {
         final JsonObject selfOrFrom = selfTranform ? to : from;
-        final TransformationContext ctx = new TransformationContext(selfOrFrom, to, selfOrFrom, to);
+        final TransformationContext ctx = new TransformationContext(selfOrFrom, to, selfOrFrom, to, this);
         if (!sourcePointer.contains("[i]")) {
             return doTransform(ctx, sourcePointer, targetPointer).asJsonObject();
         }
         final List<String> sourcePointers = Arrays.asList(sourcePointer.split("\\[i\\]", -1));
         final List<String> targetPointers = Arrays.asList(targetPointer.split("\\[i\\]", -1));
         return transform(ctx, sourcePointers, targetPointers, false).asJsonObject();
+    }
+
+    public JsonObject asJson() {
+        return Json.createObjectBuilder().add("merge", merge).add("selfTranform", selfTranform)
+                .add("sourcePointer", sourcePointer).add("targetPointer", targetPointer)
+                .add("values",
+                        Json.createArrayBuilder(values.stream().map(Value::asJson).collect(Collectors.toList())))
+                .build();
+    }
+
+    public Map<String, ValueFunction> getFunctions() {
+        return functions;
     }
 
     private JsonValue transform(final TransformationContext ctx, final List<String> sourcePointers,
@@ -69,7 +83,7 @@ public class Transformation {
             final JsonArray resultArray = result.asJsonArray();
             final JsonValue resultObject = resultArray.size() > i ? resultArray.get(i) : EMPTY_JSON_OBJECT;
             final TransformationContext localContext = new TransformationContext(ctx.getGlobalFrom(),
-                    ctx.getGlobalTo(), fromArray.get(i), resultObject);
+                    ctx.getGlobalTo(), fromArray.get(i), resultObject, this);
             final JsonValue transformed = transform(localContext, remainingSourcePointers, remainingTargetPointers,
                     doFlatten);
             if (doFlatten && merge && Utils.isArray(transformed)) {
