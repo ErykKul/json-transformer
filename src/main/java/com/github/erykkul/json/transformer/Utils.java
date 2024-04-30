@@ -125,7 +125,7 @@ public class Utils {
             engine.put("ctx", null);
             engine.eval("Set = Java.type('java.util.HashSet')");
             engine.eval("Map = Java.type('java.util.HashMap')");
-        } catch (Exception e) {
+        } catch (final Exception e) {
             logger.fine("Script engine for javascript not found: " + e);
         }
         return engine;
@@ -134,7 +134,7 @@ public class Utils {
     public static void eval(final ScriptEngine engine, final String script) {
         try {
             engine.eval(script);
-        } catch (Exception e) {
+        } catch (final Exception e) {
             logger.fine("Script failed: " + e);
         }
     }
@@ -143,7 +143,7 @@ public class Utils {
         try {
             engine.put("x", asObject(value));
             engine.eval(script);
-        } catch (Exception e) {
+        } catch (final Exception e) {
             logger.fine("Script failed: " + e);
         }
     }
@@ -151,7 +151,7 @@ public class Utils {
     public static Object getObject(final ScriptEngine engine, final String key) {
         try {
             return engine.get(key);
-        } catch (NullPointerException e) {
+        } catch (final NullPointerException e) {
             logger.fine("Engine is null");
         }
         return null;
@@ -170,7 +170,7 @@ public class Utils {
         } else if (o instanceof Map) {
             try {
                 return Json.createObjectBuilder(Map.class.cast(o)).build();
-            } catch (ClassCastException e) {
+            } catch (final ClassCastException e) {
                 return JsonValue.EMPTY_JSON_OBJECT;
             }
         } else if (o instanceof Collection) {
