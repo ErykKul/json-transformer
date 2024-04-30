@@ -33,9 +33,9 @@ public class Utils {
 
     private static final Logger logger = Logger.getLogger(Utils.class.getName()); 
 
-    public static JsonValue fixTargetPath(final JsonValue to, final JsonValue.ValueType t, final String jsonPointer) {
+    public static JsonValue fixTargetPath(final JsonValue in, final JsonValue.ValueType t, final String jsonPointer) {
         final String[] fields = jsonPointer.split("/");
-        JsonValue result = to;
+        JsonValue result = in;
         String path = "";
         for (int i = 0; i < fields.length; i++) {
             if (!"".equals(fields[i])) {
@@ -56,11 +56,11 @@ public class Utils {
         return value == null || EMPTY_JSON_ARRAY.equals(value) || EMPTY_JSON_OBJECT.equals(value) || NULL.equals(value);
     }
 
-    public static JsonValue getValue(final JsonValue from, final String pointer) {
-        if (!containsValue(from, pointer)) {
+    public static JsonValue getValue(final JsonValue source, final String pointer) {
+        if (!containsValue(source, pointer)) {
             return EMPTY_JSON_OBJECT;
         }
-        return Json.createPointer(pointer).getValue(asJsonStructure(from));
+        return Json.createPointer(pointer).getValue(asJsonStructure(source));
     }
 
     public static JsonValue replace(final JsonValue in, final String at, final JsonValue with) {

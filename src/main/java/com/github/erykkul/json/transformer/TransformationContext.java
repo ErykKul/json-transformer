@@ -8,39 +8,39 @@ import jakarta.json.JsonValue;
 
 public class TransformationContext {
     private final Transformation transformation;
-    private final JsonObject globalFrom;
-    private final JsonObject globalTo;
-    private final JsonValue localFrom;
-    private final JsonValue localTo;
+    private final JsonObject globalSource;
+    private final JsonObject globalResult;
+    private final JsonValue localSource;
+    private final JsonValue localResult;
 
-    public TransformationContext(final JsonObject globalFrom, final JsonObject globalTo, final JsonValue localFrom,
-            final JsonValue localTo, final Transformation transformation) {
-        this.globalFrom = globalFrom;
-        this.globalTo = globalTo;
-        this.localFrom = localFrom;
-        this.localTo = localTo;
+    public TransformationContext(final JsonObject globalSource, final JsonObject globalResult, final JsonValue localSource,
+            final JsonValue localResult, final Transformation transformation) {
+        this.globalSource = globalSource;
+        this.globalResult = globalResult;
+        this.localSource = localSource;
+        this.localResult = localResult;
         this.transformation = transformation;
     }
 
-    public JsonValue asJson() {
-        return Json.createObjectBuilder().add("transformation", transformation.asJson()).add("globalFrom", globalFrom)
-                .add("globalTo", globalTo).add("localFrom", localFrom).add("localTo", localTo).build();
+    public JsonObject toJsonObject() {
+        return Json.createObjectBuilder().add("transformation", transformation.toJsonObject()).add("globalSource", globalSource)
+                .add("globalResult", globalResult).add("localSource", localSource).add("localResult", localResult).build();
     }
 
-    public JsonObject getGlobalFrom() {
-        return globalFrom;
+    public JsonObject getGlobalSource() {
+        return globalSource;
     }
 
-    public JsonObject getGlobalTo() {
-        return globalTo;
+    public JsonObject getGlobalResult() {
+        return globalResult;
     }
 
-    public JsonValue getLocalFrom() {
-        return localFrom;
+    public JsonValue getLocalSource() {
+        return localSource;
     }
 
-    public JsonValue getLocalTo() {
-        return localTo;
+    public JsonValue getLocalResult() {
+        return localResult;
     }
 
     public Map<String, TransformationStepFunction> getFunctions() {

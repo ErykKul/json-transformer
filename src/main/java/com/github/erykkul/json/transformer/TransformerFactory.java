@@ -19,9 +19,9 @@ public class TransformerFactory {
 
     public static class TransformationVO {
         public Boolean append;
-        public Boolean selfTranform;
+        public Boolean useResultAsSource;
         public String sourcePointer;
-        public String targetPointer;
+        public String resultPointer;
         public List<ValueVO> steps;
     }
 
@@ -54,7 +54,7 @@ public class TransformerFactory {
         final Jsonb jsonb = JsonbBuilder.newBuilder().build();
         final TransformerVO t = jsonb.fromJson(json, TransformerVO.class);
         return new Transformer(t.transformations == null ? Collections.emptyList()
-                : t.transformations.stream().map(this::asTransformation).collect(Collectors.toList()));
+                : t.transformations.stream().map(this::toTransformation).collect(Collectors.toList()));
     }
 
     public Transformer createFromFile(final String file) throws IOException {
@@ -62,15 +62,15 @@ public class TransformerFactory {
         return createFromJsonString(content);
     }
 
-    public Transformation asTransformation(final TransformationVO t) {
-        return new Transformation(t.append == null ? false : t.append, t.selfTranform == null ? false : t.selfTranform,
-                t.sourcePointer == null ? "" : t.sourcePointer, t.targetPointer == null ? "" : t.targetPointer,
+    public Transformation toTransformation(final TransformationVO t) {
+        return new Transformation(t.append == null ? false : t.append, t.useResultAsSource == null ? false : t.useResultAsSource,
+                t.sourcePointer == null ? "" : t.sourcePointer, t.resultPointer == null ? "" : t.resultPointer,
                 t.steps == null ? Collections.emptyList()
-                        : t.steps.stream().map(this::asValue).collect(Collectors.toList()),
+                        : t.steps.stream().map(this::toValue).collect(Collectors.toList()),
                 functions);
     }
 
-    public TransformationStep asValue(final ValueVO v) {
+    public TransformationStep toValue(final ValueVO v) {
         return new TransformationStep(v.valuePointer == null ? "" : v.valuePointer,
                 v.valueExpression == null ? "" : v.valueExpression);
     }

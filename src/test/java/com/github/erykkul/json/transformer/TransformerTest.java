@@ -15,18 +15,18 @@ import jakarta.json.JsonReader;
 import jakarta.json.JsonValue;
 
 public class TransformerTest {
-    public static final TransformationStepFunction LOGGER = (ctx, from, to, valuePointer, funcArg) -> {
+    public static final TransformationStepFunction LOGGER = (ctx, source, result, valuePointer, funcArg) -> {
         System.out.println("*****\n");
-        System.out.println("ctx -> " + ctx.asJson() + "\n");
-        System.out.println("from -> " + from + "\n");
-        System.out.println("to -> " + to + "\n");
+        System.out.println("ctx -> " + ctx.toJsonObject() + "\n");
+        System.out.println("source -> " + source + "\n");
+        System.out.println("to -> " + result + "\n");
         System.out.println("valuePointer -> " + valuePointer + "\n");
         System.out.println("valueExpression -> " + funcArg + "\n");
         final TransformationStep step = new TransformationStep(valuePointer, funcArg);
-        final JsonValue result = step.execute(ctx, from, to);
+        final JsonValue res = step.execute(ctx, source, result);
         System.out.println("result -> " + result + "\n");
         System.out.println("*****");
-        return result;
+        return res;
     };
     public static final TransformerFactory FACTORY_WITH_LOGGER = TransformerFactory.factory(Map.of("withLogger", LOGGER));
 

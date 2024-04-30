@@ -11,10 +11,10 @@ public class Transformer {
         this.transformations = transformations;
     }
 
-    public JsonObject transform(final JsonObject from) {
+    public JsonObject transform(final JsonObject source) {
         JsonObject result = JsonObject.EMPTY_JSON_OBJECT;
         for (final Transformation t : transformations) {
-            result = t.transform(from, result);
+            result = t.transform(source, result);
         }
         return result;
     }

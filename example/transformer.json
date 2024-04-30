@@ -2,7 +2,7 @@
     "transformations": [
         {
             "sourcePointer": "/files",
-            "targetPointer": "/paths",
+            "resultPointer": "/paths",
             "steps": [
                 {
                     "valuePointer": "/x",
@@ -12,7 +12,7 @@
         },
         {
             "sourcePointer": "/files",
-            "targetPointer": "/paths",
+            "resultPointer": "/paths",
             "steps": [
                 {
                     "valuePointer": "/y",
@@ -23,7 +23,7 @@
         {
             "append": true,
             "sourcePointer": "/files",
-            "targetPointer": "/paths",
+            "resultPointer": "/paths",
             "steps": [
                 {
                     "valuePointer": "/z",
@@ -34,7 +34,7 @@
         {
             "append": true,
             "sourcePointer": "/files",
-            "targetPointer": "/paths",
+            "resultPointer": "/paths",
             "steps": [
                 {
                     "valuePointer": "",
@@ -44,7 +44,7 @@
         },
         {
             "sourcePointer": "/authors[i]/organizations",
-            "targetPointer": "/creators[i]/affiliations",
+            "resultPointer": "/creators[i]/affiliations",
             "steps": [
                 {
                     "valuePointer": "",
@@ -54,7 +54,7 @@
         },
         {
             "sourcePointer": "/authors[i]/organizations",
-            "targetPointer": "/creators[i]/affiliations",
+            "resultPointer": "/creators[i]/affiliations",
             "steps": [
                 {
                     "valuePointer": "/orgName",
@@ -64,7 +64,7 @@
         },
         {
             "sourcePointer": "/authors[i]/organizations",
-            "targetPointer": "/flattened",
+            "resultPointer": "/flattened",
             "steps": [
                 {
                     "valuePointer": "/org",
@@ -74,7 +74,7 @@
         },
         {
             "sourcePointer": "/authors[i]/organizations",
-            "targetPointer": "/flattened",
+            "resultPointer": "/flattened",
             "steps": [
                 {
                     "valuePointer": "/orgName",
@@ -83,9 +83,9 @@
             ]
         },
         {
-            "selfTranform" : true,
+            "useResultAsSource" : true,
             "sourcePointer": "",
-            "targetPointer": "",
+            "resultPointer": "",
             "steps": [
                 {
                     "valuePointer": "/flattened",
@@ -95,7 +95,7 @@
         },
         {
             "sourcePointer": "",
-            "targetPointer": "/total",
+            "resultPointer": "/total",
             "steps": [
                 {
                     "valuePointer": "/numbers",
@@ -105,7 +105,7 @@
         },
         {
             "sourcePointer": "",
-            "targetPointer": "/count",
+            "resultPointer": "/count",
             "steps": [
                 {
                     "valuePointer": "/numbers",
@@ -115,7 +115,7 @@
         },
         {
             "sourcePointer": "",
-            "targetPointer": "/concat",
+            "resultPointer": "/concat",
             "steps": [
                 {
                     "valuePointer": "/numbers",

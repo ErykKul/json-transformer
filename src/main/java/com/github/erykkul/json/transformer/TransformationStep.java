@@ -17,12 +17,12 @@ public class TransformationStep {
         this.valueExpression = valueExpression;
     }
 
-    public JsonValue execute(final TransformationContext ctx, final JsonValue from, final JsonValue to) {
+    public JsonValue execute(final TransformationContext ctx, final JsonValue source, final JsonValue result) {
         if (valueExpression.startsWith("\"")) {
             final String literal = valueExpression.length() > 1
                     ? valueExpression.substring(1, valueExpression.length() - 1)
                     : "";
-            return Utils.add(Utils.fixTargetPath(to, OBJECT, valuePointer), valuePointer, Json.createValue(literal));
+            return Utils.add(Utils.fixTargetPath(result, OBJECT, valuePointer), valuePointer, Json.createValue(literal));
         } else if (valueExpression.startsWith("func(")) {
             final String function = valueExpression.length() > "func()".length()
                     ? valueExpression.substring("func(".length(), valueExpression.length() - 1)
@@ -34,19 +34,19 @@ public class TransformationStep {
                     : "";
             final String functionArg = str.length() > 0 ? str.substring(0, str.length() - 1) : "";
             final TransformationStepFunction func = ctx.getFunctions().get(functionName);
-            return func == null ? to : func.apply(ctx, from, to, valuePointer, functionArg);
+            return func == null ? result : func.apply(ctx, source, result, valuePointer, functionArg);
         }
-        final JsonValue result = Utils.getValue(from, valueExpression);
-        if (Utils.isEmpty(result)) {
-            return to;
-        }
-        if (!"".equals(valueExpression) && "".equals(valuePointer)) {
+        final JsonValue res = Utils.getValue(source, valueExpression);
+        if (Utils.isEmpty(res)) {
             return result;
         }
-        return Utils.add(Utils.fixTargetPath(to, OBJECT, valuePointer), valuePointer, result);
+        if (!"".equals(valueExpression) && "".equals(valuePointer)) {
+            return res;
+        }
+        return Utils.add(Utils.fixTargetPath(result, OBJECT, valuePointer), valuePointer, res);
     }
 
-    public JsonObject asJson() {
+    public JsonObject toJsonObject() {
         return Json.createObjectBuilder().add("valuePointer", valuePointer).add("valueExpression", valueExpression)
                 .build();
     }
