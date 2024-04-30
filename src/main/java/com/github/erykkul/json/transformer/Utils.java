@@ -6,12 +6,27 @@ import static jakarta.json.JsonValue.NULL;
 import static jakarta.json.JsonValue.ValueType.ARRAY;
 import static jakarta.json.JsonValue.ValueType.OBJECT;
 
+import java.math.BigDecimal;
+import java.math.BigInteger;
+import java.util.Collection;
+import java.util.LinkedHashMap;
+import java.util.Map;
+import java.util.Map.Entry;
+import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
+import javax.script.ScriptEngine;
+import javax.script.ScriptEngineManager;
+
 import jakarta.json.Json;
+import jakarta.json.JsonArray;
 import jakarta.json.JsonException;
+import jakarta.json.JsonNumber;
+import jakarta.json.JsonObject;
+import jakarta.json.JsonString;
 import jakarta.json.JsonStructure;
 import jakarta.json.JsonValue;
+import jakarta.json.JsonValue.ValueType;
 
 public class Utils {
 
@@ -68,7 +83,7 @@ public class Utils {
     }
 
     public static Stream<JsonValue> stream(final JsonValue in) {
-        if (!isEmpty(in)) {
+        if (isEmpty(in)) {
             return Stream.empty();
         }
         if (isArray(in)) {
@@ -97,6 +112,81 @@ public class Utils {
 
     public static boolean isObject(final JsonValue js) {
         return OBJECT.equals(js.getValueType());
+    }
+
+    public static ScriptEngine engine() {
+        final ScriptEngineManager manager = new ScriptEngineManager();
+        final ScriptEngine engine = manager.getEngineByName("javascript");
+        try {
+            engine.put("res", null);
+            engine.put("ctx", null);
+            engine.eval("Set = Java.type('java.util.HashSet')");
+            engine.eval("Map = Java.type('java.util.HashMap')");
+        } catch (Exception e) {
+            System.out.println(e);
+            // NOOP
+        }
+        return engine;
+    }
+
+    public static void eval(final ScriptEngine engine, final String script) {
+        try {
+            engine.eval(script);
+        } catch (Exception e) {
+            System.out.println(e);
+            // NOOP
+        }
+    }
+
+    public static void eval(final ScriptEngine engine, final String script, final JsonValue value) {
+        try {
+            engine.put("x", asObject(value));
+            engine.eval(script);
+        } catch (Exception e) {
+            System.out.println(e);
+            // NOOP
+        }
+    }
+
+    @SuppressWarnings("unchecked")
+    public static JsonValue asJsonValue(final Object o) {
+        if (o instanceof Number) {
+            return Json.createValue(Number.class.cast(o));
+        } else if (o instanceof String) {
+            return Json.createValue(String.class.cast(o));
+        } else if (o instanceof BigDecimal) {
+            return Json.createValue(BigDecimal.class.cast(o));
+        } else if (o instanceof BigInteger) {
+            return Json.createValue(BigInteger.class.cast(o));
+        } else if (o instanceof Map) {
+            try {
+                return Json.createObjectBuilder(Map.class.cast(o)).build();
+            } catch (ClassCastException e) {
+                return JsonValue.EMPTY_JSON_OBJECT;
+            }
+        } else if (o instanceof Collection) {
+            return Json.createArrayBuilder(Collection.class.cast(o)).build();
+        }
+        return JsonValue.EMPTY_JSON_OBJECT;
+    }
+
+    public static Object asObject(final JsonValue js) {
+        final ValueType t = js.getValueType();
+        if (ValueType.NUMBER.equals(t)) {
+            return JsonNumber.class.cast(js).numberValue();
+        } else if (ValueType.STRING.equals(t)) {
+            return JsonString.class.cast(js).getString();
+        } else if (ValueType.TRUE.equals(t)) {
+            return true;
+        } else if (ValueType.FALSE.equals(t)) {
+            return false;
+        } else if (ValueType.OBJECT.equals(t)) {
+            return JsonObject.class.cast(js).entrySet().stream().collect(
+                    Collectors.toMap(Entry::getKey, x -> asObject(x.getValue()), (x, y) -> y, LinkedHashMap::new));
+        } else if (ValueType.ARRAY.equals(t)) {
+            return JsonArray.class.cast(js).stream().map(Utils::asObject).collect(Collectors.toList());
+        }
+        return null;
     }
 
     private static JsonStructure toJsonStructure(final JsonValue in) {

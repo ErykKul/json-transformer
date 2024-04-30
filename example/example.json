@@ -71,5 +71,11 @@
         {
             "path": "a/ab/file1.txt"
         }
+    ],
+    "numbers": [
+        2,
+        1,
+        2,
+        3
     ]
 }

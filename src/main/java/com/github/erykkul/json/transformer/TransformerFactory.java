@@ -81,12 +81,11 @@ public class TransformerFactory {
 
     private Map<String, ValueFunction> builtin() {
         final Map<String, ValueFunction> result = new HashMap<>();
-        result.put("filterUnique", ValueFunction.FILTER_UNIQUE);
         result.put("generateUUID", ValueFunction.GENERATE_UUID);
-        result.put("concat", ValueFunction.CONCAT);
         result.put("remove", ValueFunction.REMOVE);
-        result.put("count", ValueFunction.COUNT);
-        result.put("total", ValueFunction.TOTAL);
+        result.put("filter", ValueFunction.FILTER);
+        result.put("map", ValueFunction.MAP);
+        result.put("reduce", ValueFunction.REDUCE);
         return result;
     }
 }

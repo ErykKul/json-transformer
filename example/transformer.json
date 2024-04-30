@@ -79,7 +79,7 @@
             "values": [
                 {
                     "valuePointer": "/orgName",
-                    "valueExpression": "/name"
+                    "valueExpression": "func(withLogger(/name))"
                 }
             ]
         },
@@ -91,7 +91,40 @@
             "values": [
                 {
                     "valuePointer": "/flattened",
-                    "valueExpression": "func(withLogger(func(filterUnique(/orgName))))"
+                    "valueExpression": "func(filter(ctx = ctx ? ctx : new Set(); res = ctx.add(x.orgName);))"
+                }
+            ]
+        },
+        {
+            "merge": true,
+            "sourcePointer": "",
+            "targetPointer": "/total",
+            "values": [
+                {
+                    "valuePointer": "/numbers",
+                    "valueExpression": "func(reduce(res = res + x))"
+                }
+            ]
+        },
+        {
+            "merge": true,
+            "sourcePointer": "",
+            "targetPointer": "/count",
+            "values": [
+                {
+                    "valuePointer": "/numbers",
+                    "valueExpression": "func(reduce(res = res + 1))"
+                }
+            ]
+        },
+        {
+            "merge": true,
+            "sourcePointer": "",
+            "targetPointer": "/concat",
+            "values": [
+                {
+                    "valuePointer": "/numbers",
+                    "valueExpression": "func(reduce(res = (res ? res + ', ' : '') + x))"
                 }
             ]
         }

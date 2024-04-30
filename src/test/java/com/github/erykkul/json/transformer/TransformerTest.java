@@ -2,6 +2,8 @@ package com.github.erykkul.json.transformer;
 
 import org.junit.Test;
 
+import static org.junit.Assert.assertTrue;
+
 import java.io.FileNotFoundException;
 import java.io.FileReader;
 import java.io.IOException;
@@ -31,11 +33,12 @@ public class TransformerTest {
     @Test
     public void testTransformer() throws IOException {
         final Transformer transformer = FACTORY_WITH_LOGGER.createFromFile("example/transformer.json");
-        final JsonObject result = transformer.transform(getObject("example/example.json"));
+        final JsonObject result = Utils.asJsonValue(Utils.asObject(transformer.transform(parse("example/example.json")))).asJsonObject();
         System.out.println(result);
+        assertTrue(Utils.asJsonValue(Utils.asObject(result)).equals(result));
     }
 
-    public JsonObject getObject(final String fileName) throws FileNotFoundException {
+    public JsonObject parse(final String fileName) throws FileNotFoundException {
         final JsonReader jsonReader = Json.createReader(new FileReader(fileName));
         final JsonObject object = jsonReader.readObject();
         jsonReader.close();
