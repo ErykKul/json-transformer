@@ -18,16 +18,16 @@ import jakarta.json.JsonObject;
 import jakarta.json.JsonValue;
 
 public class Transformation {
-    private final boolean merge;
+    private final boolean append;
     private final boolean selfTranform;
     private final String sourcePointer;
     private final String targetPointer;
     private final List<Value> values;
     private final Map<String, ValueFunction> functions;
 
-    public Transformation(final boolean merge, final boolean selfTranform, final String sourcePointer,
+    public Transformation(final boolean append, final boolean selfTranform, final String sourcePointer,
             final String targetPointer, final List<Value> values, final Map<String, ValueFunction> functions) {
-        this.merge = merge;
+        this.append = append;
         this.selfTranform = selfTranform;
         this.sourcePointer = sourcePointer;
         this.targetPointer = targetPointer;
@@ -47,7 +47,7 @@ public class Transformation {
     }
 
     public JsonObject asJson() {
-        return Json.createObjectBuilder().add("merge", merge).add("selfTranform", selfTranform)
+        return Json.createObjectBuilder().add("append", append).add("selfTranform", selfTranform)
                 .add("sourcePointer", sourcePointer).add("targetPointer", targetPointer)
                 .add("values",
                         Json.createArrayBuilder(values.stream().map(Value::asJson).collect(Collectors.toList())))
@@ -65,7 +65,7 @@ public class Transformation {
         }
         final JsonValue fromValue = Utils.getValue(ctx.getLocalFrom(), sourcePointers.get(0));
         final String rootOrTargetPointer = targetPointers.isEmpty() ? "" : targetPointers.get(0);
-        final JsonValue fixedLocalTo = Utils.fixTargetPath(ctx.getLocalTo(), merge ? OBJECT : ARRAY,
+        final JsonValue fixedLocalTo = Utils.fixTargetPath(ctx.getLocalTo(), append ? ARRAY : OBJECT,
                 rootOrTargetPointer);
         if (!Utils.isArray(fromValue)) {
             return fixedLocalTo;
@@ -86,10 +86,10 @@ public class Transformation {
                     ctx.getGlobalTo(), fromArray.get(i), resultObject, this);
             final JsonValue transformed = transform(localContext, remainingSourcePointers, remainingTargetPointers,
                     doFlatten);
-            if (doFlatten && merge && Utils.isArray(transformed)) {
+            if (doFlatten && !append && Utils.isArray(transformed)) {
                 result = mergeValues(transformed.asJsonArray(), result.asJsonArray(), flattenedMergeIdx);
                 flattenedMergeIdx += transformed.asJsonArray().size();
-            } else if (merge && !Utils.isArray(transformed) && resultArray.size() > i) {
+            } else if (!append && !Utils.isArray(transformed) && resultArray.size() > i) {
                 result = Json.createArrayBuilder(resultArray).set(i, transformed).build();
             } else if (doFlatten && Utils.isArray(transformed)) {
                 result = Json.createArrayBuilder(resultArray)
@@ -108,7 +108,7 @@ public class Transformation {
         if (Utils.isEmpty(sourceValue)) {
             return ctx.getLocalTo();
         }
-        if (merge || Utils.isArray(sourceValue)) {
+        if (!append || Utils.isArray(sourceValue)) {
             JsonValue result = Utils.getValue(fixedTo, targetPointer);
             for (final Value v : values) {
                 result = copy(ctx, sourceValue, result, v);
@@ -143,11 +143,11 @@ public class Transformation {
     private JsonArray arrayCopy(final TransformationContext ctx, final JsonArray sourceArray,
             final JsonArray resultArray, final Value v) {
         final JsonArrayBuilder builder = Json.createArrayBuilder();
-        if (!merge) {
+        if (append) {
             builder.addAll(Json.createArrayBuilder(resultArray));
         }
         for (int i = 0; i < sourceArray.size(); i++) {
-            final JsonValue result = merge && i < resultArray.size() ? resultArray.get(i) : EMPTY_JSON_OBJECT;
+            final JsonValue result = !append && i < resultArray.size() ? resultArray.get(i) : EMPTY_JSON_OBJECT;
             builder.add(v.copy(ctx, sourceArray.get(i), result));
         }
         return builder.build();
@@ -159,7 +159,7 @@ public class Transformation {
             if (to.size() > startIdx + i) {
                 builder.set(startIdx + i, mergeValue(from.get(i), to.get(startIdx + i)));
             } else {
-                builder.add(mergeValue(from.get(i), to.get(startIdx + i)));
+                builder.add(from.get(i));
             }
         }
         return builder.build();

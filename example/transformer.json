@@ -11,7 +11,6 @@
             ]
         },
         {
-            "merge": true,
             "sourcePointer": "/files",
             "targetPointer": "/paths",
             "values": [
@@ -22,6 +21,7 @@
             ]
         },
         {
+            "append": true,
             "sourcePointer": "/files",
             "targetPointer": "/paths",
             "values": [
@@ -32,6 +32,7 @@
             ]
         },
         {
+            "append": true,
             "sourcePointer": "/files",
             "targetPointer": "/paths",
             "values": [
@@ -52,7 +53,6 @@
             ]
         },
         {
-            "merge": true,
             "sourcePointer": "/authors[i]/organizations",
             "targetPointer": "/creators[i]/affiliations",
             "values": [
@@ -73,7 +73,6 @@
             ]
         },
         {
-            "merge": true,
             "sourcePointer": "/authors[i]/organizations",
             "targetPointer": "/flattened",
             "values": [
@@ -84,7 +83,6 @@
             ]
         },
         {
-            "merge": true,
             "selfTranform" : true,
             "sourcePointer": "",
             "targetPointer": "",
@@ -96,7 +94,6 @@
             ]
         },
         {
-            "merge": true,
             "sourcePointer": "",
             "targetPointer": "/total",
             "values": [
@@ -107,7 +104,6 @@
             ]
         },
         {
-            "merge": true,
             "sourcePointer": "",
             "targetPointer": "/count",
             "values": [
@@ -118,7 +114,6 @@
             ]
         },
         {
-            "merge": true,
             "sourcePointer": "",
             "targetPointer": "/concat",
             "values": [

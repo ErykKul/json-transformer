@@ -18,7 +18,7 @@ public class TransformerFactory {
     }
 
     public static class TransformationVO {
-        public Boolean merge;
+        public Boolean append;
         public Boolean selfTranform;
         public String sourcePointer;
         public String targetPointer;
@@ -63,7 +63,7 @@ public class TransformerFactory {
     }
 
     public Transformation asTransformation(final TransformationVO t) {
-        return new Transformation(t.merge == null ? false : t.merge, t.selfTranform == null ? false : t.selfTranform,
+        return new Transformation(t.append == null ? false : t.append, t.selfTranform == null ? false : t.selfTranform,
                 t.sourcePointer == null ? "" : t.sourcePointer, t.targetPointer == null ? "" : t.targetPointer,
                 t.values == null ? Collections.emptyList()
                         : t.values.stream().map(this::asValue).collect(Collectors.toList()),
