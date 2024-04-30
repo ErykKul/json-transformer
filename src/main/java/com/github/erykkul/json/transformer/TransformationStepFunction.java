@@ -10,17 +10,17 @@ import jakarta.json.Json;
 import jakarta.json.JsonValue;
 
 @FunctionalInterface
-public interface ValueFunction {
+public interface TransformationStepFunction {
 
-    ValueFunction GENERATE_UUID = (ctx, from, to, valuePointer, funcArg) -> {
+    TransformationStepFunction GENERATE_UUID = (ctx, from, to, valuePointer, funcArg) -> {
         return Utils.replace(to, valuePointer, Json.createValue(UUID.randomUUID().toString()));
     };
 
-    ValueFunction REMOVE = (ctx, from, to, valuePointer, funcArg) -> {
+    TransformationStepFunction REMOVE = (ctx, from, to, valuePointer, funcArg) -> {
         return Utils.remove(to, valuePointer);
     };
 
-    ValueFunction FILTER = (ctx, from, to, valuePointer, funcArg) -> {
+    TransformationStepFunction FILTER = (ctx, from, to, valuePointer, funcArg) -> {
         final JsonValue value = Utils.getValue(from, valuePointer);
         if (Utils.isEmpty(value)) {
             return to;
@@ -33,7 +33,7 @@ public interface ValueFunction {
         return Utils.replace(to, valuePointer, Json.createArrayBuilder(result).build());
     };
 
-    ValueFunction MAP = (ctx, from, to, valuePointer, funcArg) -> {
+    TransformationStepFunction MAP = (ctx, from, to, valuePointer, funcArg) -> {
         final JsonValue value = Utils.getValue(from, valuePointer);
         if (Utils.isEmpty(value)) {
             return to;
@@ -46,7 +46,7 @@ public interface ValueFunction {
         return Utils.replace(to, valuePointer, Json.createArrayBuilder(result).build());
     };
 
-    ValueFunction REDUCE = (ctx, from, to, valuePointer, funcArg) -> {
+    TransformationStepFunction REDUCE = (ctx, from, to, valuePointer, funcArg) -> {
         final JsonValue value = Utils.getValue(from, valuePointer);
         if (Utils.isEmpty(value)) {
             return to;

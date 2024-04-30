@@ -15,14 +15,14 @@ import jakarta.json.JsonReader;
 import jakarta.json.JsonValue;
 
 public class TransformerTest {
-    public static final ValueFunction LOGGER = (ctx, from, to, valuePointer, funcArg) -> {
+    public static final TransformationStepFunction LOGGER = (ctx, from, to, valuePointer, funcArg) -> {
         System.out.println("*****\n");
         System.out.println("ctx -> " + ctx.asJson() + "\n");
         System.out.println("from -> " + from + "\n");
         System.out.println("to -> " + to + "\n");
         System.out.println("valuePointer -> " + valuePointer + "\n");
         System.out.println("valueExpression -> " + funcArg + "\n");
-        final Value v = new Value(valuePointer, funcArg);
+        final TransformationStep v = new TransformationStep(valuePointer, funcArg);
         final JsonValue result = v.copy(ctx, from, to);
         System.out.println("result -> " + result + "\n");
         System.out.println("*****");

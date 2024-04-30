@@ -22,16 +22,16 @@ public class Transformation {
     private final boolean selfTranform;
     private final String sourcePointer;
     private final String targetPointer;
-    private final List<Value> values;
-    private final Map<String, ValueFunction> functions;
+    private final List<TransformationStep> steps;
+    private final Map<String, TransformationStepFunction> functions;
 
     public Transformation(final boolean append, final boolean selfTranform, final String sourcePointer,
-            final String targetPointer, final List<Value> values, final Map<String, ValueFunction> functions) {
+            final String targetPointer, final List<TransformationStep> steps, final Map<String, TransformationStepFunction> functions) {
         this.append = append;
         this.selfTranform = selfTranform;
         this.sourcePointer = sourcePointer;
         this.targetPointer = targetPointer;
-        this.values = values;
+        this.steps = steps;
         this.functions = functions;
     }
 
@@ -50,11 +50,11 @@ public class Transformation {
         return Json.createObjectBuilder().add("append", append).add("selfTranform", selfTranform)
                 .add("sourcePointer", sourcePointer).add("targetPointer", targetPointer)
                 .add("values",
-                        Json.createArrayBuilder(values.stream().map(Value::asJson).collect(Collectors.toList())))
+                        Json.createArrayBuilder(steps.stream().map(TransformationStep::asJson).collect(Collectors.toList())))
                 .build();
     }
 
-    public Map<String, ValueFunction> getFunctions() {
+    public Map<String, TransformationStepFunction> getFunctions() {
         return functions;
     }
 
@@ -110,7 +110,7 @@ public class Transformation {
         }
         if (!append || Utils.isArray(sourceValue)) {
             JsonValue result = Utils.getValue(fixedTo, targetPointer);
-            for (final Value v : values) {
+            for (final TransformationStep v : steps) {
                 result = copy(ctx, sourceValue, result, v);
             }
             if (Utils.isEmpty(fixedTo)) {
@@ -119,7 +119,7 @@ public class Transformation {
             return Utils.replace(fixedTo, targetPointer, result);
         } else {
             JsonValue result = EMPTY_JSON_OBJECT;
-            for (final Value v : values) {
+            for (final TransformationStep v : steps) {
                 result = v.copy(ctx, sourceValue, result);
             }
             final JsonValue targetArray = Utils.getValue(fixedTo, targetPointer);
@@ -132,7 +132,7 @@ public class Transformation {
     }
 
     private JsonValue copy(final TransformationContext ctx, final JsonValue sourceValue, final JsonValue result,
-            final Value v) {
+            final TransformationStep v) {
         if (Utils.isArray(sourceValue)) {
             return arrayCopy(ctx, sourceValue.asJsonArray(),
                     Utils.isArray(result) ? result.asJsonArray() : EMPTY_JSON_ARRAY, v);
@@ -141,7 +141,7 @@ public class Transformation {
     }
 
     private JsonArray arrayCopy(final TransformationContext ctx, final JsonArray sourceArray,
-            final JsonArray resultArray, final Value v) {
+            final JsonArray resultArray, final TransformationStep v) {
         final JsonArrayBuilder builder = Json.createArrayBuilder();
         if (append) {
             builder.addAll(Json.createArrayBuilder(resultArray));

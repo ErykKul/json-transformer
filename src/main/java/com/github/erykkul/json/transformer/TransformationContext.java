@@ -43,7 +43,7 @@ public class TransformationContext {
         return localTo;
     }
 
-    public Map<String, ValueFunction> getFunctions() {
+    public Map<String, TransformationStepFunction> getFunctions() {
         return transformation.getFunctions();
     }
 }

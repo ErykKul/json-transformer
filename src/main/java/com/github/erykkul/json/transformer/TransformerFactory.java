@@ -22,7 +22,7 @@ public class TransformerFactory {
         public Boolean selfTranform;
         public String sourcePointer;
         public String targetPointer;
-        public List<ValueVO> values;
+        public List<ValueVO> steps;
     }
 
     public static class ValueVO {
@@ -34,14 +34,14 @@ public class TransformerFactory {
         return new TransformerFactory();
     }
 
-    public static TransformerFactory factory(final Map<String, ValueFunction> functions) {
+    public static TransformerFactory factory(final Map<String, TransformationStepFunction> functions) {
         return new TransformerFactory(functions);
     }
 
-    private final Map<String, ValueFunction> functions;
+    private final Map<String, TransformationStepFunction> functions;
 
-    private TransformerFactory(final Map<String, ValueFunction> functions) {
-        final Map<String, ValueFunction> result = builtin();
+    private TransformerFactory(final Map<String, TransformationStepFunction> functions) {
+        final Map<String, TransformationStepFunction> result = builtin();
         result.putAll(functions);
         this.functions = Collections.unmodifiableMap(result);
     }
@@ -65,27 +65,27 @@ public class TransformerFactory {
     public Transformation asTransformation(final TransformationVO t) {
         return new Transformation(t.append == null ? false : t.append, t.selfTranform == null ? false : t.selfTranform,
                 t.sourcePointer == null ? "" : t.sourcePointer, t.targetPointer == null ? "" : t.targetPointer,
-                t.values == null ? Collections.emptyList()
-                        : t.values.stream().map(this::asValue).collect(Collectors.toList()),
+                t.steps == null ? Collections.emptyList()
+                        : t.steps.stream().map(this::asValue).collect(Collectors.toList()),
                 functions);
     }
 
-    public Value asValue(final ValueVO v) {
-        return new Value(v.valuePointer == null ? "" : v.valuePointer,
+    public TransformationStep asValue(final ValueVO v) {
+        return new TransformationStep(v.valuePointer == null ? "" : v.valuePointer,
                 v.valueExpression == null ? "" : v.valueExpression);
     }
 
-    public Map<String, ValueFunction> getFunctions() {
+    public Map<String, TransformationStepFunction> getFunctions() {
         return functions;
     }
 
-    private Map<String, ValueFunction> builtin() {
-        final Map<String, ValueFunction> result = new HashMap<>();
-        result.put("generateUUID", ValueFunction.GENERATE_UUID);
-        result.put("remove", ValueFunction.REMOVE);
-        result.put("filter", ValueFunction.FILTER);
-        result.put("map", ValueFunction.MAP);
-        result.put("reduce", ValueFunction.REDUCE);
+    private Map<String, TransformationStepFunction> builtin() {
+        final Map<String, TransformationStepFunction> result = new HashMap<>();
+        result.put("generateUUID", TransformationStepFunction.GENERATE_UUID);
+        result.put("remove", TransformationStepFunction.REMOVE);
+        result.put("filter", TransformationStepFunction.FILTER);
+        result.put("map", TransformationStepFunction.MAP);
+        result.put("reduce", TransformationStepFunction.REDUCE);
         return result;
     }
 }

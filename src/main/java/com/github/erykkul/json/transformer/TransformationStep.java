@@ -8,11 +8,11 @@ import jakarta.json.Json;
 import jakarta.json.JsonObject;
 import jakarta.json.JsonValue;
 
-public class Value {
+public class TransformationStep {
     private final String valuePointer;
     private final String valueExpression;
 
-    public Value(final String valuePointer, final String valueExpression) {
+    public TransformationStep(final String valuePointer, final String valueExpression) {
         this.valuePointer = valuePointer;
         this.valueExpression = valueExpression;
     }
@@ -33,7 +33,7 @@ public class Value {
                     ? String.join("(", Arrays.copyOfRange(functionParts, 1, functionParts.length))
                     : "";
             final String functionArg = str.length() > 0 ? str.substring(0, str.length() - 1) : "";
-            final ValueFunction func = ctx.getFunctions().get(functionName);
+            final TransformationStepFunction func = ctx.getFunctions().get(functionName);
             return func == null ? to : func.copy(ctx, from, to, valuePointer, functionArg);
         }
         final JsonValue result = Utils.getValue(from, valueExpression);
