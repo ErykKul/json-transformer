@@ -12,6 +12,7 @@ import java.util.Collection;
 import java.util.LinkedHashMap;
 import java.util.Map;
 import java.util.Map.Entry;
+import java.util.logging.Logger;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
@@ -29,6 +30,8 @@ import jakarta.json.JsonValue;
 import jakarta.json.JsonValue.ValueType;
 
 public class Utils {
+
+    private static final Logger logger = Logger.getLogger(Utils.class.getName()); 
 
     public static JsonValue fixTargetPath(final JsonValue to, final JsonValue.ValueType t, final String jsonPointer) {
         final String[] fields = jsonPointer.split("/");
@@ -123,8 +126,7 @@ public class Utils {
             engine.eval("Set = Java.type('java.util.HashSet')");
             engine.eval("Map = Java.type('java.util.HashMap')");
         } catch (Exception e) {
-            System.out.println(e);
-            // NOOP
+            logger.fine("Script engine for javascript not found: " + e);
         }
         return engine;
     }
@@ -133,8 +135,7 @@ public class Utils {
         try {
             engine.eval(script);
         } catch (Exception e) {
-            System.out.println(e);
-            // NOOP
+            logger.fine("Script failed: " + e);
         }
     }
 
@@ -143,17 +144,15 @@ public class Utils {
             engine.put("x", asObject(value));
             engine.eval(script);
         } catch (Exception e) {
-            System.out.println(e);
-            // NOOP
+            logger.fine("Script failed: " + e);
         }
     }
 
     public static Object getObject(final ScriptEngine engine, final String key) {
         try {
             return engine.get(key);
-        } catch (Exception e) {
-            System.out.println(e);
-            // NOOP
+        } catch (NullPointerException e) {
+            logger.fine("Engine is null");
         }
         return null;
     }
