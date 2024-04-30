@@ -49,7 +49,7 @@ public class Transformation {
     public JsonObject asJson() {
         return Json.createObjectBuilder().add("append", append).add("selfTranform", selfTranform)
                 .add("sourcePointer", sourcePointer).add("targetPointer", targetPointer)
-                .add("values",
+                .add("steps",
                         Json.createArrayBuilder(steps.stream().map(TransformationStep::asJson).collect(Collectors.toList())))
                 .build();
     }
