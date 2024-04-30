@@ -57,19 +57,19 @@ public class Utils {
         if (!containsValue(from, pointer)) {
             return EMPTY_JSON_OBJECT;
         }
-        return Json.createPointer(pointer).getValue(toJsonStructure(from));
+        return Json.createPointer(pointer).getValue(asJsonStructure(from));
     }
 
     public static JsonValue replace(final JsonValue in, final String at, final JsonValue with) {
         if (!containsValue(in, at)) {
             return add(in, at, with);
         }
-        return Json.createPointer(at).replace(toJsonStructure(in), with);
+        return Json.createPointer(at).replace(asJsonStructure(in), with);
     }
 
     public static JsonValue add(final JsonValue in, final String at, final JsonValue value) {
         try {
-            return Json.createPointer(at).add(toJsonStructure(in), value);
+            return Json.createPointer(at).add(asJsonStructure(in), value);
         } catch (final JsonException e) {
             return in;
         }
@@ -79,7 +79,7 @@ public class Utils {
         if (!containsValue(in, at)) {
             return in;
         }
-        return Json.createPointer(at).remove(toJsonStructure(in));
+        return Json.createPointer(at).remove(asJsonStructure(in));
     }
 
     public static Stream<JsonValue> stream(final JsonValue in) {
@@ -100,7 +100,7 @@ public class Utils {
             return false;
         }
         try {
-            return Json.createPointer(at).containsValue(toJsonStructure(in));
+            return Json.createPointer(at).containsValue(asJsonStructure(in));
         } catch (final JsonException e) {
             return false;
         }
@@ -189,7 +189,7 @@ public class Utils {
         return null;
     }
 
-    private static JsonStructure toJsonStructure(final JsonValue in) {
+    private static JsonStructure asJsonStructure(final JsonValue in) {
         if (isArray(in)) {
             return in.asJsonArray();
         }

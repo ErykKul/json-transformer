@@ -54,7 +54,7 @@ public class TransformerFactory {
         final Jsonb jsonb = JsonbBuilder.newBuilder().build();
         final TransformerVO t = jsonb.fromJson(json, TransformerVO.class);
         return new Transformer(t.transformations == null ? Collections.emptyList()
-                : t.transformations.stream().map(this::toTransformation).collect(Collectors.toList()));
+                : t.transformations.stream().map(this::asTransformation).collect(Collectors.toList()));
     }
 
     public Transformer createFromFile(final String file) throws IOException {
@@ -62,15 +62,15 @@ public class TransformerFactory {
         return createFromJsonString(content);
     }
 
-    public Transformation toTransformation(final TransformationVO t) {
+    public Transformation asTransformation(final TransformationVO t) {
         return new Transformation(t.merge == null ? false : t.merge, t.selfTranform == null ? false : t.selfTranform,
                 t.sourcePointer == null ? "" : t.sourcePointer, t.targetPointer == null ? "" : t.targetPointer,
                 t.values == null ? Collections.emptyList()
-                        : t.values.stream().map(this::toValue).collect(Collectors.toList()),
+                        : t.values.stream().map(this::asValue).collect(Collectors.toList()),
                 functions);
     }
 
-    public Value toValue(final ValueVO v) {
+    public Value asValue(final ValueVO v) {
         return new Value(v.valuePointer == null ? "" : v.valuePointer,
                 v.valueExpression == null ? "" : v.valueExpression);
     }
