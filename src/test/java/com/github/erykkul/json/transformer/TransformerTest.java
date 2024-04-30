@@ -33,8 +33,9 @@ public class TransformerTest {
     @Test
     public void testTransformer() throws IOException {
         final Transformer transformer = FACTORY_WITH_LOGGER.createFromFile("example/transformer.json");
-        final JsonObject result = Utils.asJsonValue(Utils.asObject(transformer.transform(parse("example/example.json")))).asJsonObject();
+        final JsonObject result = transformer.transform(parse("example/example.json"));
         System.out.println(result);
+        assertTrue(parse("example/transformed.json").equals(result));
         assertTrue(Utils.asJsonValue(Utils.asObject(result)).equals(result));
     }
 
