@@ -110,8 +110,8 @@ public class Transformation {
         }
         if (!append || Utils.isArray(sourceValue)) {
             JsonValue result = Utils.getValue(fixedTo, targetPointer);
-            for (final TransformationStep v : steps) {
-                result = copy(ctx, sourceValue, result, v);
+            for (final TransformationStep step : steps) {
+                result = copy(ctx, sourceValue, result, step);
             }
             if (Utils.isEmpty(fixedTo)) {
                 return result;
@@ -119,8 +119,8 @@ public class Transformation {
             return Utils.replace(fixedTo, targetPointer, result);
         } else {
             JsonValue result = EMPTY_JSON_OBJECT;
-            for (final TransformationStep v : steps) {
-                result = v.copy(ctx, sourceValue, result);
+            for (final TransformationStep step : steps) {
+                result = step.execute(ctx, sourceValue, result);
             }
             final JsonValue targetArray = Utils.getValue(fixedTo, targetPointer);
             if (!Utils.isArray(targetArray)) {
@@ -132,23 +132,23 @@ public class Transformation {
     }
 
     private JsonValue copy(final TransformationContext ctx, final JsonValue sourceValue, final JsonValue result,
-            final TransformationStep v) {
+            final TransformationStep step) {
         if (Utils.isArray(sourceValue)) {
             return arrayCopy(ctx, sourceValue.asJsonArray(),
-                    Utils.isArray(result) ? result.asJsonArray() : EMPTY_JSON_ARRAY, v);
+                    Utils.isArray(result) ? result.asJsonArray() : EMPTY_JSON_ARRAY, step);
         }
-        return v.copy(ctx, sourceValue, result);
+        return step.execute(ctx, sourceValue, result);
     }
 
     private JsonArray arrayCopy(final TransformationContext ctx, final JsonArray sourceArray,
-            final JsonArray resultArray, final TransformationStep v) {
+            final JsonArray resultArray, final TransformationStep step) {
         final JsonArrayBuilder builder = Json.createArrayBuilder();
         if (append) {
             builder.addAll(Json.createArrayBuilder(resultArray));
         }
         for (int i = 0; i < sourceArray.size(); i++) {
             final JsonValue result = !append && i < resultArray.size() ? resultArray.get(i) : EMPTY_JSON_OBJECT;
-            builder.add(v.copy(ctx, sourceArray.get(i), result));
+            builder.add(step.execute(ctx, sourceArray.get(i), result));
         }
         return builder.build();
     }

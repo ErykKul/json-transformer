@@ -17,7 +17,7 @@ public class TransformationStep {
         this.valueExpression = valueExpression;
     }
 
-    public JsonValue copy(final TransformationContext ctx, final JsonValue from, final JsonValue to) {
+    public JsonValue execute(final TransformationContext ctx, final JsonValue from, final JsonValue to) {
         if (valueExpression.startsWith("\"")) {
             final String literal = valueExpression.length() > 1
                     ? valueExpression.substring(1, valueExpression.length() - 1)
@@ -34,7 +34,7 @@ public class TransformationStep {
                     : "";
             final String functionArg = str.length() > 0 ? str.substring(0, str.length() - 1) : "";
             final TransformationStepFunction func = ctx.getFunctions().get(functionName);
-            return func == null ? to : func.copy(ctx, from, to, valuePointer, functionArg);
+            return func == null ? to : func.apply(ctx, from, to, valuePointer, functionArg);
         }
         final JsonValue result = Utils.getValue(from, valueExpression);
         if (Utils.isEmpty(result)) {

@@ -58,7 +58,7 @@ public interface TransformationStepFunction {
         return Utils.asJsonValue(Utils.getObject(engine, "res"));
     };
 
-    JsonValue copy(TransformationContext ctx, JsonValue from, JsonValue to, String valuePointer, String funcArg);
+    JsonValue apply(TransformationContext ctx, JsonValue from, JsonValue to, String valuePointer, String funcArg);
 
     // TODO:
     // expand filepaths

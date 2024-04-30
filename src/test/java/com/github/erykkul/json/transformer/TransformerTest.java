@@ -22,8 +22,8 @@ public class TransformerTest {
         System.out.println("to -> " + to + "\n");
         System.out.println("valuePointer -> " + valuePointer + "\n");
         System.out.println("valueExpression -> " + funcArg + "\n");
-        final TransformationStep v = new TransformationStep(valuePointer, funcArg);
-        final JsonValue result = v.copy(ctx, from, to);
+        final TransformationStep step = new TransformationStep(valuePointer, funcArg);
+        final JsonValue result = step.execute(ctx, from, to);
         System.out.println("result -> " + result + "\n");
         System.out.println("*****");
         return result;
