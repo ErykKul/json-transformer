@@ -148,6 +148,16 @@ public class Utils {
         }
     }
 
+    public static Object getObject(final ScriptEngine engine, final String key) {
+        try {
+            return engine.get(key);
+        } catch (Exception e) {
+            System.out.println(e);
+            // NOOP
+        }
+        return null;
+    }
+
     @SuppressWarnings("unchecked")
     public static JsonValue asJsonValue(final Object o) {
         if (o instanceof Number) {

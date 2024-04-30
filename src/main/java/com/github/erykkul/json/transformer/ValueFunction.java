@@ -28,7 +28,7 @@ public interface ValueFunction {
         final ScriptEngine engine = Utils.engine();
         final List<JsonValue> result = Utils.stream(value).filter(x -> {
             Utils.eval(engine, funcArg, x);
-            return Boolean.TRUE.equals(engine.get("res"));
+            return Boolean.TRUE.equals(Utils.getObject(engine, "res"));
         }).collect(Collectors.toList());
         return Utils.replace(to, valuePointer, Json.createArrayBuilder(result).build());
     };
@@ -41,7 +41,7 @@ public interface ValueFunction {
         final ScriptEngine engine = Utils.engine();
         final List<JsonValue> result = Utils.stream(value).map(x -> {
             Utils.eval(engine, funcArg, x);
-            return Utils.asJsonValue(engine.get("res"));
+            return Utils.asJsonValue(Utils.getObject(engine, "res"));
         }).collect(Collectors.toList());
         return Utils.replace(to, valuePointer, Json.createArrayBuilder(result).build());
     };
@@ -55,7 +55,7 @@ public interface ValueFunction {
         Utils.stream(value).forEach(x -> {
             Utils.eval(engine, funcArg, x);
         });
-        return Utils.asJsonValue(engine.get("res"));
+        return Utils.asJsonValue(Utils.getObject(engine, "res"));
     };
 
     JsonValue copy(TransformationContext ctx, JsonValue from, JsonValue to, String valuePointer, String funcArg);
