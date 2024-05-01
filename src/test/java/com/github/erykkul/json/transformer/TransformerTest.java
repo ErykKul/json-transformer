@@ -1,7 +1,5 @@
 package com.github.erykkul.json.transformer;
 
-import org.junit.Test;
-
 import static org.junit.Assert.assertTrue;
 
 import java.io.FileNotFoundException;
@@ -10,6 +8,8 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
+
+import org.junit.Test;
 
 import jakarta.json.Json;
 import jakarta.json.JsonObject;
