@@ -83,7 +83,7 @@ public class TransformerFactory {
 
     private Map<String, TransformationStepFunction> builtin() {
         final Map<String, TransformationStepFunction> result = new HashMap<>();
-        result.put("generateUUID", TransformationStepFunction.GENERATE_UUID);
+        result.put("generateUuid", TransformationStepFunction.GENERATE_UUID);
         result.put("remove", TransformationStepFunction.REMOVE);
         result.put("filter", TransformationStepFunction.FILTER);
         result.put("map", TransformationStepFunction.MAP);

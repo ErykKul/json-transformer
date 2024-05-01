@@ -112,7 +112,10 @@
             "orgName": "d"
         }
     ],
-    "total": 8.0,
-    "count": 4.0,
-    "concat": "2, 1, 2, 3"
+    "expressionsResults": {
+        "literal": "literal",
+        "total": 8.0,
+        "count": 4.0,
+        "concat": "2, 1, 2, 3"
+    }
 }

@@ -66,8 +66,20 @@
         },
         {
             "sourcePointer": "",
-            "resultPointer": "",
+            "resultPointer": "/expressionsResults",
             "steps": [
+                {
+                    "resultPointer": "/literal",
+                    "expression": "\"literal\""
+                },
+                {
+                    "resultPointer": "/uuid",
+                    "expression": "generateUuid()"
+                },
+                {
+                    "resultPointer": "/uuid",
+                    "expression": "remove()"
+                },
                 {
                     "sourcePointer": "/numbers",
                     "resultPointer": "/total",
