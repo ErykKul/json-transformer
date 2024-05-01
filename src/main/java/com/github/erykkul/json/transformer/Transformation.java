@@ -58,6 +58,10 @@ public class Transformation {
         return functions;
     }
 
+    public boolean useResultAsSource() {
+        return useResultAsSource;
+    }
+
     private JsonValue transform(final TransformationContext ctx, final List<String> sourcePointers,
             final List<String> resultPointers, final boolean flatten) {
         if (sourcePointers.size() == 1) {

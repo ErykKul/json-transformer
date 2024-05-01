@@ -115,7 +115,7 @@
                     "expressions": [
                         "script(set = new Set())",
                         "filter(res = set.add(x.orgName))",
-                        "useResultAsSource(script(x.add({org: 'z', orgName: 'z'}); res = x))"
+                        "script(x.add({org: 'z', orgName: 'z'}); res = x)"
                     ]
                 }
             ]
@@ -146,10 +146,10 @@
                     "expressions": [
                         "script(set = new Set())",
                         "filter(res = set.add(x))",
-                        "useResultAsSource(map(if (x.parent == '') delete x.parent; res = x))",
+                        "map(if (x.parent == '') delete x.parent; res = x)",
                         "//script(UUID = Java.type('java.util.UUID'); ids = new Map(); res = null;)",
-                        "//useResultAsSource(map(ids.put(x.id, UUID.randomUUID().toString()); res = x))",
-                        "//useResultAsSource(map(x.id = ids.get(x.id); if (typeof x.parent !== 'undefined') x.parent = ids.get(x.parent); res = x))"
+                        "//map(ids.put(x.id, UUID.randomUUID().toString()); res = x)",
+                        "//map(x.id = ids.get(x.id); if (typeof x.parent !== 'undefined') x.parent = ids.get(x.parent); res = x)"
                     ]
                 }
             ]

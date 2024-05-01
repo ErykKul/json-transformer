@@ -25,12 +25,12 @@ public class TransformationStep {
     public JsonValue execute(final TransformationContext ctx, final JsonValue source, final JsonValue result) {
         if (expressions != null && !expressions.isEmpty()) {
             JsonValue res = result;
-            for (final String expression: expressions) {
-                res = execExpr(ctx, source, res, expression, engineHolder);
+            for (final String expression : expressions) {
+                res = execExpr(ctx, ctx.useResultAsSource() ? res : source, res, expression, engineHolder);
             }
             return res;
         }
-        final JsonValue res = Utils.getValue(source, sourcePointer);
+        final JsonValue res = Utils.getValue(ctx.useResultAsSource() ? result : source, sourcePointer);
         if (Utils.isEmpty(res)) {
             return result;
         }

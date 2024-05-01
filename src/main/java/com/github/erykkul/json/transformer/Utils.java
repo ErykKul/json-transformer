@@ -31,7 +31,7 @@ import jakarta.json.JsonValue.ValueType;
 
 public class Utils {
 
-    private static final Logger logger = Logger.getLogger(Utils.class.getName()); 
+    private static final Logger logger = Logger.getLogger(Utils.class.getName());
 
     public static JsonValue fixTargetPath(final JsonValue in, final JsonValue.ValueType t, final String jsonPointer) {
         final String[] fields = jsonPointer.split("/");

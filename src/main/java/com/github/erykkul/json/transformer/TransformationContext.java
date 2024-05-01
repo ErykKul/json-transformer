@@ -23,8 +23,10 @@ public class TransformationContext {
     }
 
     public JsonObject toJsonObject() {
-        return Json.createObjectBuilder().add("transformation", transformation.toJsonObject()).add("globalSource", globalSource)
-                .add("globalResult", globalResult).add("localSource", localSource).add("localResult", localResult).build();
+        return Json.createObjectBuilder().add("transformation", transformation.toJsonObject())
+                .add("globalSource", globalSource)
+                .add("globalResult", globalResult).add("localSource", localSource).add("localResult", localResult)
+                .add("useResultAsSource", transformation.useResultAsSource()).build();
     }
 
     public JsonObject getGlobalSource() {
@@ -45,5 +47,9 @@ public class TransformationContext {
 
     public Map<String, TransformationStepFunction> getFunctions() {
         return transformation.getFunctions();
+    }
+
+    public boolean useResultAsSource() {
+        return transformation.useResultAsSource();
     }
 }
