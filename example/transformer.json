@@ -70,30 +70,37 @@
             "steps": [
                 {
                     "resultPointer": "/literal",
-                    "expression": "\"literal\""
+                    "expressions": [
+                        "\"literal\""
+                    ]
                 },
                 {
                     "resultPointer": "/uuid",
-                    "expression": "generateUuid()"
-                },
-                {
-                    "resultPointer": "/uuid",
-                    "expression": "remove()"
+                    "expressions": [
+                        "withLogger(generateUuid())",
+                        "remove()"
+                    ]
                 },
                 {
                     "sourcePointer": "/numbers",
                     "resultPointer": "/total",
-                    "expression": "reduce(res = res + x)"
+                    "expressions": [
+                        "reduce(res = res + x)"
+                    ]
                 },
                 {
                     "sourcePointer": "/numbers",
                     "resultPointer": "/count",
-                    "expression": "reduce(res = res + 1)"
+                    "expressions": [
+                        "reduce(res = res + 1)"
+                    ]
                 },
                 {
                     "sourcePointer": "/numbers",
                     "resultPointer": "/concat",
-                    "expression": "reduce(res = (res ? res + ', ' : '') + x)"
+                    "expressions": [
+                        "reduce(res = (res ? res + ', ' : '') + x)"
+                    ]
                 }
             ]
         },
@@ -104,7 +111,23 @@
                 {
                     "sourcePointer": "/flattened",
                     "resultPointer": "/flattened",
-                    "expression": "filter(ctx = ctx ? ctx : new Set(); res = ctx.add(x.orgName);)"
+                    "expressions": [
+                        "script(set = new Set())",
+                        "filter(res = set.add(x.orgName))"
+                    ]
+                }
+            ]
+        },
+        {
+            "useResultAsSource": true,
+            "resultPointer": "",
+            "steps": [
+                {
+                    "sourcePointer": "/flattened",
+                    "resultPointer": "/flattened",
+                    "expressions": [
+                        "script(x.add({org: 'z', orgName: 'z'}); res = x)"
+                    ]
                 }
             ]
         }

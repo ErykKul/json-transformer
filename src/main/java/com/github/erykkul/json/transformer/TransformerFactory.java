@@ -28,7 +28,7 @@ public class TransformerFactory {
     public static class ValueVO {
         public String resultPointer;
         public String sourcePointer;
-        public String expression;
+        public List<String> expressions;
     }
 
     public static TransformerFactory factory() {
@@ -74,7 +74,7 @@ public class TransformerFactory {
 
     public TransformationStep toValue(final ValueVO v) {
         return new TransformationStep(v.sourcePointer == null ? "" : v.sourcePointer,
-                v.resultPointer == null ? "" : v.resultPointer, v.expression == null ? "" : v.expression);
+                v.resultPointer == null ? "" : v.resultPointer, v.expressions);
     }
 
     public Map<String, TransformationStepFunction> getFunctions() {
@@ -85,6 +85,7 @@ public class TransformerFactory {
         final Map<String, TransformationStepFunction> result = new HashMap<>();
         result.put("generateUuid", TransformationStepFunction.GENERATE_UUID);
         result.put("remove", TransformationStepFunction.REMOVE);
+        result.put("script", TransformationStepFunction.SCRIPT);
         result.put("filter", TransformationStepFunction.FILTER);
         result.put("map", TransformationStepFunction.MAP);
         result.put("reduce", TransformationStepFunction.REDUCE);

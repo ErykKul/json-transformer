@@ -7,6 +7,8 @@ import static org.junit.Assert.assertTrue;
 import java.io.FileNotFoundException;
 import java.io.FileReader;
 import java.io.IOException;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Map;
 
 import jakarta.json.Json;
@@ -15,7 +17,7 @@ import jakarta.json.JsonReader;
 import jakarta.json.JsonValue;
 
 public class TransformerTest {
-    public static final TransformationStepFunction LOGGER = (ctx, source, result, sourcePointer, resultPointer, expression) -> {
+    public static final TransformationStepFunction LOGGER = (ctx, source, result, sourcePointer, resultPointer, expression, engine) -> {
         System.out.println("*****\n");
         System.out.println("ctx -> " + ctx.toJsonObject() + "\n");
         System.out.println("source -> " + source + "\n");
@@ -23,7 +25,11 @@ public class TransformerTest {
         System.out.println("sourcePointer -> " + sourcePointer + "\n");
         System.out.println("resultPointer -> " + resultPointer + "\n");
         System.out.println("expression -> " + expression + "\n");
-        final TransformationStep step = new TransformationStep(sourcePointer, resultPointer, expression);
+        final List<String> expressions = new ArrayList<>();
+        if (expression != null && !"".equals(expression)) {
+            expressions.add(expression);
+        }
+        final TransformationStep step = new TransformationStep(sourcePointer, resultPointer, expressions);
         final JsonValue res = step.execute(ctx, source, result);
         System.out.println("res -> " + res + "\n");
         System.out.println("*****");

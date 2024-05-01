@@ -117,30 +117,35 @@ public class Utils {
         return OBJECT.equals(js.getValueType());
     }
 
-    public static ScriptEngine engine() {
+    public static ScriptEngine engine(final ScriptEngineHolder engineHolder) {
+        if (engineHolder.getEngine() != null) {
+            return engineHolder.getEngine();
+        }
         final ScriptEngineManager manager = new ScriptEngineManager();
         final ScriptEngine engine = manager.getEngineByName("javascript");
         try {
             engine.put("res", null);
-            engine.put("ctx", null);
-            engine.eval("Set = Java.type('java.util.HashSet')");
-            engine.eval("Map = Java.type('java.util.HashMap')");
+            engine.eval("Map = Java.type('java.util.LinkedHashMap')");
+            engine.eval("Set = Java.type('java.util.LinkedHashSet')");
+            engine.eval("List = Java.type('java.util.ArrayList')");
         } catch (final Exception e) {
             logger.fine("Script engine for javascript not found: " + e);
         }
+        engineHolder.setEngine(engine);
         return engine;
     }
 
-    public static void eval(final ScriptEngine engine, final String script) {
+    public static void eval(final ScriptEngineHolder engineHolder, final String script) {
         try {
-            engine.eval(script);
+            engine(engineHolder).eval(script);
         } catch (final Exception e) {
             logger.fine("Script failed: " + e);
         }
     }
 
-    public static void eval(final ScriptEngine engine, final String script, final JsonValue value) {
+    public static void eval(final ScriptEngineHolder engineHolder, final String script, final JsonValue value) {
         try {
+            final ScriptEngine engine = engine(engineHolder);
             engine.put("x", asObject(value));
             engine.eval(script);
         } catch (final Exception e) {
@@ -148,9 +153,9 @@ public class Utils {
         }
     }
 
-    public static Object getObject(final ScriptEngine engine, final String key) {
+    public static Object getObject(final ScriptEngineHolder engineHolder, final String key) {
         try {
-            return engine.get(key);
+            return engine(engineHolder).get(key);
         } catch (final NullPointerException e) {
             logger.fine("Engine is null");
         }
