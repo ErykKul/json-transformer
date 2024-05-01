@@ -13,8 +13,7 @@ public class TransformationContext {
     private final JsonValue localSource;
     private final JsonValue localResult;
 
-    public TransformationContext(final JsonObject globalSource, final JsonObject globalResult, final JsonValue localSource,
-            final JsonValue localResult, final Transformation transformation) {
+    public TransformationContext(final JsonObject globalSource, final JsonObject globalResult, final JsonValue localSource, final JsonValue localResult, final Transformation transformation) {
         this.globalSource = globalSource;
         this.globalResult = globalResult;
         this.localSource = localSource;

@@ -25,8 +25,7 @@ public class Transformation {
     private final List<TransformationStep> steps;
     private final Map<String, StepFunction> functions;
 
-    public Transformation(final boolean append, final boolean useResultAsSource, final String sourcePointer,
-            final String resultPointer, final List<TransformationStep> steps, final Map<String, StepFunction> functions) {
+    public Transformation(final boolean append, final boolean useResultAsSource, final String sourcePointer, final String resultPointer, final List<TransformationStep> steps, final Map<String, StepFunction> functions) {
         this.append = append;
         this.useResultAsSource = useResultAsSource;
         this.sourcePointer = sourcePointer;
@@ -50,7 +49,8 @@ public class Transformation {
         return Json.createObjectBuilder().add("append", append).add("useResultAsSource", useResultAsSource)
                 .add("sourcePointer", sourcePointer).add("resultPointer", resultPointer)
                 .add("steps",
-                        Json.createArrayBuilder(steps.stream().map(TransformationStep::toJsonObject).collect(Collectors.toList())))
+                        Json.createArrayBuilder(
+                                steps.stream().map(TransformationStep::toJsonObject).collect(Collectors.toList())))
                 .build();
     }
 
@@ -174,8 +174,8 @@ public class Transformation {
             return mergeValues(source.asJsonArray(), result.asJsonArray(), 0);
         }
         if (Utils.isObject(source) && Utils.isObject(result)) {
-            return Json.createObjectBuilder(result.asJsonObject()).addAll(Json.createObjectBuilder(source.asJsonObject()))
-                    .build();
+            return Json.createObjectBuilder(result.asJsonObject())
+                    .addAll(Json.createObjectBuilder(source.asJsonObject())).build();
         }
         return result;
     }

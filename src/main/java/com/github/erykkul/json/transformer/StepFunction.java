@@ -12,7 +12,8 @@ import jakarta.json.JsonValue.ValueType;
 public interface StepFunction {
 
     StepFunction GENERATE_UUID = (ctx, source, result, sourcePointer, resultPointer, expression, engineHolder) -> {
-        return Utils.replace(Utils.fixTargetPath(result, ValueType.OBJECT, resultPointer), resultPointer, Json.createValue(UUID.randomUUID().toString()));
+        return Utils.replace(Utils.fixTargetPath(result, ValueType.OBJECT, resultPointer), resultPointer,
+                Json.createValue(UUID.randomUUID().toString()));
     };
 
     StepFunction REMOVE = (ctx, source, result, sourcePointer, resultPointer, expression, engineHolder) -> {
@@ -41,7 +42,8 @@ public interface StepFunction {
             Utils.eval(engineHolder, expression, x);
             return Boolean.TRUE.equals(Utils.getObject(engineHolder, "res"));
         }).collect(Collectors.toList());
-        return Utils.replace(Utils.fixTargetPath(result, ValueType.ARRAY, resultPointer), resultPointer, Json.createArrayBuilder(res).build());
+        return Utils.replace(Utils.fixTargetPath(result, ValueType.ARRAY, resultPointer), resultPointer,
+                Json.createArrayBuilder(res).build());
     };
 
     StepFunction MAP = (ctx, source, result, sourcePointer, resultPointer, expression, engineHolder) -> {
@@ -53,7 +55,8 @@ public interface StepFunction {
             Utils.eval(engineHolder, expression, x);
             return Utils.asJsonValue(Utils.getObject(engineHolder, "res"));
         }).collect(Collectors.toList());
-        return Utils.replace(Utils.fixTargetPath(result, ValueType.ARRAY, resultPointer), resultPointer, Json.createArrayBuilder(res).build());
+        return Utils.replace(Utils.fixTargetPath(result, ValueType.ARRAY, resultPointer), resultPointer,
+                Json.createArrayBuilder(res).build());
     };
 
     StepFunction REDUCE = (ctx, source, result, sourcePointer, resultPointer, expression, engineHolder) -> {
@@ -64,7 +67,8 @@ public interface StepFunction {
         Utils.stream(value).forEach(x -> {
             Utils.eval(engineHolder, expression, x);
         });
-        return Utils.replace(Utils.fixTargetPath(result, ValueType.OBJECT, resultPointer), resultPointer, Utils.asJsonValue(Utils.getObject(engineHolder, "res")));
+        return Utils.replace(Utils.fixTargetPath(result, ValueType.OBJECT, resultPointer), resultPointer,
+                Utils.asJsonValue(Utils.getObject(engineHolder, "res")));
     };
 
     JsonValue apply(TransformationContext ctx, JsonValue source, JsonValue result, String sourcePointer, String resultPointer, String expression, EngineHolder engineHolder);
