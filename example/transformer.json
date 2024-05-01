@@ -5,12 +5,12 @@
             "resultPointer": "/paths",
             "steps": [
                 {
-                    "valuePointer": "/x",
-                    "valueExpression": "/path"
+                    "sourcePointer": "/path",
+                    "resultPointer": "/x"
                 },
                 {
-                    "valuePointer": "/y",
-                    "valueExpression": "/path"
+                    "sourcePointer": "/path",
+                    "resultPointer": "/y"
                 }
             ]
         },
@@ -20,19 +20,19 @@
             "resultPointer": "/paths",
             "steps": [
                 {
-                    "valuePointer": "/z",
-                    "valueExpression": "/path"
+                    "sourcePointer": "/path",
+                    "resultPointer": "/z"
                 }
             ]
         },
         {
             "append": true,
-            "sourcePointer": "/files",
             "resultPointer": "/paths",
+            "sourcePointer": "/files",
             "steps": [
                 {
-                    "valuePointer": "",
-                    "valueExpression": "/path"
+                    "sourcePointer": "/path",
+                    "resultPointer": ""
                 }
             ]
         },
@@ -41,12 +41,12 @@
             "resultPointer": "/creators[i]/affiliations",
             "steps": [
                 {
-                    "valuePointer": "",
-                    "valueExpression": ""
+                    "sourcePointer": "",
+                    "resultPointer": ""
                 },
                 {
-                    "valuePointer": "/orgName",
-                    "valueExpression": "/name"
+                    "sourcePointer": "/name",
+                    "resultPointer": "/orgName"
                 }
             ]
         },
@@ -55,42 +55,33 @@
             "resultPointer": "/flattened",
             "steps": [
                 {
-                    "valuePointer": "/org",
-                    "valueExpression": "/name"
+                    "sourcePointer": "/name",
+                    "resultPointer": "/org"
                 },
                 {
-                    "valuePointer": "/orgName",
-                    "valueExpression": "func(withLogger(/name))"
+                    "sourcePointer": "/name",
+                    "resultPointer": "/orgName"
                 }
             ]
         },
         {
             "sourcePointer": "",
-            "resultPointer": "/total",
+            "resultPointer": "",
             "steps": [
                 {
-                    "valuePointer": "/numbers",
-                    "valueExpression": "func(reduce(res = res + x))"
-                }
-            ]
-        },
-        {
-            "sourcePointer": "",
-            "resultPointer": "/count",
-            "steps": [
+                    "sourcePointer": "/numbers",
+                    "resultPointer": "/total",
+                    "expression": "reduce(res = res + x)"
+                },
                 {
-                    "valuePointer": "/numbers",
-                    "valueExpression": "func(reduce(res = res + 1))"
-                }
-            ]
-        },
-        {
-            "sourcePointer": "",
-            "resultPointer": "/concat",
-            "steps": [
+                    "sourcePointer": "/numbers",
+                    "resultPointer": "/count",
+                    "expression": "reduce(res = res + 1)"
+                },
                 {
-                    "valuePointer": "/numbers",
-                    "valueExpression": "func(reduce(res = (res ? res + ', ' : '') + x))"
+                    "sourcePointer": "/numbers",
+                    "resultPointer": "/concat",
+                    "expression": "reduce(res = (res ? res + ', ' : '') + x)"
                 }
             ]
         },
@@ -100,8 +91,9 @@
             "resultPointer": "",
             "steps": [
                 {
-                    "valuePointer": "/flattened",
-                    "valueExpression": "func(filter(ctx = ctx ? ctx : new Set(); res = ctx.add(x.orgName);))"
+                    "sourcePointer": "/flattened",
+                    "resultPointer": "/flattened",
+                    "expression": "filter(ctx = ctx ? ctx : new Set(); res = ctx.add(x.orgName);)"
                 }
             ]
         }

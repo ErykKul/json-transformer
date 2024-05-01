@@ -9,45 +9,43 @@ import jakarta.json.JsonObject;
 import jakarta.json.JsonValue;
 
 public class TransformationStep {
-    private final String valuePointer;
-    private final String valueExpression;
+    private final String sourcePointer;
+    private final String resultPointer;
+    private final String expression;
 
-    public TransformationStep(final String valuePointer, final String valueExpression) {
-        this.valuePointer = valuePointer;
-        this.valueExpression = valueExpression;
+    public TransformationStep(final String sourcePointer, final String resultPointer, final String expression) {
+        this.sourcePointer = sourcePointer;
+        this.resultPointer = resultPointer;
+        this.expression = expression;
     }
 
     public JsonValue execute(final TransformationContext ctx, final JsonValue source, final JsonValue result) {
-        if (valueExpression.startsWith("\"")) {
-            final String literal = valueExpression.length() > 1
-                    ? valueExpression.substring(1, valueExpression.length() - 1)
+        if (expression.startsWith("\"")) {
+            final String literal = expression.length() > 1
+                    ? expression.substring(1, expression.length() - 1)
                     : "";
-            return Utils.add(Utils.fixTargetPath(result, OBJECT, valuePointer), valuePointer, Json.createValue(literal));
-        } else if (valueExpression.startsWith("func(")) {
-            final String function = valueExpression.length() > "func()".length()
-                    ? valueExpression.substring("func(".length(), valueExpression.length() - 1)
-                    : "";
-            final String[] functionParts = function.split("\\(");
+            return Utils.add(Utils.fixTargetPath(result, OBJECT, resultPointer), resultPointer, Json.createValue(literal));
+        } else if (!"".equals(expression)) {
+            final String[] functionParts = expression.split("\\(");
             final String functionName = functionParts.length > 0 ? functionParts[0] : "";
             final String str = functionParts.length > 1
                     ? String.join("(", Arrays.copyOfRange(functionParts, 1, functionParts.length))
                     : "";
             final String functionArg = str.length() > 0 ? str.substring(0, str.length() - 1) : "";
             final TransformationStepFunction func = ctx.getFunctions().get(functionName);
-            return func == null ? result : func.apply(ctx, source, result, valuePointer, functionArg);
+            return func == null ? result : func.apply(ctx, source, result, sourcePointer, resultPointer, functionArg);
         }
-        final JsonValue res = Utils.getValue(source, valueExpression);
+        final JsonValue res = Utils.getValue(source, sourcePointer);
         if (Utils.isEmpty(res)) {
             return result;
         }
-        if (!"".equals(valueExpression) && "".equals(valuePointer)) {
+        if (!"".equals(sourcePointer) && "".equals(resultPointer)) {
             return res;
         }
-        return Utils.add(Utils.fixTargetPath(result, OBJECT, valuePointer), valuePointer, res);
+        return Utils.add(Utils.fixTargetPath(result, OBJECT, resultPointer), resultPointer, res);
     }
 
     public JsonObject toJsonObject() {
-        return Json.createObjectBuilder().add("valuePointer", valuePointer).add("valueExpression", valueExpression)
-                .build();
+        return Json.createObjectBuilder().add("sourcePointer", sourcePointer).add("resultPointer", resultPointer).add("expression", expression).build();
     }
 }
