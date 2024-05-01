@@ -25,7 +25,7 @@ public interface TransformationStepFunction {
         if (expression != null && !"".equals(expression)) {
             expressions.add(expression);
         }
-        final TransformationStep step = new TransformationStep(sourcePointer, resultPointer, expressions);
+        final TransformationStep step = new TransformationStep(sourcePointer, resultPointer, expressions, engineHolder);
         return step.execute(ctx, result, result);
     };
 
@@ -78,7 +78,4 @@ public interface TransformationStepFunction {
     };
 
     JsonValue apply(TransformationContext ctx, JsonValue source, JsonValue result, String sourcePointer, String resultPointer, String expression, ScriptEngineHolder engineHolder);
-
-    // TODO:
-    // expand filepaths
 }

@@ -1,6 +1,10 @@
 {
     "paths": [
         {
+            "x": "file.txt",
+            "y": "file.txt"
+        },
+        {
             "x": "a/file1.txt",
             "y": "a/file1.txt"
         },
@@ -17,6 +21,9 @@
             "y": "a/ab/file1.txt"
         },
         {
+            "z": "file.txt"
+        },
+        {
             "z": "a/file1.txt"
         },
         {
@@ -28,6 +35,7 @@
         {
             "z": "a/ab/file1.txt"
         },
+        "file.txt",
         "a/file1.txt",
         "b/file1.txt",
         "c/file1.txt",
@@ -121,5 +129,57 @@
         "total": 8.0,
         "count": 4.0,
         "concat": "2, 1, 2, 3"
-    }
+    },
+    "graph": [
+        {
+            "id": "/file.txt",
+            "name": "file.txt",
+            "isDir": false
+        },
+        {
+            "id": "/a",
+            "name": "a",
+            "isDir": true
+        },
+        {
+            "id": "/a/file1.txt",
+            "name": "file1.txt",
+            "parent": "/a",
+            "isDir": false
+        },
+        {
+            "id": "/b",
+            "name": "b",
+            "isDir": true
+        },
+        {
+            "id": "/b/file1.txt",
+            "name": "file1.txt",
+            "parent": "/b",
+            "isDir": false
+        },
+        {
+            "id": "/c",
+            "name": "c",
+            "isDir": true
+        },
+        {
+            "id": "/c/file1.txt",
+            "name": "file1.txt",
+            "parent": "/c",
+            "isDir": false
+        },
+        {
+            "id": "/a/ab",
+            "name": "ab",
+            "parent": "/a",
+            "isDir": true
+        },
+        {
+            "id": "/a/ab/file1.txt",
+            "name": "file1.txt",
+            "parent": "/a/ab",
+            "isDir": false
+        }
+    ]
 }

@@ -119,6 +119,40 @@
                     ]
                 }
             ]
+        },
+        {
+            "sourcePointer": "",
+            "resultPointer": "",
+            "steps": [
+                {
+                    "sourcePointer": "/files",
+                    "resultPointer": "/graph",
+                    "expressions": [
+                        "script(list = new List())",
+                        "map(last = x.path.split('/').slice(-1); id = ''; parent = ''; list.addAll(x.path.split('/').map(function(p) { id = id + '/' + p; r = { id: id, name: p, parent: parent, isDir: p != last }; parent = parent + '/' + p; return r })))",
+                        "script(res = list)"
+                    ]
+                }
+            ]
+        },
+        {
+            "useResultAsSource": true,
+            "sourcePointer": "",
+            "resultPointer": "",
+            "steps": [
+                {
+                    "sourcePointer": "/graph",
+                    "resultPointer": "/graph",
+                    "expressions": [
+                        "script(set = new Set())",
+                        "filter(res = set.add(x))",
+                        "useResultAsSource(map(if (x.parent == '') delete x.parent; res = x))",
+                        "//script(UUID = Java.type('java.util.UUID'); ids = new Map(); res = null;)",
+                        "//useResultAsSource(map(ids.put(x.id, UUID.randomUUID().toString()); res = x))",
+                        "//useResultAsSource(map(x.id = ids.get(x.id); if (typeof x.parent !== 'undefined') x.parent = ids.get(x.parent); res = x))"
+                    ]
+                }
+            ]
         }
     ]
 }

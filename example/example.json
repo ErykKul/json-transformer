@@ -60,6 +60,9 @@
     ],
     "files": [
         {
+            "path": "file.txt"
+        },
+        {
             "path": "a/file1.txt"
         },
         {

@@ -13,17 +13,18 @@ public class TransformationStep {
     private final String sourcePointer;
     private final String resultPointer;
     private final List<String> expressions;
+    private final ScriptEngineHolder engineHolder;
 
-    public TransformationStep(final String sourcePointer, final String resultPointer, final List<String> expressions) {
+    public TransformationStep(final String sourcePointer, final String resultPointer, final List<String> expressions, final ScriptEngineHolder engineHolder) {
         this.sourcePointer = sourcePointer;
         this.resultPointer = resultPointer;
         this.expressions = expressions;
+        this.engineHolder = engineHolder;
     }
 
     public JsonValue execute(final TransformationContext ctx, final JsonValue source, final JsonValue result) {
         if (expressions != null && !expressions.isEmpty()) {
             JsonValue res = result;
-            final ScriptEngineHolder engineHolder = new ScriptEngineHolder();
             for (final String expression: expressions) {
                 res = execExpr(ctx, source, res, expression, engineHolder);
             }
