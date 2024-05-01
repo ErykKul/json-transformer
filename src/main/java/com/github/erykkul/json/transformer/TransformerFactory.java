@@ -35,14 +35,14 @@ public class TransformerFactory {
         return new TransformerFactory();
     }
 
-    public static TransformerFactory factory(final Map<String, TransformationStepFunction> functions) {
+    public static TransformerFactory factory(final Map<String, StepFunction> functions) {
         return new TransformerFactory(functions);
     }
 
-    private final Map<String, TransformationStepFunction> functions;
+    private final Map<String, StepFunction> functions;
 
-    private TransformerFactory(final Map<String, TransformationStepFunction> functions) {
-        final Map<String, TransformationStepFunction> result = builtin();
+    private TransformerFactory(final Map<String, StepFunction> functions) {
+        final Map<String, StepFunction> result = builtin();
         result.putAll(functions);
         this.functions = Collections.unmodifiableMap(result);
     }
@@ -74,21 +74,21 @@ public class TransformerFactory {
 
     public TransformationStep toValue(final ValueVO v) {
         return new TransformationStep(v.sourcePointer == null ? "" : v.sourcePointer,
-                v.resultPointer == null ? "" : v.resultPointer, v.expressions, new ScriptEngineHolder());
+                v.resultPointer == null ? "" : v.resultPointer, v.expressions, new EngineHolder());
     }
 
-    public Map<String, TransformationStepFunction> getFunctions() {
+    public Map<String, StepFunction> getFunctions() {
         return functions;
     }
 
-    private Map<String, TransformationStepFunction> builtin() {
-        final Map<String, TransformationStepFunction> result = new HashMap<>();
-        result.put("generateUuid", TransformationStepFunction.GENERATE_UUID);
-        result.put("remove", TransformationStepFunction.REMOVE);
-        result.put("script", TransformationStepFunction.SCRIPT);
-        result.put("filter", TransformationStepFunction.FILTER);
-        result.put("map", TransformationStepFunction.MAP);
-        result.put("reduce", TransformationStepFunction.REDUCE);
+    private Map<String, StepFunction> builtin() {
+        final Map<String, StepFunction> result = new HashMap<>();
+        result.put("generateUuid", StepFunction.GENERATE_UUID);
+        result.put("remove", StepFunction.REMOVE);
+        result.put("script", StepFunction.SCRIPT);
+        result.put("filter", StepFunction.FILTER);
+        result.put("map", StepFunction.MAP);
+        result.put("reduce", StepFunction.REDUCE);
         return result;
     }
 }

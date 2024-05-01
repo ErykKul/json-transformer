@@ -17,7 +17,7 @@ import jakarta.json.JsonReader;
 import jakarta.json.JsonValue;
 
 public class TransformerTest {
-    public static final TransformationStepFunction LOGGER = (ctx, source, result, sourcePointer, resultPointer, expression, engineHolder) -> {
+    public static final StepFunction LOGGER = (ctx, source, result, sourcePointer, resultPointer, expression, engineHolder) -> {
         System.out.println("*****\n");
         System.out.println("ctx -> " + ctx.toJsonObject() + "\n");
         System.out.println("source -> " + source + "\n");

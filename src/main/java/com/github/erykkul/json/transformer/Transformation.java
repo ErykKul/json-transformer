@@ -23,10 +23,10 @@ public class Transformation {
     private final String sourcePointer;
     private final String resultPointer;
     private final List<TransformationStep> steps;
-    private final Map<String, TransformationStepFunction> functions;
+    private final Map<String, StepFunction> functions;
 
     public Transformation(final boolean append, final boolean useResultAsSource, final String sourcePointer,
-            final String resultPointer, final List<TransformationStep> steps, final Map<String, TransformationStepFunction> functions) {
+            final String resultPointer, final List<TransformationStep> steps, final Map<String, StepFunction> functions) {
         this.append = append;
         this.useResultAsSource = useResultAsSource;
         this.sourcePointer = sourcePointer;
@@ -54,7 +54,7 @@ public class Transformation {
                 .build();
     }
 
-    public Map<String, TransformationStepFunction> getFunctions() {
+    public Map<String, StepFunction> getFunctions() {
         return functions;
     }
 

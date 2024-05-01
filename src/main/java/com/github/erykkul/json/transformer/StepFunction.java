@@ -9,17 +9,17 @@ import jakarta.json.JsonValue;
 import jakarta.json.JsonValue.ValueType;
 
 @FunctionalInterface
-public interface TransformationStepFunction {
+public interface StepFunction {
 
-    TransformationStepFunction GENERATE_UUID = (ctx, source, result, sourcePointer, resultPointer, expression, engineHolder) -> {
+    StepFunction GENERATE_UUID = (ctx, source, result, sourcePointer, resultPointer, expression, engineHolder) -> {
         return Utils.replace(Utils.fixTargetPath(result, ValueType.OBJECT, resultPointer), resultPointer, Json.createValue(UUID.randomUUID().toString()));
     };
 
-    TransformationStepFunction REMOVE = (ctx, source, result, sourcePointer, resultPointer, expression, engineHolder) -> {
+    StepFunction REMOVE = (ctx, source, result, sourcePointer, resultPointer, expression, engineHolder) -> {
         return Utils.remove(result, resultPointer);
     };
 
-    TransformationStepFunction SCRIPT = (ctx, source, result, sourcePointer, resultPointer, expression, engineHolder) -> {
+    StepFunction SCRIPT = (ctx, source, result, sourcePointer, resultPointer, expression, engineHolder) -> {
         final JsonValue value = Utils.getValue(source, sourcePointer);
         if (Utils.isEmpty(value)) {
             return result;
@@ -32,7 +32,7 @@ public interface TransformationStepFunction {
         return Utils.replace(Utils.fixTargetPath(result, ValueType.ARRAY, resultPointer), resultPointer, res);
     };
 
-    TransformationStepFunction FILTER = (ctx, source, result, sourcePointer, resultPointer, expression, engineHolder) -> {
+    StepFunction FILTER = (ctx, source, result, sourcePointer, resultPointer, expression, engineHolder) -> {
         final JsonValue value = Utils.getValue(source, sourcePointer);
         if (Utils.isEmpty(value)) {
             return result;
@@ -44,7 +44,7 @@ public interface TransformationStepFunction {
         return Utils.replace(Utils.fixTargetPath(result, ValueType.ARRAY, resultPointer), resultPointer, Json.createArrayBuilder(res).build());
     };
 
-    TransformationStepFunction MAP = (ctx, source, result, sourcePointer, resultPointer, expression, engineHolder) -> {
+    StepFunction MAP = (ctx, source, result, sourcePointer, resultPointer, expression, engineHolder) -> {
         final JsonValue value = Utils.getValue(source, sourcePointer);
         if (Utils.isEmpty(value)) {
             return result;
@@ -56,7 +56,7 @@ public interface TransformationStepFunction {
         return Utils.replace(Utils.fixTargetPath(result, ValueType.ARRAY, resultPointer), resultPointer, Json.createArrayBuilder(res).build());
     };
 
-    TransformationStepFunction REDUCE = (ctx, source, result, sourcePointer, resultPointer, expression, engineHolder) -> {
+    StepFunction REDUCE = (ctx, source, result, sourcePointer, resultPointer, expression, engineHolder) -> {
         final JsonValue value = Utils.getValue(source, sourcePointer);
         if (Utils.isEmpty(value)) {
             return result;
@@ -67,5 +67,5 @@ public interface TransformationStepFunction {
         return Utils.replace(Utils.fixTargetPath(result, ValueType.OBJECT, resultPointer), resultPointer, Utils.asJsonValue(Utils.getObject(engineHolder, "res")));
     };
 
-    JsonValue apply(TransformationContext ctx, JsonValue source, JsonValue result, String sourcePointer, String resultPointer, String expression, ScriptEngineHolder engineHolder);
+    JsonValue apply(TransformationContext ctx, JsonValue source, JsonValue result, String sourcePointer, String resultPointer, String expression, EngineHolder engineHolder);
 }

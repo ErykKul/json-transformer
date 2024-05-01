@@ -2,10 +2,10 @@ package com.github.erykkul.json.transformer;
 
 import javax.script.ScriptEngine;
 
-public class ScriptEngineHolder {
+public class EngineHolder {
     private ScriptEngine engine;
 
-    public ScriptEngineHolder() {
+    public EngineHolder() {
     }
 
     public ScriptEngine getEngine() {

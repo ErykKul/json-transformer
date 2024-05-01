@@ -13,9 +13,9 @@ public class TransformationStep {
     private final String sourcePointer;
     private final String resultPointer;
     private final List<String> expressions;
-    private final ScriptEngineHolder engineHolder;
+    private final EngineHolder engineHolder;
 
-    public TransformationStep(final String sourcePointer, final String resultPointer, final List<String> expressions, final ScriptEngineHolder engineHolder) {
+    public TransformationStep(final String sourcePointer, final String resultPointer, final List<String> expressions, final EngineHolder engineHolder) {
         this.sourcePointer = sourcePointer;
         this.resultPointer = resultPointer;
         this.expressions = expressions;
@@ -46,7 +46,7 @@ public class TransformationStep {
     }
 
     private JsonValue execExpr(final TransformationContext ctx, final JsonValue source, final JsonValue result,
-            final String expression, final ScriptEngineHolder engineHolder) {
+            final String expression, final EngineHolder engineHolder) {
         if (expression.startsWith("\"")) {
             final String literal = expression.length() > 1
                     ? expression.substring(1, expression.length() - 1)
@@ -60,7 +60,7 @@ public class TransformationStep {
                     ? String.join("(", Arrays.copyOfRange(functionParts, 1, functionParts.length))
                     : "";
             final String functionArg = str.length() > 0 ? str.substring(0, str.length() - 1) : "";
-            final TransformationStepFunction func = ctx.getFunctions().get(functionName);
+            final StepFunction func = ctx.getFunctions().get(functionName);
             return func == null ? result
                     : func.apply(ctx, source, result, sourcePointer, resultPointer, functionArg, engineHolder);
         }

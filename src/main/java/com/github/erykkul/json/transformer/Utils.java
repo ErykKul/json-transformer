@@ -117,7 +117,7 @@ public class Utils {
         return OBJECT.equals(js.getValueType());
     }
 
-    public static ScriptEngine engine(final ScriptEngineHolder engineHolder) {
+    public static ScriptEngine engine(final EngineHolder engineHolder) {
         if (engineHolder.getEngine() != null) {
             return engineHolder.getEngine();
         }
@@ -135,7 +135,7 @@ public class Utils {
         return engine;
     }
 
-    public static void eval(final ScriptEngineHolder engineHolder, final String script) {
+    public static void eval(final EngineHolder engineHolder, final String script) {
         try {
             engine(engineHolder).eval(script);
         } catch (final Exception e) {
@@ -143,7 +143,7 @@ public class Utils {
         }
     }
 
-    public static void eval(final ScriptEngineHolder engineHolder, final String script, final JsonValue value) {
+    public static void eval(final EngineHolder engineHolder, final String script, final JsonValue value) {
         try {
             final ScriptEngine engine = engine(engineHolder);
             engine.put("x", asObject(value));
@@ -153,7 +153,7 @@ public class Utils {
         }
     }
 
-    public static Object getObject(final ScriptEngineHolder engineHolder, final String key) {
+    public static Object getObject(final EngineHolder engineHolder, final String key) {
         try {
             return engine(engineHolder).get(key);
         } catch (final NullPointerException e) {

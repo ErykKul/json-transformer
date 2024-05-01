@@ -45,7 +45,7 @@ public class TransformationContext {
         return localResult;
     }
 
-    public Map<String, TransformationStepFunction> getFunctions() {
+    public Map<String, StepFunction> getFunctions() {
         return transformation.getFunctions();
     }
 
