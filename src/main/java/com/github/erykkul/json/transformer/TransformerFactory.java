@@ -1,3 +1,5 @@
+// Author: Eryk Kulikowski (2024). Apache 2.0 License
+
 package com.github.erykkul.json.transformer;
 
 import java.io.IOException;
