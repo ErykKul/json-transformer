@@ -89,6 +89,7 @@ public class TransformerFactory {
         result.put("filter", TransformationStepFunction.FILTER);
         result.put("map", TransformationStepFunction.MAP);
         result.put("reduce", TransformationStepFunction.REDUCE);
+        result.put("useResultAsSource", TransformationStepFunction.USE_RESULT_AS_SOURCE);
         return result;
     }
 }

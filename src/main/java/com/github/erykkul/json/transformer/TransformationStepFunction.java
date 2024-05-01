@@ -1,5 +1,6 @@
 package com.github.erykkul.json.transformer;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
 import java.util.stream.Collectors;
@@ -17,6 +18,15 @@ public interface TransformationStepFunction {
 
     TransformationStepFunction REMOVE = (ctx, source, result, sourcePointer, resultPointer, expression, engineHolder) -> {
         return Utils.remove(result, resultPointer);
+    };
+
+    TransformationStepFunction USE_RESULT_AS_SOURCE = (ctx, source, result, sourcePointer, resultPointer, expression, engineHolder) -> {
+        final List<String> expressions = new ArrayList<>();
+        if (expression != null && !"".equals(expression)) {
+            expressions.add(expression);
+        }
+        final TransformationStep step = new TransformationStep(sourcePointer, resultPointer, expressions);
+        return step.execute(ctx, result, result);
     };
 
     TransformationStepFunction SCRIPT = (ctx, source, result, sourcePointer, resultPointer, expression, engineHolder) -> {

@@ -106,6 +106,7 @@
         },
         {
             "useResultAsSource": true,
+            "sourcePointer": "",
             "resultPointer": "",
             "steps": [
                 {
@@ -113,20 +114,8 @@
                     "resultPointer": "/flattened",
                     "expressions": [
                         "script(set = new Set())",
-                        "filter(res = set.add(x.orgName))"
-                    ]
-                }
-            ]
-        },
-        {
-            "useResultAsSource": true,
-            "resultPointer": "",
-            "steps": [
-                {
-                    "sourcePointer": "/flattened",
-                    "resultPointer": "/flattened",
-                    "expressions": [
-                        "script(x.add({org: 'z', orgName: 'z'}); res = x)"
+                        "filter(res = set.add(x.orgName))",
+                        "useResultAsSource(script(x.add({org: 'z', orgName: 'z'}); res = x))"
                     ]
                 }
             ]
