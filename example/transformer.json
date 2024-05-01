@@ -99,7 +99,6 @@
         },
         {
             "useResultAsSource": true,
-            "sourcePointer": "",
             "resultPointer": "",
             "steps": [
                 {
