@@ -33,7 +33,7 @@ public class Utils {
 
     private static final Logger logger = Logger.getLogger(Utils.class.getName());
 
-    public static JsonValue fixTargetPath(final JsonValue in, final JsonValue.ValueType t, final String jsonPointer) {
+    public static JsonValue fixPath(final JsonValue in, final JsonValue.ValueType t, final String jsonPointer) {
         final String[] fields = jsonPointer.split("/");
         JsonValue result = in;
         String path = "";

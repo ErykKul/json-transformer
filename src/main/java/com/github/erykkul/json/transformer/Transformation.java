@@ -25,7 +25,9 @@ public class Transformation {
     private final List<TransformationStep> steps;
     private final Map<String, StepFunction> functions;
 
-    public Transformation(final boolean append, final boolean useResultAsSource, final String sourcePointer, final String resultPointer, final List<TransformationStep> steps, final Map<String, StepFunction> functions) {
+    public Transformation(final boolean append, final boolean useResultAsSource, final String sourcePointer,
+            final String resultPointer, final List<TransformationStep> steps,
+            final Map<String, StepFunction> functions) {
         this.append = append;
         this.useResultAsSource = useResultAsSource;
         this.sourcePointer = sourcePointer;
@@ -35,8 +37,8 @@ public class Transformation {
     }
 
     public JsonObject transform(final JsonObject source, final JsonObject result) {
-        final JsonObject sourceOrResult = useResultAsSource ? result : source;
-        final TransformationContext ctx = new TransformationContext(sourceOrResult, result, sourceOrResult, result, this);
+        final JsonObject srcOrRes = useResultAsSource ? result : source;
+        final TransformationContext ctx = new TransformationContext(srcOrRes, result, srcOrRes, result, this);
         if (!sourcePointer.contains("[i]")) {
             return doTransform(ctx, sourcePointer, resultPointer).asJsonObject();
         }
@@ -69,10 +71,9 @@ public class Transformation {
         }
         final JsonValue sourceValue = Utils.getValue(ctx.getLocalSource(), sourcePointers.get(0));
         final String rootOrResultPointer = resultPointers.isEmpty() ? "" : resultPointers.get(0);
-        final JsonValue fixedLocalResult = Utils.fixTargetPath(ctx.getLocalResult(), append ? ARRAY : OBJECT,
-                rootOrResultPointer);
+        final JsonValue fixedResult = Utils.fixPath(ctx.getLocalResult(), append ? ARRAY : OBJECT, rootOrResultPointer);
         if (!Utils.isArray(sourceValue)) {
-            return fixedLocalResult;
+            return fixedResult;
         }
 
         final List<String> remainingSourcePointers = sourcePointers.subList(1, sourcePointers.size());
@@ -80,7 +81,7 @@ public class Transformation {
                 : resultPointers.subList(1, resultPointers.size());
         final boolean doFlatten = flatten || resultPointers.size() == 1;
         final JsonArray sourceArray = sourceValue.asJsonArray();
-        JsonValue result = Utils.getValue(fixedLocalResult, rootOrResultPointer);
+        JsonValue result = Utils.getValue(fixedResult, rootOrResultPointer);
         int flattenedMergeIdx = 0;
         for (int i = 0; i < sourceArray.size(); i++) {
             result = Utils.isArray(result) ? result : EMPTY_JSON_ARRAY;
@@ -102,13 +103,13 @@ public class Transformation {
                 result = Json.createArrayBuilder(resultArray).add(transformed).build();
             }
         }
-        return Utils.replace(fixedLocalResult, rootOrResultPointer, result);
+        return Utils.replace(fixedResult, rootOrResultPointer, result);
     }
 
     private JsonValue doTransform(final TransformationContext ctx, final String sourcePointer,
             final String resultPointer) {
         final JsonValue sourceValue = Utils.getValue(ctx.getLocalSource(), sourcePointer);
-        final JsonValue fixedResult = Utils.fixTargetPath(ctx.getLocalResult(), sourceValue.getValueType(), resultPointer);
+        final JsonValue fixedResult = Utils.fixPath(ctx.getLocalResult(), sourceValue.getValueType(), resultPointer);
         if (Utils.isEmpty(sourceValue)) {
             return ctx.getLocalResult();
         }

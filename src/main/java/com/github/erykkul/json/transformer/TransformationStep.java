@@ -15,7 +15,8 @@ public class TransformationStep {
     private final List<String> expressions;
     private final EngineHolder engineHolder;
 
-    public TransformationStep(final String sourcePointer, final String resultPointer, final List<String> expressions, final EngineHolder engineHolder) {
+    public TransformationStep(final String sourcePointer, final String resultPointer, final List<String> expressions,
+            final EngineHolder engineHolder) {
         this.sourcePointer = sourcePointer;
         this.resultPointer = resultPointer;
         this.expressions = expressions;
@@ -26,7 +27,7 @@ public class TransformationStep {
         if (expressions != null && !expressions.isEmpty()) {
             JsonValue res = result;
             for (final String expression : expressions) {
-                res = execExpr(ctx, ctx.useResultAsSource() ? res : source, res, expression, engineHolder);
+                res = executeExpresion(ctx, ctx.useResultAsSource() ? res : source, res, expression, engineHolder);
             }
             return res;
         }
@@ -37,7 +38,7 @@ public class TransformationStep {
         if (!"".equals(sourcePointer) && "".equals(resultPointer)) {
             return res;
         }
-        return Utils.add(Utils.fixTargetPath(result, OBJECT, resultPointer), resultPointer, res);
+        return Utils.add(Utils.fixPath(result, OBJECT, resultPointer), resultPointer, res);
     }
 
     public JsonObject toJsonObject() {
@@ -45,14 +46,13 @@ public class TransformationStep {
                 .add("expressions", Json.createArrayBuilder(expressions).build()).build();
     }
 
-    private JsonValue execExpr(final TransformationContext ctx, final JsonValue source, final JsonValue result,
+    private JsonValue executeExpresion(final TransformationContext ctx, final JsonValue source, final JsonValue result,
             final String expression, final EngineHolder engineHolder) {
         if (expression.startsWith("\"")) {
             final String literal = expression.length() > 1
                     ? expression.substring(1, expression.length() - 1)
                     : "";
-            return Utils.add(Utils.fixTargetPath(result, OBJECT, resultPointer), resultPointer,
-                    Json.createValue(literal));
+            return Utils.add(Utils.fixPath(result, OBJECT, resultPointer), resultPointer, Json.createValue(literal));
         } else if (!"".equals(expression)) {
             final String[] functionParts = expression.split("\\(");
             final String functionName = functionParts.length > 0 ? functionParts[0] : "";
