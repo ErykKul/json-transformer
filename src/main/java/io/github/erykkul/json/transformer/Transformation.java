@@ -1,6 +1,6 @@
 // Author: Eryk Kulikowski (2024). Apache 2.0 License
 
-package com.github.erykkul.json.transformer;
+package io.github.erykkul.json.transformer;
 
 import static jakarta.json.JsonValue.EMPTY_JSON_ARRAY;
 import static jakarta.json.JsonValue.EMPTY_JSON_OBJECT;
