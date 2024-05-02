@@ -17,7 +17,8 @@ public class TransformationContext {
     private final EngineHolder engineHolder;
 
     public TransformationContext(final JsonObject globalSource, final JsonObject globalResult,
-            final JsonValue localSource, final JsonValue localResult, final Transformation transformation, final EngineHolder engineHolder) {
+            final JsonValue localSource, final JsonValue localResult, final Transformation transformation,
+            final EngineHolder engineHolder) {
         this.globalSource = globalSource;
         this.globalResult = globalResult;
         this.localSource = localSource;
