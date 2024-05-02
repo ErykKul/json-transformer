@@ -129,7 +129,7 @@
                     "resultPointer": "/graph",
                     "expressions": [
                         "script(list = new List())",
-                        "map(last = x.path.split('/').slice(-1); id = ''; parent = ''; list.addAll(x.path.split('/').map(function(p) { id = id + '/' + p; r = { id: id, name: p, parent: parent, isDir: p != last }; parent = parent + '/' + p; return r })))",
+                        "map(importJS example/split_paths.js endImport)",
                         "script(res = list)"
                     ]
                 }

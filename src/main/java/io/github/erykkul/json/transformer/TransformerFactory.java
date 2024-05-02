@@ -9,12 +9,15 @@ import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.logging.Logger;
+import java.util.regex.Pattern;
 import java.util.stream.Collectors;
 
 import jakarta.json.bind.Jsonb;
 import jakarta.json.bind.JsonbBuilder;
 
 public class TransformerFactory {
+
     public static class TransformerVO {
         public List<TransformationVO> transformations;
     }
@@ -32,6 +35,23 @@ public class TransformerFactory {
         public String sourcePointer;
         public List<String> expressions;
     }
+
+    private static final Logger logger = Logger.getLogger(TransformerFactory.class.getName());
+    private static final String importOpenTag = "importJS";
+    private static final String importEndTag = "endImport";
+    private static final Pattern importPattern = Pattern.compile(importOpenTag + "(.*)" + importEndTag);
+    private static final Pattern escapePattern = Pattern.compile("(;\r\n|;\n|\r\n|\n|\"|\\\\|\b|\f|\r|\t)");
+    private static final Map<String, String> escapeMap = Map.of(
+            ";\r\n", "; ",
+            ";\n", "; ",
+            "\r\n", "; ",
+            "\n", "; ",
+            "\\", "\\\\\\\\\\\\\\\\",
+            "\"", "\\\\\\\\\"",
+            "\b", "\\\\\\\\b",
+            "\f", "\\\\\\\\f",
+            "\r", "\\\\\\\\r",
+            "\t", "\\\\\\\\t");
 
     public static TransformerFactory factory() {
         return new TransformerFactory();
@@ -54,8 +74,20 @@ public class TransformerFactory {
     }
 
     public Transformer createFromJsonString(final String json) {
+        final String content = importPattern.matcher(json).replaceAll(x -> {
+            final String importFile = x.group()
+                    .substring(importOpenTag.length(), x.group().length() - importEndTag.length())
+                    .trim();
+            try {
+                return escapePattern.matcher(Files.readString(Paths.get(importFile)))
+                        .replaceAll(y -> escapeMap.get(y.group()));
+            } catch (final IOException e) {
+                logger.severe("Importing from file \"" + importFile + "\" failed: " + e);
+                return "";
+            }
+        });
         final Jsonb jsonb = JsonbBuilder.newBuilder().build();
-        final TransformerVO t = jsonb.fromJson(json, TransformerVO.class);
+        final TransformerVO t = jsonb.fromJson(content, TransformerVO.class);
         return new Transformer(t.transformations == null ? Collections.emptyList()
                 : t.transformations.stream().map(this::toTransformation).collect(Collectors.toList()));
     }
