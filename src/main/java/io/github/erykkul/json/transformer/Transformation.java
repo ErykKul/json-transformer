@@ -38,15 +38,16 @@ public class Transformation {
         this.functions = functions;
     }
 
-    public JsonObject transform(final JsonObject source, final JsonObject result) {
+    public JsonObject transform(final JsonObject source, final JsonObject result, final EngineHolder engineHolder) {
         final JsonObject srcOrRes = useResultAsSource ? result : source;
-        final TransformationContext ctx = new TransformationContext(srcOrRes, result, srcOrRes, result, this);
+        final TransformationContext ctx = new TransformationContext(srcOrRes, result, srcOrRes, result, this,
+                engineHolder);
         if (!sourcePointer.contains("[i]")) {
             return doTransform(ctx, sourcePointer, resultPointer).asJsonObject();
         }
         final List<String> sourcePointers = Arrays.asList(sourcePointer.split("\\[i\\]", -1));
         final List<String> resultPointers = Arrays.asList(resultPointer.split("\\[i\\]", -1));
-        return transform(ctx, sourcePointers, resultPointers, false).asJsonObject();
+        return transform(ctx, sourcePointers, resultPointers, false, engineHolder).asJsonObject();
     }
 
     public JsonObject toJsonObject() {
@@ -67,7 +68,7 @@ public class Transformation {
     }
 
     private JsonValue transform(final TransformationContext ctx, final List<String> sourcePointers,
-            final List<String> resultPointers, final boolean flatten) {
+            final List<String> resultPointers, final boolean flatten, final EngineHolder engineHolder) {
         if (sourcePointers.size() == 1) {
             return doTransform(ctx, sourcePointers.get(0), String.join("[i]", resultPointers));
         }
@@ -90,9 +91,9 @@ public class Transformation {
             final JsonArray resultArray = result.asJsonArray();
             final JsonValue resultObject = resultArray.size() > i ? resultArray.get(i) : EMPTY_JSON_OBJECT;
             final TransformationContext localContext = new TransformationContext(ctx.getGlobalSource(),
-                    ctx.getGlobalResult(), sourceArray.get(i), resultObject, this);
+                    ctx.getGlobalResult(), sourceArray.get(i), resultObject, this, engineHolder);
             final JsonValue transformed = transform(localContext, remainingSourcePointers, remainingResultPointers,
-                    doFlatten);
+                    doFlatten, engineHolder);
             if (doFlatten && !append && Utils.isArray(transformed)) {
                 result = mergeValues(transformed.asJsonArray(), result.asJsonArray(), flattenedMergeIdx);
                 flattenedMergeIdx += transformed.asJsonArray().size();

@@ -108,7 +108,7 @@ public class TransformerFactory {
 
     public TransformationStep toValue(final ValueVO v) {
         return new TransformationStep(v.sourcePointer == null ? "" : v.sourcePointer,
-                v.resultPointer == null ? "" : v.resultPointer, v.expressions, new EngineHolder());
+                v.resultPointer == null ? "" : v.resultPointer, v.expressions);
     }
 
     public Map<String, StepFunction> getFunctions() {

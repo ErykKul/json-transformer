@@ -15,21 +15,18 @@ public class TransformationStep {
     private final String sourcePointer;
     private final String resultPointer;
     private final List<String> expressions;
-    private final EngineHolder engineHolder;
 
-    public TransformationStep(final String sourcePointer, final String resultPointer, final List<String> expressions,
-            final EngineHolder engineHolder) {
+    public TransformationStep(final String sourcePointer, final String resultPointer, final List<String> expressions) {
         this.sourcePointer = sourcePointer;
         this.resultPointer = resultPointer;
         this.expressions = expressions;
-        this.engineHolder = engineHolder;
     }
 
     public JsonValue execute(final TransformationContext ctx, final JsonValue source, final JsonValue result) {
         if (expressions != null && !expressions.isEmpty()) {
             JsonValue res = result;
             for (final String expression : expressions) {
-                res = executeExpresion(ctx, ctx.useResultAsSource() ? res : source, res, expression, engineHolder);
+                res = executeExpresion(ctx, ctx.useResultAsSource() ? res : source, res, expression);
             }
             return res;
         }
@@ -49,7 +46,7 @@ public class TransformationStep {
     }
 
     private JsonValue executeExpresion(final TransformationContext ctx, final JsonValue source, final JsonValue result,
-            final String expression, final EngineHolder engineHolder) {
+            final String expression) {
         if (expression.startsWith("\"")) {
             final String literal = expression.length() > 1
                     ? expression.substring(1, expression.length() - 1)
@@ -64,7 +61,7 @@ public class TransformationStep {
             final String functionArg = str.length() > 0 ? str.substring(0, str.length() - 1) : "";
             final StepFunction func = ctx.getFunctions().get(functionName);
             return func == null ? result
-                    : func.apply(ctx, source, result, sourcePointer, resultPointer, functionArg, engineHolder);
+                    : func.apply(ctx, source, result, sourcePointer, resultPointer, functionArg);
         }
         return result;
     }

@@ -14,9 +14,10 @@ public class Transformer {
     }
 
     public JsonObject transform(final JsonObject source) {
+        final EngineHolder engineHolder = new EngineHolder();
         JsonObject result = JsonObject.EMPTY_JSON_OBJECT;
         for (final Transformation t : transformations) {
-            result = t.transform(source, result);
+            result = t.transform(source, result, engineHolder);
         }
         return result;
     }

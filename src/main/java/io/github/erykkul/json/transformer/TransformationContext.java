@@ -14,14 +14,16 @@ public class TransformationContext {
     private final JsonObject globalResult;
     private final JsonValue localSource;
     private final JsonValue localResult;
+    private final EngineHolder engineHolder;
 
     public TransformationContext(final JsonObject globalSource, final JsonObject globalResult,
-            final JsonValue localSource, final JsonValue localResult, final Transformation transformation) {
+            final JsonValue localSource, final JsonValue localResult, final Transformation transformation, final EngineHolder engineHolder) {
         this.globalSource = globalSource;
         this.globalResult = globalResult;
         this.localSource = localSource;
         this.localResult = localResult;
         this.transformation = transformation;
+        this.engineHolder = engineHolder;
     }
 
     public JsonObject toJsonObject() {
@@ -53,5 +55,9 @@ public class TransformationContext {
 
     public boolean useResultAsSource() {
         return transformation.useResultAsSource();
+    }
+
+    public EngineHolder engine() {
+        return engineHolder;
     }
 }
