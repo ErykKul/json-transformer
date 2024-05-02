@@ -27,7 +27,8 @@ public interface StepFunction {
         if (Utils.isEmpty(value)) {
             return result;
         }
-        Utils.eval(engineHolder, expression, value);
+        Utils.eval(engineHolder, "res = null");
+        Utils.eval(engineHolder, expression, value, "x");
         final JsonValue res = Utils.asJsonValue(Utils.getObject(engineHolder, "res"));
         if (Utils.isEmpty(res)) {
             return result;
@@ -40,8 +41,9 @@ public interface StepFunction {
         if (Utils.isEmpty(value)) {
             return result;
         }
+        Utils.eval(engineHolder, "res = null");
         final List<JsonValue> res = Utils.stream(value).filter(x -> {
-            Utils.eval(engineHolder, expression, x);
+            Utils.eval(engineHolder, expression, x, "x");
             return Boolean.TRUE.equals(Utils.getObject(engineHolder, "res"));
         }).collect(Collectors.toList());
         return Utils.replace(Utils.fixPath(result, ValueType.ARRAY, resultPointer), resultPointer,
@@ -53,8 +55,9 @@ public interface StepFunction {
         if (Utils.isEmpty(value)) {
             return result;
         }
+        Utils.eval(engineHolder, "res = null");
         final List<JsonValue> res = Utils.stream(value).map(x -> {
-            Utils.eval(engineHolder, expression, x);
+            Utils.eval(engineHolder, expression, x, "x");
             return Utils.asJsonValue(Utils.getObject(engineHolder, "res"));
         }).collect(Collectors.toList());
         return Utils.replace(Utils.fixPath(result, ValueType.ARRAY, resultPointer), resultPointer,
@@ -66,8 +69,9 @@ public interface StepFunction {
         if (Utils.isEmpty(value)) {
             return result;
         }
+        Utils.eval(engineHolder, "res = null");
         Utils.stream(value).forEach(x -> {
-            Utils.eval(engineHolder, expression, x);
+            Utils.eval(engineHolder, expression, x, "x");
         });
         return Utils.replace(Utils.fixPath(result, ValueType.OBJECT, resultPointer), resultPointer,
                 Utils.asJsonValue(Utils.getObject(engineHolder, "res")));

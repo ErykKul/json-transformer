@@ -126,7 +126,6 @@ public class Utils {
         final ScriptEngineManager manager = new ScriptEngineManager();
         final ScriptEngine engine = manager.getEngineByName("javascript");
         try {
-            engine.put("res", null);
             engine.eval("Map = Java.type('java.util.LinkedHashMap')");
             engine.eval("Set = Java.type('java.util.LinkedHashSet')");
             engine.eval("List = Java.type('java.util.ArrayList')");
@@ -145,10 +144,11 @@ public class Utils {
         }
     }
 
-    public static void eval(final EngineHolder engineHolder, final String script, final JsonValue value) {
+    public static void eval(final EngineHolder engineHolder, final String script, final JsonValue value,
+            final String key) {
         try {
             final ScriptEngine engine = engine(engineHolder);
-            engine.put("x", asObject(value));
+            engine.put(key, asObject(value));
             engine.eval(script);
         } catch (final Exception e) {
             logger.fine("Script failed: " + e);

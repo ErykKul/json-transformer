@@ -147,7 +147,7 @@
                         "script(set = new Set())",
                         "filter(res = set.add(x))",
                         "map(if (x.parent == '') delete x.parent; res = x)",
-                        "//script(UUID = Java.type('java.util.UUID'); ids = new Map(); res = null;)",
+                        "//script(UUID = Java.type('java.util.UUID'); ids = new Map())",
                         "//map(ids.put(x.id, UUID.randomUUID().toString()); res = x)",
                         "//map(x.id = ids.get(x.id); if (typeof x.parent !== 'undefined') x.parent = ids.get(x.parent); res = x)"
                     ]
