@@ -27,12 +27,6 @@ public class TransformerFactory {
         public Boolean useResultAsSource;
         public String sourcePointer;
         public String resultPointer;
-        public List<ValueVO> steps;
-    }
-
-    public static class ValueVO {
-        public String resultPointer;
-        public String sourcePointer;
         public List<String> expressions;
     }
 
@@ -101,14 +95,7 @@ public class TransformerFactory {
         return new Transformation(t.append == null ? false : t.append,
                 t.useResultAsSource == null ? false : t.useResultAsSource,
                 t.sourcePointer == null ? "" : t.sourcePointer, t.resultPointer == null ? "" : t.resultPointer,
-                t.steps == null ? Collections.emptyList()
-                        : t.steps.stream().map(this::toValue).collect(Collectors.toList()),
-                functions);
-    }
-
-    public TransformationStep toValue(final ValueVO v) {
-        return new TransformationStep(v.sourcePointer == null ? "" : v.sourcePointer,
-                v.resultPointer == null ? "" : v.resultPointer, v.expressions);
+                t.expressions, functions);
     }
 
     public Map<String, StepFunction> getFunctions() {

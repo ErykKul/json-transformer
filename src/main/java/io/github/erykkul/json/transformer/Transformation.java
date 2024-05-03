@@ -11,7 +11,6 @@ import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
 import java.util.Map;
-import java.util.stream.Collectors;
 
 import jakarta.json.Json;
 import jakarta.json.JsonArray;
@@ -24,17 +23,17 @@ public class Transformation {
     private final boolean useResultAsSource;
     private final String sourcePointer;
     private final String resultPointer;
-    private final List<TransformationStep> steps;
+    private final List<String> expressions;
     private final Map<String, StepFunction> functions;
 
     public Transformation(final boolean append, final boolean useResultAsSource, final String sourcePointer,
-            final String resultPointer, final List<TransformationStep> steps,
+            final String resultPointer, final List<String> expressions,
             final Map<String, StepFunction> functions) {
         this.append = append;
         this.useResultAsSource = useResultAsSource;
         this.sourcePointer = sourcePointer;
         this.resultPointer = resultPointer;
-        this.steps = steps;
+        this.expressions = expressions;
         this.functions = functions;
     }
 
@@ -53,10 +52,7 @@ public class Transformation {
     public JsonObject toJsonObject() {
         return Json.createObjectBuilder().add("append", append).add("useResultAsSource", useResultAsSource)
                 .add("sourcePointer", sourcePointer).add("resultPointer", resultPointer)
-                .add("steps",
-                        Json.createArrayBuilder(
-                                steps.stream().map(TransformationStep::toJsonObject).collect(Collectors.toList())))
-                .build();
+                .add("expressions", Json.createArrayBuilder(expressions)).build();
     }
 
     public Map<String, StepFunction> getFunctions() {
@@ -116,20 +112,16 @@ public class Transformation {
         if (Utils.isEmpty(sourceValue)) {
             return ctx.getLocalResult();
         }
-        if (!append || Utils.isArray(sourceValue)) {
+        if (!append) {
             JsonValue result = Utils.getValue(fixedResult, resultPointer);
-            for (final TransformationStep step : steps) {
-                result = copy(ctx, sourceValue, result, step);
-            }
+            result = TransformationStep.execute(ctx, sourceValue, Utils.getValue(fixedResult, resultPointer), expressions);
             if (Utils.isEmpty(fixedResult)) {
                 return result;
             }
             return Utils.replace(fixedResult, resultPointer, result);
         } else {
             JsonValue result = EMPTY_JSON_OBJECT;
-            for (final TransformationStep step : steps) {
-                result = step.execute(ctx, sourceValue, result);
-            }
+            result = TransformationStep.execute(ctx, sourceValue, result, expressions);
             final JsonValue targetArray = Utils.getValue(fixedResult, resultPointer);
             if (!Utils.isArray(targetArray)) {
                 return result;
@@ -137,28 +129,6 @@ public class Transformation {
             final JsonArray target = Json.createArrayBuilder(targetArray.asJsonArray()).add(result).build();
             return Utils.replace(fixedResult, resultPointer, target);
         }
-    }
-
-    private JsonValue copy(final TransformationContext ctx, final JsonValue sourceValue, final JsonValue result,
-            final TransformationStep step) {
-        if (Utils.isArray(sourceValue)) {
-            return arrayCopy(ctx, sourceValue.asJsonArray(),
-                    Utils.isArray(result) ? result.asJsonArray() : EMPTY_JSON_ARRAY, step);
-        }
-        return step.execute(ctx, sourceValue, result);
-    }
-
-    private JsonArray arrayCopy(final TransformationContext ctx, final JsonArray sourceArray,
-            final JsonArray resultArray, final TransformationStep step) {
-        final JsonArrayBuilder builder = Json.createArrayBuilder();
-        if (append) {
-            builder.addAll(Json.createArrayBuilder(resultArray));
-        }
-        for (int i = 0; i < sourceArray.size(); i++) {
-            final JsonValue result = !append && i < resultArray.size() ? resultArray.get(i) : EMPTY_JSON_OBJECT;
-            builder.add(step.execute(ctx, sourceArray.get(i), result));
-        }
-        return builder.build();
     }
 
     private JsonArray mergeValues(final JsonArray source, final JsonArray result, final int startIdx) {
