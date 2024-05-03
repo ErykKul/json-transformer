@@ -98,10 +98,6 @@ public class TransformerFactory {
                 t.expressions, functions);
     }
 
-    public Map<String, ExprFunction> getFunctions() {
-        return functions;
-    }
-
     private Map<String, ExprFunction> builtin() {
         final Map<String, ExprFunction> result = new HashMap<>();
         result.put("copy", ExprFunction.COPY);
