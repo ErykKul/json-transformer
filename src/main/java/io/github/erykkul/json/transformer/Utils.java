@@ -59,6 +59,9 @@ public class Utils {
     }
 
     public static JsonValue getValue(final JsonValue source, final String pointer) {
+        if ("".equals(pointer)) {
+            return source;
+        }
         if (!containsValue(source, pointer)) {
             return EMPTY_JSON_OBJECT;
         }
@@ -66,18 +69,13 @@ public class Utils {
     }
 
     public static JsonValue replace(final JsonValue in, final String at, final JsonValue with) {
+        if ("".equals(at)) {
+            return with;
+        }
         if (!containsValue(in, at)) {
             return add(in, at, with);
         }
         return Json.createPointer(at).replace(asJsonStructure(in), with);
-    }
-
-    public static JsonValue add(final JsonValue in, final String at, final JsonValue value) {
-        try {
-            return Json.createPointer(at).add(asJsonStructure(in), value);
-        } catch (final JsonException e) {
-            return in;
-        }
     }
 
     public static JsonValue remove(final JsonValue in, final String at) {
@@ -98,17 +96,6 @@ public class Utils {
             in.asJsonObject().values().stream();
         }
         return Stream.of(in);
-    }
-
-    public static boolean containsValue(final JsonValue in, final String at) {
-        if (isEmpty(in)) {
-            return false;
-        }
-        try {
-            return Json.createPointer(at).containsValue(asJsonStructure(in));
-        } catch (final JsonException e) {
-            return false;
-        }
     }
 
     public static boolean isArray(final JsonValue js) {
@@ -203,6 +190,25 @@ public class Utils {
             return JsonArray.class.cast(js).stream().map(Utils::asObject).collect(Collectors.toList());
         }
         return null;
+    }
+
+    private static JsonValue add(final JsonValue in, final String at, final JsonValue value) {
+        try {
+            return Json.createPointer(at).add(asJsonStructure(in), value);
+        } catch (final JsonException e) {
+            return in;
+        }
+    }
+
+    private static boolean containsValue(final JsonValue in, final String at) {
+        if (isEmpty(in)) {
+            return false;
+        }
+        try {
+            return Json.createPointer(at).containsValue(asJsonStructure(in));
+        } catch (final JsonException e) {
+            return false;
+        }
     }
 
     private static JsonStructure asJsonStructure(final JsonValue in) {
