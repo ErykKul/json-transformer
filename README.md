@@ -115,4 +115,45 @@ This library is implemented using [Jakarta JSON Processing](https://jakarta.ee/s
 
 Some of the built-in functions provided in this project use JavaScript as expression language. If you are using these function, or you are adding your own functions using JavaScript as expression language, then you need to provide a [jvax.script](https://docs.oracle.com/javase/6/docs/api/javax/script/package-summary.html) implementation. This project uses (dependency scope `provided`) the following implementation: `pkg:maven/org.openjdk.nashorn/nashorn-core@15.4`.
 
-## Transformation structure
+## Transformer
+
+Transformer contains only one field `transformations`, which is an array of transformations, each having the following structure:
+- boolean `append` (default: `false`): it can only be set to `true` when the JsonValue at the `resultPointer` is an array (or that value does not yet exist). In that case, values resulting from this transformation are appended to the array at the `resultPointer`.
+- boolean `useResultAsSource`(default: `false`): when set to `true` the result is also used as the source of this transformation, where the source itself is ignored. It is useful, for example, when using the `filter` function on an array in the resulting document.
+- string `sourcePointer` (default: `""`): a JSON Pointer extended with `[i]` notation (see [Working with arrays](#working-with-arrays)) pointing to a value in the source document.
+- string `resultPointer` (default: `""`): a JSON Pointer extended with `[i]` notation (see [Working with arrays](#working-with-arrays)) pointing to a value in the resulting document.
+- array of strings `expressions` (empty by default): when not defined (left empty), the transformations copies the value from `sourcePointer` to the `resultPointer`. If the value at the `resultPointer` does not yet exist, it is created. If it already exists, and it is not an array we are appending to (`"append": true`, see also [Working with arrays](#working-with-arrays)), then the value is merged with the already existing value (see [Merging already existing values](#merging-already-existing-values)). When `expressions` are not empty, then the values are produced according to these expressions (see [Expressions](#expressions)).
+
+Note that empty string (`""`) is a valid JSON Pointer that points to the whole document. The identity transformation that copies the whole source document to the resulting document can be then created with the following transformer:
+
+```json
+{
+    "transformations": [
+        {}
+    ]
+}
+```
+
+Or in a more verbose way, by filling in the default values:
+
+```json
+{
+    "transformations": [
+        {
+            "append": false,
+            "useResultAsSource": false,
+            "sourcePointer": "",
+            "resultPointer": "",
+            "expressions": []
+        }
+    ]
+}
+```
+
+### Merging already existing values
+
+### Expressions
+
+### Working with arrays
+
+### Example
