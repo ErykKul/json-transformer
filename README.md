@@ -152,6 +152,126 @@ Or in a more verbose way, by filling in the default values:
 
 ### Merging already existing values
 
+The default behavior of the library is merging values at the `resultPointer` with values from the `sourcePointer`. This can be overridden by setting the `"append": true` (in that case, values are appended to the array at the `resultPointer`, which is created if it does not yet exist), or by using specific expressions (for example, `remove(/x)` would remove `x` field in the object at the `resultPointer`). This section focuses on the merging behavior.
+
+In the trivial case where there is no value defined in the resulting document at `resultPointer`, the values are inserted at the `resultPointer` path in the source document. Note that that path may not exist yet in the resulting document. In fact, it is always the case at the beginning of the transformation. The objects needed for that path to be valid are then created, and the value is inserted at the right spot. If the value already exists, then it is overwritten. This can be illustrated with the following example.
+
+Source:
+```json
+{
+    "a": "x",
+    "b": "y"
+}
+```
+
+Transformer:
+```json
+{
+    "transformations": [
+        {
+            "sourcePointer": "/a",
+            "resultPointer": "/result1"
+        },
+        {
+            "sourcePointer": "/b",
+            "resultPointer": "/result1"
+        },
+        {
+            "sourcePointer": "/a",
+            "resultPointer": "/result2/x"
+        },
+        {
+            "sourcePointer": "/b",
+            "resultPointer": "/result2/y"
+        }
+    ]
+}
+```
+
+Result:
+```json
+{
+    "result1": "y",
+    "result2": {
+        "x": "x",
+        "y": "y"
+    }
+}
+```
+
+The same behavior can be observed in more complex situations when merging objects inside (possibly nested) arrays of objects. Also, objects in flattened array or in arrays of different lengths can be merged that way. If the array is shorter, or even empty, new objects are created at the corresponding (not yet existing) positions. Existing objects are always merged the same way, just as described above. However, if the value being merged is itself an array, it is overwritten with the new value (array or otherwise and vice versa). For example:
+
+Source:
+```json
+{
+    "a": [1, 2, 3],
+    "b": "y"
+}
+```
+
+Result from using the same transformations as in the example above:
+```json
+{
+    "result1": "y",
+    "result2": {
+        "x": [
+            1,
+            2,
+            3
+        ],
+        "y": "y"
+    }
+}
+```
+
+This behavior can be changed, as described in [Working with arrays](#working-with-arrays), by using the `[i]` notation and iterating over the values inside an array. For example:
+
+Source:
+```json
+{
+    "a": [1, 2, 3],
+    "b": ["a", "b", "c"]
+}
+```
+
+Transformer:
+```json
+{
+    "transformations": [
+        {
+            "sourcePointer": "/a[i]",
+            "resultPointer": "/result[i]/x"
+        },
+        {
+            "sourcePointer": "/b[i]",
+            "resultPointer": "/result[i]/y"
+        }
+    ]
+}
+```
+
+Result:
+```json
+{
+    "result": [
+        {
+            "x": 1,
+            "y": "a"
+        },
+        {
+            "x": 2,
+            "y": "b"
+        },
+        {
+            "x": 3,
+            "y": "c"
+        }
+    ]
+}
+```
+
+More details on using the `[i]` notation for iterating over elements in an array can be found in [Working with arrays](#working-with-arrays).
+
 ### Expressions
 
 ### Working with arrays
