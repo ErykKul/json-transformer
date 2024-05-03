@@ -231,9 +231,10 @@ Transformer (the same as in the example above):
         }
     ]
 }
-```json
+```
 
 Result:
+```json
 {
     "result1": "y",
     "result2": {
