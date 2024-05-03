@@ -11,18 +11,25 @@ import jakarta.json.JsonValue;
 import jakarta.json.JsonValue.ValueType;
 
 @FunctionalInterface
-public interface StepFunction {
+public interface ExprFunction {
 
-    StepFunction GENERATE_UUID = (ctx, source, result, expression) -> {
+    ExprFunction COPY = (ctx, source, result, expression) -> {
+        final String[] args = expression.split(",");
+        final String from = args.length > 0 ? args[0].trim() : "";
+        final String to = args.length > 1 ? args[1].trim() : "";
+        return Utils.replace(Utils.fixPath(result, ValueType.OBJECT, to), to, Utils.getValue(source, from));
+    };
+
+    ExprFunction GENERATE_UUID = (ctx, source, result, expression) -> {
         return Utils.replace(Utils.fixPath(result, ValueType.OBJECT, expression), expression,
                 Json.createValue(UUID.randomUUID().toString()));
     };
 
-    StepFunction REMOVE = (ctx, source, result, expression) -> {
+    ExprFunction REMOVE = (ctx, source, result, expression) -> {
         return Utils.remove(result, expression);
     };
 
-    StepFunction SCRIPT = (ctx, source, result, expression) -> {
+    ExprFunction SCRIPT = (ctx, source, result, expression) -> {
         if (Utils.isEmpty(source)) {
             return result;
         }
@@ -35,7 +42,7 @@ public interface StepFunction {
         return res;
     };
 
-    StepFunction FILTER = (ctx, source, result, expression) -> {
+    ExprFunction FILTER = (ctx, source, result, expression) -> {
         if (Utils.isEmpty(source)) {
             return result;
         }
@@ -47,7 +54,7 @@ public interface StepFunction {
         return Json.createArrayBuilder(res).build();
     };
 
-    StepFunction MAP = (ctx, source, result, expression) -> {
+    ExprFunction MAP = (ctx, source, result, expression) -> {
         if (Utils.isEmpty(source)) {
             return result;
         }
@@ -59,7 +66,7 @@ public interface StepFunction {
         return Json.createArrayBuilder(res).build();
     };
 
-    StepFunction REDUCE = (ctx, source, result, expression) -> {
+    ExprFunction REDUCE = (ctx, source, result, expression) -> {
         if (Utils.isEmpty(source)) {
             return result;
         }
@@ -70,5 +77,5 @@ public interface StepFunction {
         return Utils.asJsonValue(Utils.getObject(ctx.engine(), "res"));
     };
 
-    JsonValue apply(TransformationContext ctx, JsonValue source, JsonValue result, String expression);
+    JsonValue execute(TransformationCtx ctx, JsonValue source, JsonValue result, String expression);
 }

@@ -51,14 +51,14 @@ public class TransformerFactory {
         return new TransformerFactory();
     }
 
-    public static TransformerFactory factory(final Map<String, StepFunction> functions) {
+    public static TransformerFactory factory(final Map<String, ExprFunction> functions) {
         return new TransformerFactory(functions);
     }
 
-    private final Map<String, StepFunction> functions;
+    private final Map<String, ExprFunction> functions;
 
-    private TransformerFactory(final Map<String, StepFunction> functions) {
-        final Map<String, StepFunction> result = builtin();
+    private TransformerFactory(final Map<String, ExprFunction> functions) {
+        final Map<String, ExprFunction> result = builtin();
         result.putAll(functions);
         this.functions = Collections.unmodifiableMap(result);
     }
@@ -98,18 +98,19 @@ public class TransformerFactory {
                 t.expressions, functions);
     }
 
-    public Map<String, StepFunction> getFunctions() {
+    public Map<String, ExprFunction> getFunctions() {
         return functions;
     }
 
-    private Map<String, StepFunction> builtin() {
-        final Map<String, StepFunction> result = new HashMap<>();
-        result.put("generateUuid", StepFunction.GENERATE_UUID);
-        result.put("remove", StepFunction.REMOVE);
-        result.put("script", StepFunction.SCRIPT);
-        result.put("filter", StepFunction.FILTER);
-        result.put("map", StepFunction.MAP);
-        result.put("reduce", StepFunction.REDUCE);
+    private Map<String, ExprFunction> builtin() {
+        final Map<String, ExprFunction> result = new HashMap<>();
+        result.put("copy", ExprFunction.COPY);
+        result.put("generateUuid", ExprFunction.GENERATE_UUID);
+        result.put("remove", ExprFunction.REMOVE);
+        result.put("script", ExprFunction.SCRIPT);
+        result.put("filter", ExprFunction.FILTER);
+        result.put("map", ExprFunction.MAP);
+        result.put("reduce", ExprFunction.REDUCE);
         return result;
     }
 }

@@ -13,7 +13,7 @@
             "sourcePointer": "/files[i]",
             "resultPointer": "/paths",
             "expressions": [
-                "script(res = { z: x.path })"
+                "copy(/path, /z)"
             ]
         },
         {
@@ -30,10 +30,19 @@
             "resultPointer": "/creators[i]/affiliations[i]/orgName"
         },
         {
+            "append": true,
             "sourcePointer": "/authors[i]/organizations[i]",
             "resultPointer": "/flattened",
             "expressions": [
-                "script(res = { org: x.name, orgName: x.name })"
+                "copy(/name, /org)"
+            ]
+        },
+        {
+            "sourcePointer": "/authors[i]/organizations[i]",
+            "resultPointer": "/flattened",
+            "expressions": [
+                "copy(/name, /orgName)",
+                "copy(/name, /orgNameAgain)"
             ]
         },
         {

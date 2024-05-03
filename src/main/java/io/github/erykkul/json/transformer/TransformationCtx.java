@@ -8,7 +8,7 @@ import jakarta.json.Json;
 import jakarta.json.JsonObject;
 import jakarta.json.JsonValue;
 
-public class TransformationContext {
+public class TransformationCtx {
     private final Transformation transformation;
     private final JsonObject globalSource;
     private final JsonObject globalResult;
@@ -16,7 +16,7 @@ public class TransformationContext {
     private final JsonValue localResult;
     private final EngineHolder engineHolder;
 
-    public TransformationContext(final JsonObject globalSource, final JsonObject globalResult,
+    public TransformationCtx(final JsonObject globalSource, final JsonObject globalResult,
             final JsonValue localSource, final JsonValue localResult, final Transformation transformation,
             final EngineHolder engineHolder) {
         this.globalSource = globalSource;
@@ -29,9 +29,8 @@ public class TransformationContext {
 
     public JsonObject toJsonObject() {
         return Json.createObjectBuilder().add("transformation", transformation.toJsonObject())
-                .add("globalSource", globalSource)
-                .add("globalResult", globalResult).add("localSource", localSource).add("localResult", localResult)
-                .add("useResultAsSource", transformation.useResultAsSource()).build();
+                .add("globalSource", globalSource).add("globalResult", globalResult).add("localSource", localSource)
+                .add("localResult", localResult).build();
     }
 
     public JsonObject getGlobalSource() {
@@ -50,7 +49,7 @@ public class TransformationContext {
         return localResult;
     }
 
-    public Map<String, StepFunction> getFunctions() {
+    public Map<String, ExprFunction> getFunctions() {
         return transformation.getFunctions();
     }
 

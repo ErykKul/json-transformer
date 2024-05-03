@@ -105,19 +105,23 @@
     "flattened": [
         {
             "org": "a",
-            "orgName": "a"
+            "orgName": "a",
+            "orgNameAgain": "a"
         },
         {
             "org": "b",
-            "orgName": "b"
+            "orgName": "b",
+            "orgNameAgain": "b"
         },
         {
             "org": "c",
-            "orgName": "c"
+            "orgName": "c",
+            "orgNameAgain": "c"
         },
         {
             "org": "d",
-            "orgName": "d"
+            "orgName": "d",
+            "orgNameAgain": "d"
         },
         {
             "org": "z",

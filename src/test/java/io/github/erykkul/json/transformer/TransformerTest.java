@@ -19,7 +19,7 @@ import jakarta.json.JsonReader;
 import jakarta.json.JsonValue;
 
 public class TransformerTest {
-    public static final StepFunction LOGGER = (ctx, source, result, expression) -> {
+    public static final ExprFunction LOGGER = (ctx, source, result, expression) -> {
         System.out.println("*****\n");
         System.out.println("ctx -> " + ctx.toJsonObject() + "\n");
         System.out.println("source -> " + source + "\n");
@@ -29,11 +29,12 @@ public class TransformerTest {
         if (expression != null && !"".equals(expression)) {
             expressions.add(expression);
         }
-        final JsonValue res = TransformationStep.execute(ctx, source, result, expressions);
+        final JsonValue res = Transformation.executeExpressions(ctx, source, result, expressions);
         System.out.println("res -> " + res + "\n");
         System.out.println("*****");
         return res;
     };
+
     public static final TransformerFactory FACTORY_WITH_LOGGER = TransformerFactory
             .factory(Map.of("withLogger", LOGGER));
 
