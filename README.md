@@ -209,8 +209,31 @@ Source:
 }
 ```
 
-Result from using the same transformations as in the example above:
+Transformer (the same as in the example above):
 ```json
+{
+    "transformations": [
+        {
+            "sourcePointer": "/a",
+            "resultPointer": "/result1"
+        },
+        {
+            "sourcePointer": "/b",
+            "resultPointer": "/result1"
+        },
+        {
+            "sourcePointer": "/a",
+            "resultPointer": "/result2/x"
+        },
+        {
+            "sourcePointer": "/b",
+            "resultPointer": "/result2/y"
+        }
+    ]
+}
+```json
+
+Result:
 {
     "result1": "y",
     "result2": {
