@@ -20,13 +20,22 @@ public interface ExprFunction {
         return Utils.replace(Utils.fixPath(result, ValueType.OBJECT, to), to, Utils.getValue(source, from));
     };
 
-    ExprFunction GENERATE_UUID = (ctx, source, result, expression) -> {
-        return Utils.replace(Utils.fixPath(result, ValueType.OBJECT, expression), expression,
-                Json.createValue(UUID.randomUUID().toString()));
+    ExprFunction MOVE = (ctx, source, result, expression) -> {
+        final String[] args = expression.split(",");
+        final String from = args.length > 0 ? args[0].trim() : "";
+        final String to = args.length > 1 ? args[1].trim() : "";
+        final JsonValue res = Utils.replace(Utils.fixPath(result, ValueType.OBJECT, to), to,
+                Utils.getValue(result, from));
+        return Utils.remove(res, from);
     };
 
     ExprFunction REMOVE = (ctx, source, result, expression) -> {
         return Utils.remove(result, expression);
+    };
+
+    ExprFunction GENERATE_UUID = (ctx, source, result, expression) -> {
+        return Utils.replace(Utils.fixPath(result, ValueType.OBJECT, expression), expression,
+                Json.createValue(UUID.randomUUID().toString()));
     };
 
     ExprFunction SCRIPT = (ctx, source, result, expression) -> {

@@ -372,6 +372,16 @@ Note that the expression above does not set the `res` variable to any value. Thi
 
 #### Functions
 
+Expressions that are not starting with `\"` are treated as calls to functions that are mapped in the transformer factory. The syntax of such expression is the name of the function followed by the argument(s) between `()`, which might be left empty, depending on the definition of the function that is being called. This library provides several bult-in functions:
+- `copy(\fromPointer, \toPointer)`
+- `move(\fromPointer, \toPointer)`
+- `remove(\atPointer)`
+- `generateUuid(\atPointer)`
+- `script(res = myFunction(x))`
+- `filter(res = x > 2)`
+- `map(res = { a: x.field1, b: x.field2 })`
+- `reduce(res = res + x)`
+
 ### Working with arrays
 
 ### Example

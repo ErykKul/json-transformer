@@ -101,8 +101,9 @@ public class TransformerFactory {
     private Map<String, ExprFunction> builtin() {
         final Map<String, ExprFunction> result = new HashMap<>();
         result.put("copy", ExprFunction.COPY);
-        result.put("generateUuid", ExprFunction.GENERATE_UUID);
+        result.put("move", ExprFunction.MOVE);
         result.put("remove", ExprFunction.REMOVE);
+        result.put("generateUuid", ExprFunction.GENERATE_UUID);
         result.put("script", ExprFunction.SCRIPT);
         result.put("filter", ExprFunction.FILTER);
         result.put("map", ExprFunction.MAP);
