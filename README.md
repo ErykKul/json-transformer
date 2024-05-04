@@ -100,10 +100,10 @@ This can be implemented the following way, using the string representations of t
 ```java
     public static final TransformerFactory FACTORY = TransformerFactory.factory();
 
-    public String testTransformer(final String transformer, final String sourceg) {
-        final Transformer transformer = FACTORY.createFromJsonString(transformer);
+    public String testTransformer(final String transformerStr, final String sourceStr) {
+        final Transformer transformer = FACTORY.createFromJsonString(transformerStr);
         final JsonObject result = transformer.transform(Json.createParser(
-            new StringReader(sourceA)).getObject());
+            new StringReader(sourceStr)).getObject());
         return result.toString();
     }
 ```

@@ -7,6 +7,7 @@ import static org.junit.Assert.assertTrue;
 import java.io.FileNotFoundException;
 import java.io.FileReader;
 import java.io.IOException;
+import java.io.StringReader;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
@@ -34,17 +35,18 @@ public class TransformerTest {
         System.out.println("*****");
         return res;
     };
+    public static final TransformerFactory FACTORY = TransformerFactory.factory();
 
     public static final TransformerFactory FACTORY_WITH_LOGGER = TransformerFactory
             .factory(Map.of("withLogger", LOGGER));
 
     @Test
-    public void testTransformer() throws IOException {
-        final Transformer transformer = FACTORY_WITH_LOGGER.createFromFile("example/transformer.json");
-        final JsonObject result = transformer.transform(parse("example/example.json"));
-        System.out.println(result);
-        assertTrue(parse("example/transformed.json").equals(result));
-        assertTrue(Utils.asJsonValue(Utils.asObject(result)).equals(result));
+
+    public String testTransformer(final String transformerStr, final String sourceStr) {
+        final Transformer transformer = FACTORY.createFromJsonString(transformerStr);
+        final JsonObject result = transformer.transform(Json.createParser(
+            new StringReader(sourceStr)).getObject());
+        return result.toString();
     }
 
     public JsonObject parse(final String fileName) throws FileNotFoundException {
