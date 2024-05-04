@@ -50,11 +50,14 @@ public class TransformerTest {
 
     @Test
     public void testExamples() throws IOException {
-        final List<String> examples = Arrays.asList("quickStart", "merging1", "merging2", "merging3", "literals");
+        final List<String> examples = Arrays.asList("quickStart", "merging1", "merging2", "merging3", "literals",
+                "functions");
         for (final String example : examples) {
             System.out.println(example);
-            final Transformer transformer = FACTORY_WITH_LOGGER.createFromFile("examples/documentation/" + example + "ExampleTransformer.json");
-            final JsonObject result = transformer.transform(parse("examples/documentation/" + example + "ExampleSource.json"));
+            final Transformer transformer = FACTORY_WITH_LOGGER
+                    .createFromFile("examples/documentation/" + example + "ExampleTransformer.json");
+            final JsonObject result = transformer
+                    .transform(parse("examples/documentation/" + example + "ExampleSource.json"));
             System.out.println(result);
             assertTrue(parse("examples/documentation/" + example + "ExampleResult.json").equals(result));
         }

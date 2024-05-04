@@ -431,14 +431,96 @@ The following example illustrates the usage of the functions as described in thi
 
 Source:
 ```json
+{
+    "a": [1, 2, 3],
+    "b": "y"
+}
 ```
 
 Tranformer:
 ```json
+{
+    "transformations": [
+        {
+            "expressions": [
+                "copy(/b, /copied)",
+                "copy(/b, /temp)",
+                "move(/temp, /moved)",
+                "generateUuid(/uuid)"
+            ]
+        },
+        {
+            "resultPointer": "/scriptResult",
+            "expressions": [
+                "script(res = { test: '123' })"
+            ]
+        },
+        {
+            "sourcePointer": "/a",
+            "resultPointer": "/filtered",
+            "expressions": [
+                "filter(res = x > 1)"
+            ]
+        },
+        {
+            "sourcePointer": "/a",
+            "resultPointer": "/mapped",
+            "expressions": [
+                "map(res = x + 5)"
+            ]
+        },
+        {
+            "sourcePointer": "/a",
+            "resultPointer": "/reduced",
+            "expressions": [
+                "reduce(res = res + x)"
+            ]
+        },
+        {
+            "expressions": [
+                "withLogger(remove(/uuid))"
+            ]
+        }
+    ]
+}
 ```
 
 Result:
 ```json
+{
+    "copied": "y",
+    "moved": "y",
+    "scriptResult": {
+        "test": "123"
+    },
+    "filtered": [
+        2,
+        3
+    ],
+    "mapped": [
+        6.0,
+        7.0,
+        8.0
+    ],
+    "reduced": 6.0
+}
+```
+
+Where we can also see the debug output from the `withLogger` function in the console:
+```
+*****
+
+ctx -> {"transformation":{"append":false,"useResultAsSource":false,"sourcePointer":"","resultPointer":"","expressions":["withLogger(remove(/uuid))"]},"globalSource":{"a":[1,2,3],"b":"y"},"globalResult":{"copied":"y","moved":"y","uuid":"8605858c-4e95-47bb-aa4d-afc1af46e354","scriptResult":{"test":"123"},"filtered":[2,3],"mapped":[6.0,7.0,8.0],"reduced":6.0},"localSource":{"a":[1,2,3],"b":"y"},"localResult":{"copied":"y","moved":"y","uuid":"8605858c-4e95-47bb-aa4d-afc1af46e354","scriptResult":{"test":"123"},"filtered":[2,3],"mapped":[6.0,7.0,8.0],"reduced":6.0}}
+
+source -> {"a":[1,2,3],"b":"y"}
+
+result -> {"copied":"y","moved":"y","uuid":"8605858c-4e95-47bb-aa4d-afc1af46e354","scriptResult":{"test":"123"},"filtered":[2,3],"mapped":[6.0,7.0,8.0],"reduced":6.0}
+
+expression -> remove(/uuid)
+
+res -> {"copied":"y","moved":"y","scriptResult":{"test":"123"},"filtered":[2,3],"mapped":[6.0,7.0,8.0],"reduced":6.0}
+
+*****
 ```
 
 #### Importing JavaScript files
