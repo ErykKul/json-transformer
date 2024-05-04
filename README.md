@@ -110,7 +110,7 @@ This can be implemented the following way, using the string representations of t
 
 ## Dependencies
 
-This library is implemented using the [Jakarta JSON Processing](https://jakarta.ee/specifications/jsonp/) specification. It also uses (for parsing of the transformations from JSON documents) the [Jakarta JSON Binding](https://jakarta.ee/specifications/jsonb/) specification. Particular implementations of these specifications, which are necessary for running the code of this library, can be chosen at runtime. This project uses (with the dependency scope `provided`) the following implementations: `pkg:maven/org.glassfish/jakarta.json@2.0.1` and `pkg:maven/org.eclipse/yasson@3.0.3`.
+This library is implemented using the [Jakarta JSON Processing](https://jakarta.ee/specifications/jsonp/) specification. It also uses (for parsing of the transformers from JSON documents) the [Jakarta JSON Binding](https://jakarta.ee/specifications/jsonb/) specification. Particular implementations of these specifications, which are necessary for running the code of this library, can be chosen at runtime. This project uses (with the dependency scope `provided`) the following implementations: `pkg:maven/org.glassfish/jakarta.json@2.0.1` and `pkg:maven/org.eclipse/yasson@3.0.3`.
 
 Some of the built-in functions provided in this project use JavaScript as expression language. If you are using these function, or you are adding your own functions using JavaScript as expression language, then you need to provide a [jvax.script](https://docs.oracle.com/javase/6/docs/api/javax/script/package-summary.html) implementation. This project uses (with the dependency scope `provided`) the following implementation: `pkg:maven/org.openjdk.nashorn/nashorn-core@15.4`.
 
@@ -198,7 +198,7 @@ Result:
 }
 ```
 
-The same behavior can be observed in more complex situations, e.g., when merging objects inside (possibly nested) arrays of objects. Also, objects in flattened array or in arrays of different lengths can be merged that way. If the array is shorter, or even empty, new objects are created at the corresponding (not yet existing) positions. Existing objects are always merged the same way, just as described above. However, the value at the `resultPointer` could be either a simple value, or a JSON structure, like an array or an object. For example, if the already existing value being merged is itself an array, it will be overwritten with the new value (array or otherwise and vice versa). For example:
+The same behavior can be observed in more complex situations, e.g., when merging objects inside (possibly nested) arrays of objects. Also, objects in flattened array or in arrays of different lengths can be merged that way. If the array is shorter, or even empty, new objects are created at the corresponding (not yet existing) positions. Existing objects themselves are always merged the same way, just as described above. However, the value at the `resultPointer` could be either a simple value, or a JSON structure, like an array or an object. For example, if the already existing value being merged is an array, it will be overwritten with the new value (array or otherwise and vice versa). For example:
 
 Source:
 ```json
@@ -303,4 +303,4 @@ As can be seen, the resulting objects are merged in a consistent manner, just as
 
 ## Thread safety
 
-Thread safety is achieved by the concepts of immutability, and no synchronization is needed when using this library. The only mutable objects that are possibly exposed during the transformations are the JavaScript Engine instances. However, they are created for each transformation separately and should not be used outside that transformation scope.
+Thread safety using this library is achieved by the concepts of immutability, and no synchronization is needed when using this library. The only mutable objects that are possibly exposed during the transformations are the JavaScript Engine instances. However, they are created for each transformation separately and should not be used outside that transformation scope.
