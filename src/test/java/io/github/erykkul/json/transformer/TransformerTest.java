@@ -2,6 +2,7 @@
 
 package io.github.erykkul.json.transformer;
 
+import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertTrue;
 
 import java.io.FileNotFoundException;
@@ -61,6 +62,16 @@ public class TransformerTest {
             System.out.println(result);
             assertTrue(parse("examples/documentation/" + example + "ExampleResult.json").equals(result));
         }
+    }
+
+    @Test
+    public void testUuid() {
+        final Transformer transformer = FACTORY_WITH_LOGGER
+                .createFromJsonString(
+                        "{\"transformations\": [{\"expressions\":[\"generateUuid(/uuid1)\"]}, {\"resultPointer\":\"/uuid2\", \"expressions\":[\"generateUuid()\"]}]}");
+        final JsonObject result = transformer.transform(JsonObject.EMPTY_JSON_OBJECT);
+        System.out.println(result);
+        assertEquals(95, result.toString().length());
     }
 
     public JsonObject parse(final String fileName) throws FileNotFoundException {
