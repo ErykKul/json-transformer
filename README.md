@@ -300,3 +300,7 @@ As can be seen, the resulting objects are merged in a consistent manner, just as
 ### Working with arrays
 
 ### Example
+
+### Thread safety
+
+Thread safety is achieved by the concepts of immutability, and no synchronization is needed when using this library. The only mutable objects that are possibly exposed during the transformations are the JavaScript Engine instances. However, they are created for each transformation separately and should not be used outside that transformation scope.
