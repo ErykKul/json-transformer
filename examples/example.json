@@ -1,0 +1,84 @@
+{
+    "testField": "test",
+    "authors": [
+        {
+            "name": "John Do",
+            "organizations": [
+                {
+                    "name": "a",
+                    "phoneNumbers": [
+                        "555705",
+                        "555555"
+                    ]
+                },
+                {
+                    "name": "b"
+                },
+                {
+                    "name": "c",
+                    "phoneNumbers": [
+                        "222222",
+                        "333333"
+                    ]
+                }
+            ]
+        },
+        {
+            "name": "John Do 2",
+            "organizations": [
+                {
+                    "name": "d"
+                }
+            ]
+        },
+        {
+            "name": "John Do 3",
+            "organizations": [
+                {
+                    "name": "d"
+                }
+            ]
+        },
+        {
+            "name": "John Do",
+            "organizations": [
+                {
+                    "name": "b",
+                    "phoneNumbers": [
+                        "123456",
+                        "654321"
+                    ]
+                },
+                {
+                    "name": "c",
+                    "phoneNumbers": [
+                        "666666"
+                    ]
+                }
+            ]
+        }
+    ],
+    "files": [
+        {
+            "path": "file.txt"
+        },
+        {
+            "path": "a/file1.txt"
+        },
+        {
+            "path": "b/file1.txt"
+        },
+        {
+            "path": "c/file1.txt"
+        },
+        {
+            "path": "a/ab/file1.txt"
+        }
+    ],
+    "numbers": [
+        2,
+        1,
+        2,
+        3
+    ]
+}

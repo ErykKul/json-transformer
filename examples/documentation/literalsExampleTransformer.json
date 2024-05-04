@@ -1,0 +1,16 @@
+{
+    "transformations": [
+        {
+            "resultPointer": "/greeting",
+            "expressions": [
+                "\"Hello, World!\""
+            ]
+        },
+        {
+            "resultPointer": "/result",
+            "expressions": [
+                "script(res = { string: 'Hello!', int: 5, decimal: 1.2, object: { a: 'x', b: 'y' }, array: new List([1, 2, 3]) })"
+            ]
+        }
+    ]
+}

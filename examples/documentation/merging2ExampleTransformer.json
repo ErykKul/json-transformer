@@ -1,0 +1,20 @@
+{
+    "transformations": [
+        {
+            "sourcePointer": "/a",
+            "resultPointer": "/result1"
+        },
+        {
+            "sourcePointer": "/b",
+            "resultPointer": "/result1"
+        },
+        {
+            "sourcePointer": "/a",
+            "resultPointer": "/result2/x"
+        },
+        {
+            "sourcePointer": "/b",
+            "resultPointer": "/result2/y"
+        }
+    ]
+}

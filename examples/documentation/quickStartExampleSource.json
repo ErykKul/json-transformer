@@ -1,0 +1,34 @@
+{
+    "a": {
+        "value": "value1"
+    },
+    "b": "value2",
+    "c": [
+        {
+            "values": [
+                {
+                    "value": "value3"
+                },
+                {
+                    "value": "value4"
+                }
+            ]
+        },
+        {
+            "values": [
+                {
+                    "value": "value5"
+                },
+                {
+                    "value": "value6"
+                }
+            ]
+        }
+    ],
+    "numbers": [
+        1,
+        2,
+        5,
+        7
+    ]
+}

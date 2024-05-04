@@ -1,0 +1,29 @@
+{
+    "transformations": [
+        {
+            "sourcePointer": "/a/value",
+            "resultPointer": "/x"
+        },
+        {
+            "sourcePointer": "/b",
+            "resultPointer": "/y"
+        },
+        {
+            "sourcePointer": "/c[i]/values[i]/value",
+            "resultPointer": "/z"
+        },
+        {
+            "resultPointer": "/greeting",
+            "expressions": [
+                "\"Hello, World!\""
+            ]
+        },
+        {
+            "sourcePointer": "/numbers",
+            "resultPointer": "/total",
+            "expressions": [
+                "reduce(res = res + x)"
+            ]
+        }
+    ]
+}

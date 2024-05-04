@@ -1,0 +1,12 @@
+{
+    "x": "value1",
+    "y": "value2",
+    "z": [
+        "value3",
+        "value4",
+        "value5",
+        "value6"
+    ],
+    "greeting": "Hello, World!",
+    "total": 15.0
+}

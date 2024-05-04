@@ -1,0 +1,115 @@
+{
+    "transformations": [
+        {
+            "sourcePointer": "/files[i]/path",
+            "resultPointer": "/paths[i]/x"
+        },
+        {
+            "sourcePointer": "/files[i]/path",
+            "resultPointer": "/paths[i]/y"
+        },
+        {
+            "append": true,
+            "sourcePointer": "/files[i]",
+            "resultPointer": "/paths",
+            "expressions": [
+                "copy(/path, /z)"
+            ]
+        },
+        {
+            "append": true,
+            "sourcePointer": "/files[i]/path",
+            "resultPointer": "/paths"
+        },
+        {
+            "sourcePointer": "/authors[i]/organizations",
+            "resultPointer": "/creators[i]/affiliations"
+        },
+        {
+            "sourcePointer": "/authors[i]/organizations[i]/name",
+            "resultPointer": "/creators[i]/affiliations[i]/orgName"
+        },
+        {
+            "append": true,
+            "sourcePointer": "/authors[i]/organizations[i]",
+            "resultPointer": "/flattened",
+            "expressions": [
+                "copy(/name, /org)"
+            ]
+        },
+        {
+            "sourcePointer": "/authors[i]/organizations[i]",
+            "resultPointer": "/flattened",
+            "expressions": [
+                "copy(/name, /orgName)",
+                "copy(/name, /orgNameAgain)"
+            ]
+        },
+        {
+            "resultPointer": "/expressionsResults/literal",
+            "expressions": [
+                "\"literal\""
+            ]
+        },
+        {
+            "resultPointer": "/expressionsResults",
+            "expressions": [
+                "withLogger(generateUuid(/uuid))",
+                "remove(/uuid)"
+            ]
+        },
+        {
+            "sourcePointer": "/numbers",
+            "resultPointer": "/expressionsResults/total",
+            "expressions": [
+                "reduce(res = res + x)"
+            ]
+        },
+        {
+            "sourcePointer": "/numbers",
+            "resultPointer": "/expressionsResults/count",
+            "expressions": [
+                "reduce(res = res + 1)"
+            ]
+        },
+        {
+            "sourcePointer": "/numbers",
+            "resultPointer": "/expressionsResults/concat",
+            "expressions": [
+                "reduce(res = (res ? res + ', ' : '') + x)"
+            ]
+        },
+        {
+            "useResultAsSource": true,
+            "sourcePointer": "/flattened",
+            "resultPointer": "/flattened",
+            "expressions": [
+                "script(set = new Set())",
+                "filter(res = set.add(x.orgName))",
+                "script(x.add({org: 'z', orgName: 'z'}); res = x)"
+            ]
+        },
+        {
+            "sourcePointer": "/files",
+            "resultPointer": "/graph",
+            "expressions": [
+                "script(list = new List())",
+                "map(importJS examples/split_paths.js endImport)",
+                "script(res = list)"
+            ]
+        },
+        {
+            "useResultAsSource": true,
+            "sourcePointer": "/graph",
+            "resultPointer": "/graph",
+            "expressions": [
+                "script(set = new Set())",
+                "filter(res = set.add(x))",
+                "map(if (x.parent == '') delete x.parent; res = x)",
+                "//script(UUID = Java.type('java.util.UUID'); ids = new Map())",
+                "//map(ids.put(x.id, UUID.randomUUID().toString()); res = x)",
+                "//map(x.id = ids.get(x.id); if (typeof x.parent !== 'undefined') x.parent = ids.get(x.parent); res = x)"
+            ]
+        }
+    ]
+}
