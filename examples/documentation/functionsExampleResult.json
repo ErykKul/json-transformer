@@ -1,0 +1,17 @@
+{
+    "copied": "y",
+    "moved": "y",
+    "scriptResult": {
+        "test": "123"
+    },
+    "filtered": [
+        2,
+        3
+    ],
+    "mapped": [
+        6.0,
+        7.0,
+        8.0
+    ],
+    "reduced": 6.0
+}

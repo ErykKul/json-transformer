@@ -1,0 +1,44 @@
+{
+    "transformations": [
+        {
+            "expressions": [
+                "copy(/b, /copied)",
+                "copy(/b, /temp)",
+                "move(/temp, /moved)",
+                "generateUuid(/uuid)"
+            ]
+        },
+        {
+            "resultPointer": "/scriptResult",
+            "expressions": [
+                "script(res = { test: '123' })"
+            ]
+        },
+        {
+            "sourcePointer": "/a",
+            "resultPointer": "/filtered",
+            "expressions": [
+                "filter(res = x > 1)"
+            ]
+        },
+        {
+            "sourcePointer": "/a",
+            "resultPointer": "/mapped",
+            "expressions": [
+                "map(res = x + 5)"
+            ]
+        },
+        {
+            "sourcePointer": "/a",
+            "resultPointer": "/reduced",
+            "expressions": [
+                "reduce(res = res + x)"
+            ]
+        },
+        {
+            "expressions": [
+                "withLogger(remove(/uuid))"
+            ]
+        }
+    ]
+}
