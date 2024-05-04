@@ -39,9 +39,6 @@ public interface ExprFunction {
     };
 
     ExprFunction SCRIPT = (ctx, source, result, expression) -> {
-        if (Utils.isEmpty(source)) {
-            return result;
-        }
         Utils.eval(ctx.engine(), "res = null");
         Utils.eval(ctx.engine(), expression, source, "x");
         final JsonValue res = Utils.asJsonValue(Utils.getObject(ctx.engine(), "res"));

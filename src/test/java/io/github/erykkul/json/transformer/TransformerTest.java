@@ -8,6 +8,7 @@ import java.io.FileNotFoundException;
 import java.io.FileReader;
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 import java.util.Map;
 
@@ -40,11 +41,23 @@ public class TransformerTest {
 
     @Test
     public void testTransformer() throws IOException {
-        final Transformer transformer = FACTORY_WITH_LOGGER.createFromFile("example/transformer.json");
-        final JsonObject result = transformer.transform(parse("example/example.json"));
+        final Transformer transformer = FACTORY_WITH_LOGGER.createFromFile("examples/transformer.json");
+        final JsonObject result = transformer.transform(parse("examples/example.json"));
         System.out.println(result);
-        assertTrue(parse("example/transformed.json").equals(result));
+        assertTrue(parse("examples/transformed.json").equals(result));
         assertTrue(Utils.asJsonValue(Utils.asObject(result)).equals(result));
+    }
+
+    @Test
+    public void testExamples() throws IOException {
+        final List<String> examples = Arrays.asList("quickStart", "merging1", "merging2", "merging3", "literals");
+        for (final String example : examples) {
+            System.out.println(example);
+            final Transformer transformer = FACTORY_WITH_LOGGER.createFromFile("examples/documentation/" + example + "ExampleTransformer.json");
+            final JsonObject result = transformer.transform(parse("examples/documentation/" + example + "ExampleSource.json"));
+            System.out.println(result);
+            assertTrue(parse("examples/documentation/" + example + "ExampleResult.json").equals(result));
+        }
     }
 
     public JsonObject parse(final String fileName) throws FileNotFoundException {

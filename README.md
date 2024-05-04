@@ -372,19 +372,80 @@ Note that the expression above does not set the `res` variable to any value. Thi
 
 #### Functions
 
-Expressions that are not starting with `\"` are treated as calls to functions that are mapped in the transformer factory. The syntax of such expression is the name of the function followed by the argument(s) between `()`, which might be left empty, depending on the definition of the function that is being called. This library provides several bult-in functions:
-- `copy(\fromPointer, \toPointer)`
-- `move(\fromPointer, \toPointer)`
-- `remove(\atPointer)`
-- `generateUuid(\atPointer)`
-- `script(res = myFunction(x))`
-- `filter(res = x > 2)`
-- `map(res = { a: x.field1, b: x.field2 })`
-- `reduce(res = res + x)`
+Expressions that are not starting with `\"` are treated as calls to functions that are registered in the transformer factory. The syntax of such an expression is the name of the function followed by the argument(s) between round brackets (`()`), that might be left empty, depending on the definition of the function that is being called. This library provides several built-in functions:
+- `copy(/fromPointer, /toPointer)`: copies a value from the `/fromPointer` (relative to the `sourcePointer`) in the source document to the `/toPointer` (relative to the `resultPointer`) in the resulting document. Notice that it is very similar to the default copy functionality when the expressions of the transformation are left empty. In fact, the default functionality is identical with `copy(, )` (or simply `copy()`, where both; the `/fromPointer` and the `/toPointer` are empty string pointers, and the value is copied from the `/sourcePointer` to the `resultPointer`).
+- `move(/fromPointer, /toPointer)`: moves a value from the `/fromPointer` (relative to the `sourcePointer`) to the `/toPointer` (relative to the `resultPointer`) in the resulting document (the source document is ignored by this function).
+- `remove(/atPointer)`: removes a value from the `/atPointer` (relative to the `resultPointer`) in the resulting document. The `\atPointer` cannot be an empty string pointer, as remove operations are not permitted on the root.
+- `generateUuid(/atPointer)`: generates a UUID at the `/atPointer` (relative to the `resultPointer`) in the resulting document.
+- `script(res = myFunction(x))`: executes the JavaScript script sent as an argument to this function. If the script writes a value to the `res` variable, that value is written at the `resultPointer` in the resulting document.
+- `filter(res = x > 2)`: filters out values from an array (or fields in an object) at the `sourcePointer` in the source document that do not produce `res = true` in the JavaScript script provided as argument to this function. The values or fields being filtered are passed as `x` variables to the script engine by the library. The result of the expression is written at the `resultPointer` in the resulting document.
+- `map(res = { a: x.field1, b: x.field2 })`: maps values from an array (or fields in an object) at the `sourcePointer` in the source document to the values written in the `res` variable by the JavaScript script provided as argument to this function. The values or fields being mapped are passed as `x` variables to the script engine by the library. The result of the expression is written at the `resultPointer` in the resulting document.
+- `reduce(res = res + x)`: reduces values from an array (or fields in an object) at the `sourcePointer` in the source document to the values written in the `res` variable by the JavaScript script provided as argument to this function. The values or fields being reduced are passed as `x` variables to the script engine by the library. The result of the expression is written at the `resultPointer` in the resulting document.
+
+You can add functions (or even overwrite the built-in functions) to the transformer factory by implementing the `ExprFunction` functional interface and registering it in the transformer factory. For example, if you want to add logging for debugging purposes to the execution of an expression, you may write a code similar to the following function:
+
+```java
+    public static final ExprFunction LOGGER = (ctx, source, result, expression) -> {
+        System.out.println("*****\n");
+        System.out.println("ctx -> " + ctx.toJsonObject() + "\n");
+        System.out.println("source -> " + source + "\n");
+        System.out.println("result -> " + result + "\n");
+        System.out.println("expression -> " + expression + "\n");
+        final List<String> expressions = new ArrayList<>();
+        if (expression != null && !"".equals(expression)) {
+            expressions.add(expression);
+        }
+        final JsonValue res = Transformation.executeExpressions(ctx, source, result, expressions);
+        System.out.println("res -> " + res + "\n");
+        System.out.println("*****");
+        return res;
+    };
+```
+
+The `source` and the `result` JsonValues are the values at the `sourcePointer` in the source document and the `resultPointer` in the resulting document, respectively. The `expression` is the string value between the round brackets (`()`) that is passed to this function in the expression of the transformation being executed. The `ctx` is the transformation context containing, a.o., the script engine constructed for the execution of the transform action of the transformer. You can also retrieve the `useResultAsSource` value from that context, which would indicate if you need to use the result as source, and then ignore the source document. It also provides access to the map of functions registered in the transformer factory. Other fields, namely `globalSource`, `globalResult`, `localSource` and `localResult`, are used mainly by the  framework itself and can be ignored for other than debugging purposes. You can then make that new function available to the expressions in the transformer by creating a new transformer factory with that new function registered (the built-in functions are registered as well in that factory):
+```java
+public static final TransformerFactory FACTORY_WITH_LOGGER = TransformerFactory
+        .factory(Map.of("withLogger", LOGGER));
+```
+
+You can then create new transformers using that new factory, e.g.:
+```java
+final Transformer transformer = FACTORY_WITH_LOGGER.createFromFile("example/transformer.json");
+```
+
+Transformers created that way can then access the new function. For example:
+```json
+{
+    "transformations": [
+        {
+            "resultPointer": "/expressionsResults",
+            "expressions": [
+                "withLogger(generateUuid(/uuid))",
+            ]
+        }
+    ]
+}
+```
+
+The following example illustrates the usage of the functions as described in this section:
+
+Source:
+```json
+```
+
+Tranformer:
+```json
+```
+
+Result:
+```json
+```
+
+#### Importing JavaScript files
 
 ### Working with arrays
 
-### Example
+### Examples
 
 ## Thread safety
 
