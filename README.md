@@ -297,6 +297,81 @@ As can be seen, the resulting objects are merged in a consistent manner, just as
 
 ### Expressions
 
+Expressions can be either string [literals](#literals) or calls to [functions](#functions) registered in the transformer factory. Each transformation in the transformer can have multiple expressions, they are then executed in the order that they are defined. Note that when JavaScript code is used in the expressions, you can store variables in the script engine, and these variables become accessible in all the following expressions, also in the expressions from the transformations that are defined after the transformation where the variable is stored. The execution engine is then shared over the whole transform action. It created in a lazy manner, meaning that when no expressions using the JavaScript are defined in a transformer, the engine is never created.
+
+#### Literals
+
+All expressions starting with an escaped quotation mark (`\"`) are treated by this library as string literals. String literals are placed between `\"\"` and the value of them is copied to the value at the `resultPointer` (`sourcePointer` is ignored by the expressions containing only literals of any type). Only the string literals are supported this way and other types of literals, as shown in the example below, can be expressed in the `script` function as JavaScript literals. Notice the wrapping of the JavaScript array literal between `[]` in the `List` type (that is mapped to the `java.util.ArrayList` Java type, as explained in the [next section](#java-types-inside-the-javascript-expressions)). This wrapping is needed when using the `nashorn` implementation of the script engine, as it interprets all objects from the engine as `java.util.Map` instances, unless they are mapped to another Java type, as it is the case for the `List` type. The primitive JavaScript types, like `int` or `string`, as well as object literals, are processed as expected and do not need any special mapping. This is further illustrated in the following example:
+
+Transformer:
+```json
+{
+    "transformations": [
+        {
+            "resultPointer": "/greeting",
+            "expressions": [
+                "\"Hello, World!\""
+            ]
+        },
+        {
+            "resultPointer": "/result",
+            "expressions": [
+                "script(res = { string: 'Hello!', int: 5, decimal: 1.2, object: { a: 'x', b: 'y' }, array: new List([1, 2, 3]) })"
+            ]
+        }
+    ]
+}
+```
+
+Result:
+```json
+{
+    "greeting": "Hello, World!",
+    "result": {
+        "string": "Hello!",
+        "int": 5,
+        "decimal": 1.2,
+        "object": {
+            "a": "x",
+            "b": "y"
+        },
+        "array": [
+            1,
+            2,
+            3
+        ]
+    }
+}
+```
+
+#### Java types inside the JavaScript expressions
+
+All [functions](#functions) that use JavaScript have access to the Java types mapped to the `Map`, `Set` and `List` types in JavaScript at the moment of the creation of the Script Engine:
+
+```java
+    engine.eval("Map = Java.type('java.util.LinkedHashMap')");
+    engine.eval("Set = Java.type('java.util.LinkedHashSet')");
+    engine.eval("List = Java.type('java.util.ArrayList')");
+```
+
+You can override these types, or add any Java type you need by simply adding an expression. For example:
+
+```json
+{
+    "transformations": [
+        {
+            "expressions": [
+                "script(Date = Java.type('java.util.Date'))"
+            ]
+        }
+    ]
+}
+```
+
+Note that the expression above does not set the `res` variable to any value. This means that it only has an effect on the engine being used and does not produce any value that can be used in the transformation. In this situation, the transformer simply continues its execution and the particular expression has no effect on the resulting document (it has only an effect on the engine within the scope of the transform action of the transformer).
+
+#### Functions
+
 ### Working with arrays
 
 ### Example
