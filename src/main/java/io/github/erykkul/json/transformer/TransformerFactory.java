@@ -95,7 +95,7 @@ public class TransformerFactory {
         return new Transformation(t.append == null ? false : t.append,
                 t.useResultAsSource == null ? false : t.useResultAsSource,
                 t.sourcePointer == null ? "" : t.sourcePointer, t.resultPointer == null ? "" : t.resultPointer,
-                t.expressions, functions);
+                t.expressions == null ? Collections.emptyList() : t.expressions, functions);
     }
 
     private Map<String, ExprFunction> builtin() {
