@@ -205,6 +205,20 @@ This can be implemented the following way, using the string representations of t
     }
 ```
 
+## Table of Contents
+
+- [Dependencies](#dependencies)
+- [Transformer](#transformer)
+    - [Merging already existing values](#merging-already-existing-values)
+    - [Expressions](#expressions)
+        - [Literals](#literals)
+        - [Java types inside the JavaScript expressions](#java-types-inside-the-javascript-expressions)
+        - [Functions](#functions)
+        - [Importing JavaScript files](#importing-javascript-files)
+    - [Working with arrays](#working-with-arrays)
+- [Running the examples](#running-the-examples)
+- [Thread safety](#thread-safety)
+
 ## Dependencies
 
 This library is implemented using the [Jakarta JSON Processing](https://jakarta.ee/specifications/jsonp/) specification. It also uses (for parsing of the transformers from JSON documents) the [Jakarta JSON Binding](https://jakarta.ee/specifications/jsonb/) specification. Particular implementations of these specifications, which are necessary for running the code of this library, can be chosen at runtime. This project uses (with the dependency scope `provided`) the following implementations: `pkg:maven/org.glassfish/jakarta.json@2.0.1` and `pkg:maven/org.eclipse/yasson@3.0.3`.
@@ -245,6 +259,15 @@ Or in a more verbose way, by filling in the default values:
     ]
 }
 ```
+
+The remainder of this section is structured as follows:
+- [Merging already existing values](#merging-already-existing-values)
+- [Expressions](#expressions)
+    - [Literals](#literals)
+    - [Java types inside the JavaScript expressions](#java-types-inside-the-javascript-expressions)
+    - [Functions](#functions)
+    - [Importing JavaScript files](#importing-javascript-files)
+- [Working with arrays](#working-with-arrays)
 
 ### Merging already existing values
 
@@ -791,9 +814,13 @@ Result:
 
 ### Working with arrays
 
-### Examples
+append
+
+[i]
 
 accessing parent
+
+## Running the examples
 
 ## Thread safety
 
