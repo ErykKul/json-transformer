@@ -216,6 +216,9 @@ This can be implemented the following way, using the string representations of t
         - [Functions](#functions)
         - [Importing JavaScript files](#importing-javascript-files)
     - [Working with arrays](#working-with-arrays)
+        - [Using the `append` transformation field](#using-the-append-tranformation-field)
+        - [Iterating over arrays with the `[i]` notation](#iterating-over-arrays-with-the-i-notation)
+        - [Note on accessing parent objects](#note-on-accessing-parent-objects)
 - [Running the examples](#running-the-examples)
 - [Thread safety](#thread-safety)
 
@@ -268,6 +271,9 @@ The remainder of this section is structured as follows:
     - [Functions](#functions)
     - [Importing JavaScript files](#importing-javascript-files)
 - [Working with arrays](#working-with-arrays)
+    - [Using the `append` transformation field](#using-the-append-tranformation-field)
+    - [Iterating over arrays with the `[i]` notation](#iterating-over-arrays-with-the-i-notation)
+    - [Note on accessing parent objects](#note-on-accessing-parent-objects)
 
 ### Merging already existing values
 
@@ -814,11 +820,17 @@ Result:
 
 ### Working with arrays
 
-append
+This section is structured as follows:
+- [Using the `append` transformation field](#using-the-append-tranformation-field)
+- [Iterating over arrays with the `[i]` notation](#iterating-over-arrays-with-the-i-notation)
+- [Note on accessing parent objects](#note-on-accessing-parent-objects)
 
-[i]
 
-accessing parent
+#### Using the `append` transformation field
+
+#### Iterating over arrays with the `[i]` notation
+
+#### Note on accessing parent objects
 
 ## Running the examples
 
