@@ -137,8 +137,8 @@ public class Transformation {
 
     private JsonValue doTransform(final TransformationCtx ctx, final String sourcePointer, final String resultPointer) {
         final JsonValue sourceValue = Utils.getValue(ctx.getLocalSource(), sourcePointer);
-        final JsonValue fixedResult = Utils.fixPath(ctx.getLocalResult(), sourceValue.getValueType(), resultPointer);
         if (append) {
+            final JsonValue fixedResult = Utils.fixPath(ctx.getLocalResult(), ARRAY, resultPointer);
             final JsonValue result = executeExpressions(ctx, sourceValue, EMPTY_JSON_OBJECT, expressions);
             final JsonValue resultArray = Utils.getValue(fixedResult, resultPointer);
             if (!Utils.isArray(resultArray)) {
@@ -147,6 +147,7 @@ public class Transformation {
             return Utils.replace(fixedResult, resultPointer,
                     Json.createArrayBuilder(resultArray.asJsonArray()).add(result).build());
         } else {
+            final JsonValue fixedResult = Utils.fixPath(ctx.getLocalResult(), sourceValue.getValueType(), resultPointer);
             final JsonValue result = executeExpressions(ctx, sourceValue, Utils.getValue(fixedResult, resultPointer),
                     expressions);
             if (Utils.isEmpty(fixedResult)) {
