@@ -827,6 +827,71 @@ This section is structured as follows:
 
 #### Using the `append` transformation field
 
+We can append to an array at the `resultPointer` in the resulting document by setting the `"append": true`. If that array does not yet exist (e.g., on the first append call), then that array is created. Appending to an array is illustrated in the following example:
+
+Source:
+```json
+{
+    "a": {
+        "x": "1"
+    },
+    "b": "y",
+    "c": [
+        1,
+        2,
+        2
+    ]
+}
+```
+
+Transformer:
+```json
+{
+    "transformations": [
+        {
+            "append": true,
+            "sourcePointer": "/a",
+            "resultPointer": "/appended"
+        },
+        {
+            "append": true,
+            "sourcePointer": "/b",
+            "resultPointer": "/appended"
+        },
+        {
+            "append": true,
+            "sourcePointer": "/c",
+            "resultPointer": "/appended"
+        },
+        {
+            "append": true,
+            "resultPointer": "/appended",
+            "expressions": [
+                "\"literal\""
+            ]
+        }
+    ]
+}
+```
+
+Result:
+```json
+{
+    "appended": [
+        {
+            "x": "1"
+        },
+        "y",
+        [
+            1,
+            2,
+            2
+        ],
+        "literal"
+    ]
+}
+```
+
 #### Iterating over arrays with the `[i]` notation
 
 #### Note on accessing parent objects

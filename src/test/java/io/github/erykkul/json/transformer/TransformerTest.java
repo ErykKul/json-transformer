@@ -51,7 +51,7 @@ public class TransformerTest {
     @Test
     public void testExamples() throws IOException {
         final List<String> examples = Arrays.asList("quickStart", "merging1", "merging2", "merging3", "literals",
-                "functions", "import");
+                "functions", "import", "append");
         for (final String example : examples) {
             System.out.println(example);
             final Transformer transformer = FACTORY_WITH_LOGGER

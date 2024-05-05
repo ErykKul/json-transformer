@@ -1,0 +1,26 @@
+{
+    "transformations": [
+        {
+            "append": true,
+            "sourcePointer": "/a",
+            "resultPointer": "/appended"
+        },
+        {
+            "append": true,
+            "sourcePointer": "/b",
+            "resultPointer": "/appended"
+        },
+        {
+            "append": true,
+            "sourcePointer": "/c",
+            "resultPointer": "/appended"
+        },
+        {
+            "append": true,
+            "resultPointer": "/appended",
+            "expressions": [
+                "\"literal\""
+            ]
+        }
+    ]
+}
