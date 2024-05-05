@@ -117,7 +117,7 @@ public class Utils {
             engine.eval("Set = Java.type('java.util.LinkedHashSet')");
             engine.eval("List = Java.type('java.util.ArrayList')");
         } catch (final Exception e) {
-            logger.fine("Script engine for javascript not found: " + e);
+            logger.severe("Script engine for javascript not found: " + e);
         }
         engineHolder.setEngine(engine);
         return engine;
@@ -127,7 +127,7 @@ public class Utils {
         try {
             engine(engineHolder).eval(script);
         } catch (final Exception e) {
-            logger.fine("Script failed: " + e);
+            logger.severe("Script failed: " + e);
         }
     }
 
@@ -138,7 +138,7 @@ public class Utils {
             engine.put(key, asObject(value));
             engine.eval(script);
         } catch (final Exception e) {
-            logger.fine("Script failed: " + e);
+            logger.severe("Script failed: " + e);
         }
     }
 
@@ -146,7 +146,7 @@ public class Utils {
         try {
             return engine(engineHolder).get(key);
         } catch (final NullPointerException e) {
-            logger.fine("Engine is null");
+            logger.severe("Engine is null");
         }
         return null;
     }
