@@ -1,6 +1,6 @@
 # JSON Transformer
 
-JSON Transformer is a simple and expressive Java library that uses transformers defined in JSON documents for transformations of JSON structures (even complex structures containing nested arrays of objects) into other (complex) JSON structures. At its bases, it uses the [JavaScript Object Notation (JSON) Pointers](https://datatracker.ietf.org/doc/html/rfc6901) specification, as provided by the `jakarta.json` API. This library extends that specification with the `[i]` notation for working with arrays. It also provides several built-in functions, ranging from the very basic `copy` function taking two JSON pointers as arguments, to more expressive `map`, `filter` and `reduce` functions taking JavaScript expressions as arguments (e.g., `res = res + x`). Together with the `script` function, that can be used to produce any JSON object (e.g., `res = { a: 1, b: myFunc(x) }`), and the possibility of overwriting and/or adding new custom functions, this library can support arbitrary complex transformation.
+JSON Transformer is a simple and expressive Java library that uses [transformers](#transformer) defined in JSON documents for transformations of JSON structures (even complex structures containing nested arrays of objects) into other (complex) JSON structures. At its bases, it uses the [JavaScript Object Notation (JSON) Pointers](https://datatracker.ietf.org/doc/html/rfc6901) specification, as provided by the `jakarta.json` API. This library extends that specification with the `[i]` notation for [working with arrays](#working-with-arrays). It also provides several built-in [functions](#functions), ranging from the very basic `copy` function taking two JSON pointers as arguments, to more expressive `map`, `filter` and `reduce` functions taking JavaScript expressions as arguments (e.g., `res = res + x`). Together with the `script` function, that can be used to produce any JSON object (e.g., `res = { a: 1, b: myFunc(x) }`), and the possibility of overwriting and/or adding new custom functions, this library can support arbitrary complex transformation. Finally, you can also use the [literals](#literals) for addind static information to your transformed JSON documents.
 
 ## Quick start
 
@@ -39,7 +39,8 @@ For example, the following JSON document:
         2,
         5,
         7
-    ]
+    ],
+    "strings": ["a", "b", "c"]
 }
 
 ```
@@ -59,12 +60,55 @@ Transformed with this transformer:
         },
         {
             "sourcePointer": "/c[i]/values[i]/value",
-            "resultPointer": "/z"
+            "resultPointer": "/y/z"
         },
         {
-            "resultPointer": "/greeting",
+            "sourcePointer": "/numbers[i]",
+            "resultPointer": "/merged[i]/x"
+        },
+        {
+            "sourcePointer": "/strings[i]",
+            "resultPointer": "/merged[i]/y"
+        },
+        {
+            "resultPointer": "/stringLiteral",
             "expressions": [
                 "\"Hello, World!\""
+            ]
+        },
+        {
+            "resultPointer": "/JSliterals",
+            "expressions": [
+                "script(res = { string: 'Hello!', int: 5, decimal: 1.2, object: { a: 'x', b: 'y' }, array: new List([1, 2, 3]) })"
+            ]
+        },
+        {
+            "expressions": [
+                "copy(/b, /copied)",
+                "copy(/b, /temp)",
+                "move(/temp, /moved)",
+                "generateUuid(/uuid)"
+            ]
+        },
+        {
+            "resultPointer": "/scriptResult",
+            "expressions": [
+                "script(concat = function (c, n) { return (c ? c + ', ' : '') + n })",
+                "script(res = { concat: x.strings.stream().reduce(null, concat) })"
+            ]
+        },
+        {
+            "sourcePointer": "/numbers",
+            "resultPointer": "/filtered",
+            "expressions": [
+                "filter(res = x > 2)"
+            ]
+        },
+        {
+            "sourcePointer": "/numbers",
+            "resultPointer": "/mapped",
+            "expressions": [
+                "map(res = x + 5)"
             ]
         },
         {
@@ -72,6 +116,11 @@ Transformed with this transformer:
             "resultPointer": "/total",
             "expressions": [
                 "reduce(res = res + x)"
+            ]
+        },
+        {
+            "expressions": [
+                "withLogger(remove(/uuid))"
             ]
         }
     ]
@@ -84,13 +133,53 @@ Becomes:
 {
     "x": "value1",
     "y": "value2",
-    "z": [
-        "value3",
-        "value4",
-        "value5",
-        "value6"
+    "merged": [
+        {
+            "x": 1,
+            "y": "a"
+        },
+        {
+            "x": 2,
+            "y": "b"
+        },
+        {
+            "x": 5,
+            "y": "c"
+        },
+        {
+            "x": 7
+        }
     ],
-    "greeting": "Hello, World!",
+    "stringLiteral": "Hello, World!",
+    "JSliterals": {
+        "string": "Hello!",
+        "int": 5,
+        "decimal": 1.2,
+        "object": {
+            "a": "x",
+            "b": "y"
+        },
+        "array": [
+            1,
+            2,
+            3
+        ]
+    },
+    "copied": "value2",
+    "moved": "value2",
+    "scriptResult": {
+        "concat": "a, b, c"
+    },
+    "filtered": [
+        5,
+        7
+    ],
+    "mapped": [
+        6.0,
+        7.0,
+        10.0,
+        12.0
+    ],
     "total": 15.0
 }
 ```
@@ -117,11 +206,11 @@ Some of the built-in functions provided in this project use JavaScript as expres
 ## Transformer
 
 Transformer contains only one field `transformations`, which is an array of transformations, each having the following structure:
-- boolean `append` (default: `false`): it can only be set to `true` when the JSON value at the `resultPointer` is an array (or that value does not yet exist). In that case, values resulting from this transformation are appended to the array at the `resultPointer` (see [Working with arrays](#working-with-arrays)).
-- boolean `useResultAsSource`(default: `false`): when set to `true` the result is also used as the source of this transformation, where the source itself is ignored. It is useful, for example, when using the `filter` function on an array in the resulting document (see [Expressions](#expressions)).
-- string `sourcePointer` (default: `""`): a JSON Pointer extended with `[i]` notation (see [Working with arrays](#working-with-arrays)) pointing to a value in the source document.
-- string `resultPointer` (default: `""`): a JSON Pointer extended with `[i]` notation (see [Working with arrays](#working-with-arrays)) pointing to a value in the resulting document.
-- array of strings `expressions` (empty by default): when not defined (left empty), the transformations copies the value from `sourcePointer` to the `resultPointer`. If the value at the `resultPointer` does not yet exist, it is created. If it already exists, and it is not an array we are appending to (`"append": true`), then the value is merged with the already existing value (see [Merging already existing values](#merging-already-existing-values)). When `expressions` are not empty, then the values are produced according to these expressions (see [Expressions](#expressions)), i.e., they override the default `copy` behavior.
+- boolean `append` (default: `false`): it can only be set to `true` when the JSON value at the `resultPointer` is an array (or that value does not yet exist). In that case, values resulting from this transformation are appended to the array at the `resultPointer` (see [working with arrays](#working-with-arrays)).
+- boolean `useResultAsSource`(default: `false`): when set to `true` the result is also used as the source of this transformation, where the source itself is ignored. It is useful, for example, when using the `filter` function on an array in the resulting document (see [functions](#functions)).
+- string `sourcePointer` (default: `""`): a JSON Pointer extended with `[i]` notation (see [working with arrays](#working-with-arrays)) pointing to a value in the source document.
+- string `resultPointer` (default: `""`): a JSON Pointer extended with `[i]` notation (see [working with arrays](#working-with-arrays)) pointing to a value in the resulting document.
+- array of strings `expressions` (empty by default): when not defined (left empty), the transformations copies the value from `sourcePointer` to the `resultPointer`. If the value at the `resultPointer` does not yet exist, it is created. If it already exists, and it is not an array we are appending to (`"append": true`), then the value is merged with the already existing value (see [merging already existing values](#merging-already-existing-values)). When `expressions` are not empty, then the values are produced according to these expressions (see [](#expressions)), i.e., they override the default `copy` behavior and can be either [literas](#literals) or calls to [functions](#functions).
 
 Note that empty string (`""`) is a valid JSON Pointer that points to the whole document. The identity transformation that copies the whole source document to the resulting document can be then created with the following transformer:
 
@@ -247,7 +336,7 @@ Result:
 }
 ```
 
-If we want to treat each element of an array as a separate value, then we need to use the `[i]` notation and iterate over the values inside that array (see also [Working with arrays](#working-with-arrays)). For example:
+If we want to treat each element of an array as a separate value, then we need to use the `[i]` notation and iterate over the values inside that array (see also [working with arrays](#working-with-arrays)). For example:
 
 Source:
 ```json
@@ -293,7 +382,7 @@ Result:
 }
 ```
 
-As can be seen, the resulting objects are merged in a consistent manner, just as described before. More details on using the `[i]` notation for iterating over elements in an array can be found in [Working with arrays](#working-with-arrays).
+As can be seen, the resulting objects are merged in a consistent manner, just as described before. More details on using the `[i]` notation for iterating over elements in an array can be found in [working with arrays](#working-with-arrays) section.
 
 ### Expressions
 
@@ -452,7 +541,8 @@ Tranformer:
         {
             "resultPointer": "/scriptResult",
             "expressions": [
-                "script(res = { test: '123' })"
+                "script(concat = function (c, n) { return (c ? c + ', ' : '') + n })",
+                "script(res = { concat: x.a.stream().reduce(null, concat) })"
             ]
         },
         {
@@ -491,7 +581,7 @@ Result:
     "copied": "y",
     "moved": "y",
     "scriptResult": {
-        "test": "123"
+        "concat": "1, 2, 3"
     },
     "filtered": [
         2,
@@ -525,9 +615,15 @@ res -> {"copied":"y","moved":"y","scriptResult":{"test":"123"},"filtered":[2,3],
 
 #### Importing JavaScript files
 
+
+
 ### Working with arrays
 
 ### Examples
+
+accessing parent
+
+files to graph
 
 ## Thread safety
 

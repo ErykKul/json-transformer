@@ -10,12 +10,55 @@
         },
         {
             "sourcePointer": "/c[i]/values[i]/value",
-            "resultPointer": "/z"
+            "resultPointer": "/y/z"
         },
         {
-            "resultPointer": "/greeting",
+            "sourcePointer": "/numbers[i]",
+            "resultPointer": "/merged[i]/x"
+        },
+        {
+            "sourcePointer": "/strings[i]",
+            "resultPointer": "/merged[i]/y"
+        },
+        {
+            "resultPointer": "/stringLiteral",
             "expressions": [
                 "\"Hello, World!\""
+            ]
+        },
+        {
+            "resultPointer": "/JSliterals",
+            "expressions": [
+                "script(res = { string: 'Hello!', int: 5, decimal: 1.2, object: { a: 'x', b: 'y' }, array: new List([1, 2, 3]) })"
+            ]
+        },
+        {
+            "expressions": [
+                "copy(/b, /copied)",
+                "copy(/b, /temp)",
+                "move(/temp, /moved)",
+                "generateUuid(/uuid)"
+            ]
+        },
+        {
+            "resultPointer": "/scriptResult",
+            "expressions": [
+                "script(concat = function (c, n) { return (c ? c + ', ' : '') + n })",
+                "script(res = { concat: x.strings.stream().reduce(null, concat) })"
+            ]
+        },
+        {
+            "sourcePointer": "/numbers",
+            "resultPointer": "/filtered",
+            "expressions": [
+                "filter(res = x > 2)"
+            ]
+        },
+        {
+            "sourcePointer": "/numbers",
+            "resultPointer": "/mapped",
+            "expressions": [
+                "map(res = x + 5)"
             ]
         },
         {
@@ -23,6 +66,11 @@
             "resultPointer": "/total",
             "expressions": [
                 "reduce(res = res + x)"
+            ]
+        },
+        {
+            "expressions": [
+                "withLogger(remove(/uuid))"
             ]
         }
     ]

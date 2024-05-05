@@ -1,12 +1,52 @@
 {
     "x": "value1",
     "y": "value2",
-    "z": [
-        "value3",
-        "value4",
-        "value5",
-        "value6"
+    "merged": [
+        {
+            "x": 1,
+            "y": "a"
+        },
+        {
+            "x": 2,
+            "y": "b"
+        },
+        {
+            "x": 5,
+            "y": "c"
+        },
+        {
+            "x": 7
+        }
     ],
-    "greeting": "Hello, World!",
+    "stringLiteral": "Hello, World!",
+    "JSliterals": {
+        "string": "Hello!",
+        "int": 5,
+        "decimal": 1.2,
+        "object": {
+            "a": "x",
+            "b": "y"
+        },
+        "array": [
+            1,
+            2,
+            3
+        ]
+    },
+    "copied": "value2",
+    "moved": "value2",
+    "scriptResult": {
+        "concat": "a, b, c"
+    },
+    "filtered": [
+        5,
+        7
+    ],
+    "mapped": [
+        6.0,
+        7.0,
+        10.0,
+        12.0
+    ],
     "total": 15.0
 }

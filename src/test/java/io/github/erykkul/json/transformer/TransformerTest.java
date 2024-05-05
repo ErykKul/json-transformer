@@ -3,7 +3,6 @@
 package io.github.erykkul.json.transformer;
 
 import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertTrue;
 
 import java.io.FileNotFoundException;
 import java.io.FileReader;
@@ -45,8 +44,8 @@ public class TransformerTest {
         final Transformer transformer = FACTORY_WITH_LOGGER.createFromFile("examples/transformer.json");
         final JsonObject result = transformer.transform(parse("examples/example.json"));
         System.out.println(result);
-        assertTrue(parse("examples/transformed.json").equals(result));
-        assertTrue(Utils.asJsonValue(Utils.asObject(result)).equals(result));
+        assertEquals(parse("examples/transformed.json"), result);
+        assertEquals(result, Utils.asJsonValue(Utils.asObject(result)));
     }
 
     @Test
@@ -60,7 +59,7 @@ public class TransformerTest {
             final JsonObject result = transformer
                     .transform(parse("examples/documentation/" + example + "ExampleSource.json"));
             System.out.println(result);
-            assertTrue(parse("examples/documentation/" + example + "ExampleResult.json").equals(result));
+            assertEquals(parse("examples/documentation/" + example + "ExampleResult.json"), result);
         }
     }
 

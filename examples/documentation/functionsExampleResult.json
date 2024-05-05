@@ -2,7 +2,7 @@
     "copied": "y",
     "moved": "y",
     "scriptResult": {
-        "test": "123"
+        "concat": "1, 2, 3"
     },
     "filtered": [
         2,

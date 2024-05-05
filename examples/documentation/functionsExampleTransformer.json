@@ -11,7 +11,8 @@
         {
             "resultPointer": "/scriptResult",
             "expressions": [
-                "script(res = { test: '123' })"
+                "script(concat = function (c, n) { return (c ? c + ', ' : '') + n })",
+                "script(res = { concat: x.a.stream().reduce(null, concat) })"
             ]
         },
         {
