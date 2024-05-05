@@ -1,0 +1,24 @@
+{
+    "transformations": [
+        {
+            "append": true,
+            "sourcePointer": "/array/0/x",
+            "resultPointer": "/appended"
+        },
+        {
+            "append": true,
+            "sourcePointer": "/array/1/x",
+            "resultPointer": "/appended"
+        },
+        {
+            "append": true,
+            "sourcePointer": "/array/2/x",
+            "resultPointer": "/appended"
+        },
+        {
+            "append": true,
+            "sourcePointer": "/array[i]/x",
+            "resultPointer": "/appended2"
+        }
+    ]
+}

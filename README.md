@@ -894,6 +894,158 @@ Result:
 
 #### Iterating over arrays with the `[i]` notation
 
+The [JavaScript Object Notation (JSON) Pointers](https://datatracker.ietf.org/doc/html/rfc6901) specification does support arrays, but only by addressing each array element by its specific zero-based index. This means that for copying the values from an array, you would need to know exactly how many elements are contained in the source document array and access each of these values by its specific index. This is a valid approach in this library, since the pointers using indexes are valid JSON pointers. However, this is counterproductive if we do not know on beforehand how many elements are in the source array, and we simply want to copy all of them. To address this issue, this library introduces a shorthand notation `[i]` indicating that we want to execute the same operation for each element from the source array. This is illustrated with the following example, that compares both approaches:
+
+Source:
+```json
+{
+    "array": [
+        {"x":1},
+        {"x":2},
+        {"x":3}
+    ]
+}
+```
+
+Transformer:
+```json
+{
+    "transformations": [
+        {
+            "append": true,
+            "sourcePointer": "/array/0/x",
+            "resultPointer": "/appended"
+        },
+        {
+            "append": true,
+            "sourcePointer": "/array/1/x",
+            "resultPointer": "/appended"
+        },
+        {
+            "append": true,
+            "sourcePointer": "/array/2/x",
+            "resultPointer": "/appended"
+        },
+        {
+            "append": true,
+            "sourcePointer": "/array[i]/x",
+            "resultPointer": "/appended2"
+        }
+    ]
+}
+```
+
+Result:
+```json
+{
+    "appended": [
+        1,
+        2,
+        3
+    ],
+    "appended2": [
+        1,
+        2,
+        3
+    ]
+}
+```
+
+The same notation can be used for iterating over nested arrays, where we add `[i]` notation to each array we are iterating over. We can also use that notation in the `resultPointer`, where the library matches the `[i]` notations in the `resultPointer` to the same notations in the `sourcePointer` in order to preserve the structure. This means that the `resultPointer` can contain at most the same number of `[i]`'s as the `sourcePointer`. For each `[i]` that is missing in the `resultPointer` we flatten the most outer array from the source document, while maintaining the remaining structure. This is illustrated in the following example:
+
+Source:
+```json
+{
+    "x": [
+        {
+            "a": "a1",
+            "y": [
+                {
+                    "b": "b1",
+                    "z": [1, 2, 3]
+                },
+                {
+                    "b": "b2",
+                    "z": [4, 5, 6]
+                }
+            ]
+        },
+        {
+            "a": "a2",
+            "y": [
+                {
+                    "b": "b3",
+                    "z": [7, 8, 9]
+                },
+                {
+                    "b": "b4",
+                    "z": [10, 11, 12]
+                }
+            ]
+        }
+    ]
+}
+```
+
+Transformer:
+```json
+{
+    "transformations": [
+        {
+            "sourcePointer": "/x[i]/y[i]/z[i]",
+            "resultPointer": "/result1/xyz"
+        },
+        {
+            "sourcePointer": "/x[i]/a",
+            "resultPointer": "/result1/a"
+        },
+        {
+            "sourcePointer": "/x[i]/y[i]/b",
+            "resultPointer": "/result1/b"
+        },
+        {
+            "sourcePointer": "/x[i]/y[i]/z[i]",
+            "resultPointer": "/result2[i]/res/yz"
+        },
+        {
+            "sourcePointer": "/x[i]/a",
+            "resultPointer": "/result2[i]/res/a"
+        },
+        {
+            "sourcePointer": "/x[i]/y[i]/b",
+            "resultPointer": "/result2[i]/res/b"
+        }
+    ]
+}
+```
+
+Result:
+```json
+{
+    "result1": {
+        "xyz": [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12],
+        "a":["a1","a2"],
+        "b":["b1","b2","b3","b4"]
+    },
+    "result2": [
+        {
+            "res": {
+                "yz": [1, 2, 3, 4, 5, 6],
+                "a": "a1",
+                "b": ["b1", "b2"]
+            }
+        },
+        {
+            "res": {
+                "yz": [7, 8, 9, 10, 11, 12],
+                "a": "a2",
+                "b": ["b3", "b4"]
+            }
+        }
+    ]
+}
+```
+
 #### Note on accessing parent objects
 
 ## Running the examples

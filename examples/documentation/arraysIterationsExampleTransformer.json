@@ -1,0 +1,28 @@
+{
+    "transformations": [
+        {
+            "sourcePointer": "/x[i]/y[i]/z[i]",
+            "resultPointer": "/result1/xyz"
+        },
+        {
+            "sourcePointer": "/x[i]/a",
+            "resultPointer": "/result1/a"
+        },
+        {
+            "sourcePointer": "/x[i]/y[i]/b",
+            "resultPointer": "/result1/b"
+        },
+        {
+            "sourcePointer": "/x[i]/y[i]/z[i]",
+            "resultPointer": "/result2[i]/res/yz"
+        },
+        {
+            "sourcePointer": "/x[i]/a",
+            "resultPointer": "/result2[i]/res/a"
+        },
+        {
+            "sourcePointer": "/x[i]/y[i]/b",
+            "resultPointer": "/result2[i]/res/b"
+        }
+    ]
+}
