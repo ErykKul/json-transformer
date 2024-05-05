@@ -631,15 +631,169 @@ res -> {"copied":"y","moved":"y","scriptResult":{"test":"123"},"filtered":[2,3],
 
 #### Importing JavaScript files
 
+In certain situations, a more complex JavaScript script may be needed to achieve the desired transformation. This kind of script becomes unreadable when written on one line (e.g., using semicolon (`;`) for splitting the script lines). Let's look, for example, at the following JSON document:
 
+Source:
+```json
+{
+    "files": [
+        {
+            "path": "file.txt"
+        },
+        {
+            "path": "a/file1.txt"
+        },
+        {
+            "path": "b/file1.txt"
+        },
+        {
+            "path": "c/file1.txt"
+        },
+        {
+            "path": "a/ab/file1.txt"
+        }
+    ]
+}
+```
+
+If the desired transformation would be having the files in a graph representation, where each object has a name (either a file name or a directory name), a reference to its parent directory, and a boolean indicating if it is a directory, then you might end up writing the following transformer:
+
+Transformer:
+```json
+{
+    "transformations": [
+        {
+            "sourcePointer": "/files",
+            "resultPointer": "/graph",
+            "expressions": [
+                "script(list = new List())",
+                "map(last = x.path.split('/').slice(-1); id = ''; parent = ''; list.addAll(x.path.split('/').map(function (p) { id = id + '/' + p; r = { id: id, name: p, parent: parent, isDir: p != last }; parent = parent + '/' + p; return r; }));)",
+                "script(res = list)"
+            ]
+        },
+        {
+            "useResultAsSource": true,
+            "sourcePointer": "/graph",
+            "resultPointer": "/graph",
+            "expressions": [
+                "script(set = new Set())",
+                "filter(res = set.add(x))",
+                "map(if (x.parent == '') delete x.parent; res = x)"
+            ]
+        }
+    ]
+}
+```
+
+The long `map` expression in the first transformation is not easily readable in that transformer. The script inside that expression becomes much more readable when stored in a separate file:
+
+JavaScript stored in [/example/split.paths](/examples/split_paths.js)
+```javascript
+last = x.path.split('/').slice(-1);
+id = '';
+parent = '';
+list.addAll(x.path.split('/').map(function (p) {
+    id = id + '/' + p;
+    r = { id: id, name: p, parent: parent, isDir: p != last };
+    parent = parent + '/' + p;
+    return r;
+}));
+```
+
+We can then create a transformer that imports that file inside the expression using the `importJS {fileName} endImport` notation, as show in the example below:
+
+Transformer with JavaScript file import:
+```json
+{
+    "transformations": [
+        {
+            "sourcePointer": "/files",
+            "resultPointer": "/graph",
+            "expressions": [
+                "script(list = new List())",
+                "map(importJS examples/split_paths.js endImport)",
+                "script(res = list)"
+            ]
+        },
+        {
+            "useResultAsSource": true,
+            "sourcePointer": "/graph",
+            "resultPointer": "/graph",
+            "expressions": [
+                "script(set = new Set())",
+                "filter(res = set.add(x))",
+                "map(if (x.parent == '') delete x.parent; res = x)"
+            ]
+        }
+    ]
+}
+```
+
+The new transformation becomes much more readable that way. When we execute it on the source document from the example above, we get the following resulting document:
+
+Result:
+```json
+{
+    "graph": [
+        {
+            "id": "/file.txt",
+            "name": "file.txt",
+            "isDir": false
+        },
+        {
+            "id": "/a",
+            "name": "a",
+            "isDir": true
+        },
+        {
+            "id": "/a/file1.txt",
+            "name": "file1.txt",
+            "parent": "/a",
+            "isDir": false
+        },
+        {
+            "id": "/b",
+            "name": "b",
+            "isDir": true
+        },
+        {
+            "id": "/b/file1.txt",
+            "name": "file1.txt",
+            "parent": "/b",
+            "isDir": false
+        },
+        {
+            "id": "/c",
+            "name": "c",
+            "isDir": true
+        },
+        {
+            "id": "/c/file1.txt",
+            "name": "file1.txt",
+            "parent": "/c",
+            "isDir": false
+        },
+        {
+            "id": "/a/ab",
+            "name": "ab",
+            "parent": "/a",
+            "isDir": true
+        },
+        {
+            "id": "/a/ab/file1.txt",
+            "name": "file1.txt",
+            "parent": "/a/ab",
+            "isDir": false
+        }
+    ]
+}
+```
 
 ### Working with arrays
 
 ### Examples
 
 accessing parent
-
-files to graph
 
 ## Thread safety
 

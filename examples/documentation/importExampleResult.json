@@ -1,0 +1,54 @@
+{
+    "graph": [
+        {
+            "id": "/file.txt",
+            "name": "file.txt",
+            "isDir": false
+        },
+        {
+            "id": "/a",
+            "name": "a",
+            "isDir": true
+        },
+        {
+            "id": "/a/file1.txt",
+            "name": "file1.txt",
+            "parent": "/a",
+            "isDir": false
+        },
+        {
+            "id": "/b",
+            "name": "b",
+            "isDir": true
+        },
+        {
+            "id": "/b/file1.txt",
+            "name": "file1.txt",
+            "parent": "/b",
+            "isDir": false
+        },
+        {
+            "id": "/c",
+            "name": "c",
+            "isDir": true
+        },
+        {
+            "id": "/c/file1.txt",
+            "name": "file1.txt",
+            "parent": "/c",
+            "isDir": false
+        },
+        {
+            "id": "/a/ab",
+            "name": "ab",
+            "parent": "/a",
+            "isDir": true
+        },
+        {
+            "id": "/a/ab/file1.txt",
+            "name": "file1.txt",
+            "parent": "/a/ab",
+            "isDir": false
+        }
+    ]
+}

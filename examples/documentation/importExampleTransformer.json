@@ -1,0 +1,23 @@
+{
+    "transformations": [
+        {
+            "sourcePointer": "/files",
+            "resultPointer": "/graph",
+            "expressions": [
+                "script(list = new List())",
+                "map(importJS examples/split_paths.js endImport)",
+                "script(res = list)"
+            ]
+        },
+        {
+            "useResultAsSource": true,
+            "sourcePointer": "/graph",
+            "resultPointer": "/graph",
+            "expressions": [
+                "script(set = new Set())",
+                "filter(res = set.add(x))",
+                "map(if (x.parent == '') delete x.parent; res = x)"
+            ]
+        }
+    ]
+}

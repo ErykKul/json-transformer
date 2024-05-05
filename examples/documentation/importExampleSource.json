@@ -1,0 +1,19 @@
+{
+    "files": [
+        {
+            "path": "file.txt"
+        },
+        {
+            "path": "a/file1.txt"
+        },
+        {
+            "path": "b/file1.txt"
+        },
+        {
+            "path": "c/file1.txt"
+        },
+        {
+            "path": "a/ab/file1.txt"
+        }
+    ]
+}
