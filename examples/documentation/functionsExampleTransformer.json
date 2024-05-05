@@ -40,6 +40,13 @@
             "expressions": [
                 "withLogger(remove(/uuid))"
             ]
+        },
+        {
+            "sourcePointer": "/a",
+            "resultPointer": "/concat",
+            "expressions": [
+                "reduce(res = (res ? res + ', ' : '') + x)"
+            ]
         }
     ]
 }

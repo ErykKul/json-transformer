@@ -72,6 +72,13 @@
             "expressions": [
                 "withLogger(remove(/uuid))"
             ]
+        },
+        {
+            "sourcePointer": "/numbers",
+            "resultPointer": "/concat",
+            "expressions": [
+                "reduce(res = (res ? res + ', ' : '') + x)"
+            ]
         }
     ]
 }

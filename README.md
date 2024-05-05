@@ -122,6 +122,13 @@ Transformed with this transformer:
             "expressions": [
                 "withLogger(remove(/uuid))"
             ]
+        },
+        {
+            "sourcePointer": "/numbers",
+            "resultPointer": "/concat",
+            "expressions": [
+                "reduce(res = (res ? res + ', ' : '') + x)"
+            ]
         }
     ]
 }
@@ -180,7 +187,8 @@ Becomes:
         10.0,
         12.0
     ],
-    "total": 15.0
+    "total": 15.0,
+    "concat": "1, 2, 5, 7"
 }
 ```
 
@@ -570,6 +578,13 @@ Tranformer:
             "expressions": [
                 "withLogger(remove(/uuid))"
             ]
+        },
+        {
+            "sourcePointer": "/a",
+            "resultPointer": "/concat",
+            "expressions": [
+                "reduce(res = (res ? res + ', ' : '') + x)"
+            ]
         }
     ]
 }
@@ -592,7 +607,8 @@ Result:
         7.0,
         8.0
     ],
-    "reduced": 6.0
+    "reduced": 6.0,
+    "concat": "1, 2, 3"
 }
 ```
 
