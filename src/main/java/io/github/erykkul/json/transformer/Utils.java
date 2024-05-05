@@ -116,6 +116,7 @@ public class Utils {
             engine.eval("Map = Java.type('java.util.LinkedHashMap')");
             engine.eval("Set = Java.type('java.util.LinkedHashSet')");
             engine.eval("List = Java.type('java.util.ArrayList')");
+            engine.eval("Collectors = Java.type('java.util.stream.Collectors')");
         } catch (final Exception e) {
             logger.severe("Script engine for javascript not found: " + e);
         }

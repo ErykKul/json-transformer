@@ -1,0 +1,15 @@
+{
+    "transformations": [
+        {
+            "sourcePointer": "/x[i]/y[i]/z[i]",
+            "resultPointer": "/result[i]/res/yz"
+        },
+        {
+            "sourcePointer": "/x[i]",
+            "resultPointer": "/result[i]/res/ab",
+            "expressions": [
+                "script(ab = function(y) {return {a: x.a, b: y.b}}; res = x.y.stream().map(ab).collect(Collectors.toList()))"
+            ]
+        }
+    ]
+}

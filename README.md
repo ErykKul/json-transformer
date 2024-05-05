@@ -472,12 +472,13 @@ Result:
 
 #### Java types inside the JavaScript expressions
 
-All [functions](#functions) that use JavaScript have access to the Java types mapped to the `Map`, `Set` and `List` types in JavaScript at the moment of the creation of the Script Engine:
+All [functions](#functions) that use JavaScript have access to the Java types mapped to the `Map`, `Set`, `List` and `Collectors` types in JavaScript at the moment of the creation of the Script Engine:
 
 ```java
     engine.eval("Map = Java.type('java.util.LinkedHashMap')");
     engine.eval("Set = Java.type('java.util.LinkedHashSet')");
     engine.eval("List = Java.type('java.util.ArrayList')");
+    engine.eval("Collectors = Java.type('java.util.stream.Collectors')");
 ```
 
 You can override these types, or add any Java type you need by simply adding an expression. For example:
@@ -1047,6 +1048,97 @@ Result:
 ```
 
 #### Note on accessing parent objects
+
+Source:
+```json
+{
+    "x": [
+        {
+            "a": "a1",
+            "y": [
+                {
+                    "b": "b1",
+                    "z": [1, 2, 3]
+                },
+                {
+                    "b": "b2",
+                    "z": [4, 5, 6]
+                }
+            ]
+        },
+        {
+            "a": "a2",
+            "y": [
+                {
+                    "b": "b3",
+                    "z": [7, 8, 9]
+                },
+                {
+                    "b": "b4",
+                    "z": [10, 11, 12]
+                }
+            ]
+        }
+    ]
+}
+```
+
+Transformer:
+```json
+{
+    "transformations": [
+        {
+            "sourcePointer": "/x[i]/y[i]/z[i]",
+            "resultPointer": "/result[i]/res/yz"
+        },
+        {
+            "sourcePointer": "/x[i]",
+            "resultPointer": "/result[i]/res/ab",
+            "expressions": [
+                "script(ab = function(y) {return {a: x.a, b: y.b}}; res = x.y.stream().map(ab).collect(Collectors.toList()))"
+            ]
+        }
+    ]
+}
+```
+
+Result:
+```json
+{
+    "result": [
+        {
+            "res": {
+                "yz": [1, 2, 3, 4, 5, 6],
+                "ab": [
+                    {
+                        "a": "a1",
+                        "b": "b1"
+                    },
+                    {
+                        "a": "a1",
+                        "b": "b2"
+                    }
+                ]
+            }
+        },
+        {
+            "res": {
+                "yz": [7, 8, 9, 10, 11, 12],
+                "ab": [
+                    {
+                        "a": "a2",
+                        "b": "b3"
+                    },
+                    {
+                        "a": "a2",
+                        "b": "b4"
+                    }
+                ]
+            }
+        }
+    ]
+}
+```
 
 ## Running the examples
 
