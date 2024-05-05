@@ -825,7 +825,6 @@ This section is structured as follows:
 - [Iterating over arrays with the `[i]` notation](#iterating-over-arrays-with-the-i-notation)
 - [Note on accessing parent objects](#note-on-accessing-parent-objects)
 
-
 #### Using the `append` transformation field
 
 #### Iterating over arrays with the `[i]` notation
@@ -833,6 +832,10 @@ This section is structured as follows:
 #### Note on accessing parent objects
 
 ## Running the examples
+
+All the examples from this documentation are provided as test cases. If you wish to run them yourself and experiment with this library, you can check out this repository and run the tests from the [TransformerTest.java](/src/test/java//io/github/erykkul/json/transformer/TransformerTest.java) class by running the `mvn test` command.
+
+The examples themselves can be found in the [examples](/examples/) directory, that next to JSON files from the examples in this documentation in the [documentation](/examples/documentation/) directory, contains an extra example and the [split_paths.js](/examples/split_paths.js) file, as used in the [importing javascript files](#importing-javascript-files) section.
 
 ## Thread safety
 
