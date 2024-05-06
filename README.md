@@ -425,7 +425,7 @@ As can be seen, the resulting objects are merged consistently, just as described
 
 ### Expressions
 
-Expressions can be either string [literals](#literals) or calls to [functions](#functions) registered in the transformer factory. Each transformation in the transformer can have multiple expressions, they are then executed in the order that they are defined. Note that when JavaScript code is used in the expressions, you can store variables in the script engine, and these variables become accessible in all the following expressions, also in the expressions from the transformations that are defined after the transformation where the variable is stored. The execution engine is then shared over the whole transform action. It created in a lazy manner, meaning that when no expressions using the JavaScript are defined in a transformer, the engine is never created.
+Expressions can be either string [literals](#literals) or calls to [functions](#functions) registered in the transformer factory. Each transformation in the transformer can have multiple expressions, they are then executed in the order that they were defined. Note that when JavaScript code is used in the expressions, you can store variables in the script engine, and these variables become accessible in all the following expressions, also in the expressions from the transformations that are defined after the transformation where the variable is stored. The execution engine is then shared over the whole transform action. It is created in a lazy manner, meaning that when no expressions using JavaScript are defined in the transformer, the engine is never created.
 
 #### Literals
 
