@@ -1052,7 +1052,7 @@ Result:
 
 #### Note on accessing parent objects
 
-A limitation of working with `jakarta.json` API is that you cannot access the parent of an object. The references to parent objects are not stored in the child objects for efficiency reasons. When the child object is not in an array, it does not cause any problems, as we can copy values from any JSON pointer to another JSON pointer. However, when we work with arrays, it might become difficult. Accessing the local and global source from the context object might be hard to understand, and a generic solution that would work in all cases does not exist at this moment. The best option is then to work on the parent object directly and either use a custom function or a script. The following example uses a script:
+A limitation of working with `jakarta.json` API is that you cannot access the parent of an object. The references to parent objects are not stored in the child objects for efficiency reasons. When the child object is not in an array, it does not cause any problems, as we can copy values from any JSON pointer to another JSON pointer. However, when we work with arrays, it might become difficult. Accessing the local and the global source from the context object might be hard to understand, and a generic solution that would work in all cases does not exist at this moment. The best option is then to work on the parent object directly and either use a custom function or a script. The following example uses a script:
 
 Source:
 ```json
