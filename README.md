@@ -199,8 +199,10 @@ This can be implemented the following way, using the string representations of t
 
     public String testTransformer(final String transformerStr, final String sourceStr) {
         final Transformer transformer = FACTORY.createFromJsonString(transformerStr);
-        final JsonObject result = transformer.transform(Json.createParser(
-            new StringReader(sourceStr)).getObject());
+        final JsonReader jsonReader = Json.createReader(new StringReader(sourceStr));
+        final JsonObject source = jsonReader.readObject();
+        jsonReader.close();
+        final JsonObject result = transformer.transform(source);
         return result.toString();
     }
 ```
