@@ -224,7 +224,7 @@ This can be implemented the following way, using the string representations of t
 
 ## Dependencies
 
-This library is implemented using the [Jakarta JSON Processing](https://jakarta.ee/specifications/jsonp/) specification. It also uses (for parsing of the transformers from JSON documents) the [Jakarta JSON Binding](https://jakarta.ee/specifications/jsonb/) specification. Particular implementations of these specifications, which are necessary for running the code of this library, can be chosen at runtime. This project uses (with the dependency scope `provided`) the following implementations: `pkg:maven/org.glassfish/jakarta.json@2.0.1` and `pkg:maven/org.eclipse/yasson@3.0.3`.
+This library is implemented using the [Jakarta JSON Processing](https://jakarta.ee/specifications/jsonp/) specification. An implementation of this specification, which is necessary for running the code of this library, can be chosen at runtime. This project uses (with the dependency scope `provided`) the following implementation: `pkg:maven/org.eclipse.parsson/parsson@1.1.5`.
 
 Some of the built-in functions provided in this project use JavaScript as expression language. If you are using these function, or you are adding your own functions using JavaScript as expression language, then you need to provide a [jvax.script](https://docs.oracle.com/javase/6/docs/api/javax/script/package-summary.html) implementation. This project uses (with the dependency scope `provided`) the following implementation: `pkg:maven/org.openjdk.nashorn/nashorn-core@15.4`.
 

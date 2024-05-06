@@ -2,33 +2,26 @@
 
 package io.github.erykkul.json.transformer;
 
+import static jakarta.json.JsonValue.TRUE;
+
 import java.io.IOException;
+import java.io.StringReader;
 import java.nio.file.Files;
 import java.nio.file.Paths;
 import java.util.Collections;
 import java.util.HashMap;
-import java.util.List;
 import java.util.Map;
 import java.util.logging.Logger;
 import java.util.regex.Pattern;
 import java.util.stream.Collectors;
 
-import jakarta.json.bind.Jsonb;
-import jakarta.json.bind.JsonbBuilder;
+import jakarta.json.Json;
+import jakarta.json.JsonObject;
+import jakarta.json.JsonReader;
+import jakarta.json.JsonString;
+import jakarta.json.JsonValue;
 
 public class TransformerFactory {
-
-    public static class TransformerVO {
-        public List<TransformationVO> transformations;
-    }
-
-    public static class TransformationVO {
-        public Boolean append;
-        public Boolean useResultAsSource;
-        public String sourcePointer;
-        public String resultPointer;
-        public List<String> expressions;
-    }
 
     private static final Logger logger = Logger.getLogger(TransformerFactory.class.getName());
     private static final String importOpenTag = "importJS";
@@ -80,10 +73,12 @@ public class TransformerFactory {
                 return "";
             }
         });
-        final Jsonb jsonb = JsonbBuilder.newBuilder().build();
-        final TransformerVO t = jsonb.fromJson(content, TransformerVO.class);
-        return new Transformer(t.transformations == null ? Collections.emptyList()
-                : t.transformations.stream().map(this::toTransformation).collect(Collectors.toList()));
+        final JsonReader jsonReader = Json.createReader(new StringReader(content));
+        final JsonObject object = jsonReader.readObject();
+        jsonReader.close();
+        return new Transformer(object.get("transformations") == null ? Collections.emptyList()
+                : object.getJsonArray("transformations").stream().map(this::toTransformation)
+                        .collect(Collectors.toList()));
     }
 
     public Transformer createFromFile(final String file) throws IOException {
@@ -91,11 +86,19 @@ public class TransformerFactory {
         return createFromJsonString(content);
     }
 
-    public Transformation toTransformation(final TransformationVO t) {
-        return new Transformation(t.append == null ? false : t.append,
-                t.useResultAsSource == null ? false : t.useResultAsSource,
-                t.sourcePointer == null ? "" : t.sourcePointer, t.resultPointer == null ? "" : t.resultPointer,
-                t.expressions == null ? Collections.emptyList() : t.expressions, functions);
+    public Transformation toTransformation(final JsonValue transformations) {
+        final JsonObject t = transformations.asJsonObject();
+        System.out.println(transformations.toString());
+        final Transformation parsed = new Transformation(TRUE.equals(t.get("append")),
+                TRUE.equals(t.get("useResultAsSource")),
+                t.get("sourcePointer") == null ? "" : t.getString("sourcePointer"),
+                t.get("resultPointer") == null ? "" : t.getString("resultPointer"),
+                t.get("expressions") == null ? Collections.emptyList()
+                        : t.getJsonArray("expressions").stream().map(x -> ((JsonString) x).getString())
+                                .collect(Collectors.toList()),
+                functions);
+        System.out.println(parsed.toJsonObject());
+        return parsed;
     }
 
     private Map<String, ExprFunction> builtin() {
