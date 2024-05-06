@@ -1,6 +1,6 @@
 # JSON Transformer
 
-JSON Transformer is a simple and expressive Java library that uses [transformers](#transformer) defined in JSON documents for transformations of JSON structures (even complex structures containing nested arrays of objects) into other (complex) JSON structures. At its bases, it uses the [JavaScript Object Notation (JSON) Pointers](https://datatracker.ietf.org/doc/html/rfc6901) specification, as provided by the `jakarta.json` API. This library extends that specification with the `[i]` notation for [working with arrays](#working-with-arrays). It also provides several built-in [functions](#functions), ranging from the very basic `copy` function taking two JSON pointers as arguments, to more expressive `map`, `filter` and `reduce` functions taking JavaScript expressions as arguments (e.g., `res = res + x`). Together with the `script` function, that can be used to produce any JSON object (e.g., `res = { a: 1, b: myFunc(x) }`), and the possibility of overwriting and/or adding new custom functions, this library can support arbitrary complex transformation. Finally, you can also use the [literals](#literals) for addind static information to your transformed JSON documents.
+JSON Transformer is a small and expressive Java library that uses [transformers](#transformer) defined in JSON documents for transformations of JSON structures (even complex structures containing nested arrays of objects) into other (complex) JSON structures. At its bases, it uses the [JavaScript Object Notation (JSON) Pointers](https://datatracker.ietf.org/doc/html/rfc6901) specification, as provided by the `jakarta.json` API. This library extends that specification with the `[i]` notation for [iterating over arrays](#iterating-over-arrays-with-the-i-notation). It also provides several built-in [functions](#functions), ranging from the very basic `copy` function taking two JSON pointers as arguments, to more expressive `map`, `filter` and `reduce` functions taking JavaScript expressions as arguments (e.g., `res = res + x`). Together with the `script` function, that can be used to create any JSON objects and execute JavaScript code, and the possibility of overwriting and/or adding new custom functions, this library can support arbitrary complex transformation. Finally, you can also use [literals](#literals) for adding values to your transformed JSON documents.
 
 ## Quick start
 
@@ -231,11 +231,11 @@ Some of the built-in functions provided in this project use JavaScript as expres
 ## Transformer
 
 Transformer contains only one field `transformations`, which is an array of transformations, each having the following structure:
-- boolean `append` (default: `false`): it can only be set to `true` when the JSON value at the `resultPointer` is an array (or that value does not yet exist). In that case, values resulting from this transformation are appended to the array at the `resultPointer` (see [working with arrays](#working-with-arrays)).
+- boolean `append` (default: `false`): it can only be set to `true` when the JSON value at the `resultPointer` is an array (or that value does not yet exist). In that case, values resulting from this transformation are appended to the array at the `resultPointer` (see [using the `append` transformation field](#using-the-append-transformation-field)).
 - boolean `useResultAsSource`(default: `false`): when set to `true` the result is also used as the source of this transformation, where the source itself is ignored. It is useful, for example, when using the `filter` function on an array in the resulting document (see [functions](#functions)).
-- string `sourcePointer` (default: `""`): a JSON Pointer extended with `[i]` notation (see [working with arrays](#working-with-arrays)) pointing to a value in the source document.
-- string `resultPointer` (default: `""`): a JSON Pointer extended with `[i]` notation (see [working with arrays](#working-with-arrays)) pointing to a value in the resulting document.
-- array of strings `expressions` (empty by default): when not defined (left empty), the transformations copies the value from `sourcePointer` to the `resultPointer`. If the value at the `resultPointer` does not yet exist, it is created. If it already exists, and it is not an array we are appending to (`"append": true`), then the value is merged with the already existing value (see [merging already existing values](#merging-already-existing-values)). When `expressions` are not empty, then the values are produced according to these expressions (see [](#expressions)), i.e., they override the default `copy` behavior and can be either [literas](#literals) or calls to [functions](#functions).
+- string `sourcePointer` (default: `""`): a JSON Pointer extended with `[i]` notation (see [iterating over arrays with the `[i]` notation](#iterating-over-arrays-with-the-i-notation)) pointing to a value in the source document.
+- string `resultPointer` (default: `""`): a JSON Pointer extended with `[i]` notation (see [iterating over arrays with the `[i]` notation](#iterating-over-arrays-with-the-i-notation)) pointing to a value in the resulting document.
+- array of strings `expressions` (empty by default): when not defined (left empty), the transformation copies the value from `sourcePointer` to the `resultPointer`. If the value at the `resultPointer` does not yet exist, it is created. If it already exists, and it is not an array we are appending to (`"append": true`), then the value is merged with the already existing value (see [merging already existing values](#merging-already-existing-values)). When `expressions` are not empty, then the values are produced according to these expressions (see [](#expressions)), i.e., they override the default `copy` behavior and can be either [literas](#literals) or calls to [functions](#functions).
 
 Note that empty string (`""`) is a valid JSON Pointer that points to the whole document. The identity transformation that copies the whole source document to the resulting document can be then created with the following transformer:
 
@@ -279,7 +279,7 @@ The remainder of this section is structured as follows:
 
 The default behavior of the library is merging values at the `resultPointer` with values from the `sourcePointer`. This can be overridden by setting the `"append": true` (in that case, values are appended to the array at the `resultPointer`, which is created if it does not yet exist), or by using specific expressions (for example, `remove(/x)` would remove `x` field in the object at the `resultPointer`). This section focuses on the merging behavior.
 
-In the trivial case where there is no value defined in the resulting document at `resultPointer`, the values are inserted at the `resultPointer` path in the source document. Note that that path may not exist yet in the resulting document. In fact, it is always the case at the beginning of the transformation. The objects needed for that path to be valid are then created, and the value is inserted at the right spot. If the value already exists, then it is overwritten. This can be illustrated with the following example.
+In the trivial case where there is no value defined in the resulting document at the `resultPointer`, the values are inserted at the `resultPointer` path in the source document. Note that that path may not yet exist in the resulting document. In fact, it is always the case at the beginning of the transformation. The objects needed for that path to be valid are then created, and the value is inserted at the right spot. If the value already exists, then it is overwritten. This can be illustrated with the following example.
 
 Source:
 ```json
@@ -324,7 +324,7 @@ Result:
 }
 ```
 
-The same behavior can be observed in more complex situations, e.g., when merging objects inside (possibly nested) arrays of objects. Also, objects in flattened array or in arrays of different lengths can be merged that way. If the array is shorter, or even empty, new objects are created at the corresponding (not yet existing) positions. Existing objects themselves are always merged the same way, just as described above. However, the value at the `resultPointer` could be either a simple value, or a JSON structure, like an array or an object. For example, if the already existing value being merged is an array, it will be overwritten with the new value (array or otherwise and vice versa). For example:
+The same behavior can be observed in more complex situations, e.g., when merging objects inside (possibly nested) arrays of objects. Also, objects in flattened array or in arrays of different lengths can be merged that way. If the array is shorter, or even empty, new objects are created at the corresponding (not yet existing) positions. Existing objects themselves are always merged the same way, just as described above. However, the value at the `resultPointer` could be either a simple value or a JSON structure, like an array or an object. For example, if the already existing value being merged is an array, it will be overwritten with the new value (array or otherwise and vice versa). For example:
 
 Source:
 ```json
@@ -373,7 +373,7 @@ Result:
 }
 ```
 
-If we want to treat each element of an array as a separate value, then we need to use the `[i]` notation and iterate over the values inside that array (see also [working with arrays](#working-with-arrays)). For example:
+If we want to treat each element of an array as a separate value, then we need to use the `[i]` notation and iterate over the values inside that array (see also [iterating over arrays](#iterating-over-arrays-with-the-i-notation)). For example:
 
 Source:
 ```json
@@ -419,7 +419,7 @@ Result:
 }
 ```
 
-As can be seen, the resulting objects are merged in a consistent manner, just as described before. More details on using the `[i]` notation for iterating over elements in an array can be found in [working with arrays](#working-with-arrays) section.
+As can be seen, the resulting objects are merged consistently, just as described before.
 
 ### Expressions
 
@@ -427,7 +427,7 @@ Expressions can be either string [literals](#literals) or calls to [functions](#
 
 #### Literals
 
-All expressions starting with an escaped quotation mark (`\"`) are treated by this library as string literals. String literals are placed between `\"\"` and the value of them is copied to the value at the `resultPointer` (`sourcePointer` is ignored by the expressions containing only literals of any type). Only the string literals are supported this way and other types of literals, as shown in the example below, can be expressed in the `script` function as JavaScript literals. Notice the wrapping of the JavaScript array literal between `[]` in the `List` type (that is mapped to the `java.util.ArrayList` Java type, as explained in the [next section](#java-types-inside-the-javascript-expressions)). This wrapping is needed when using the `nashorn` implementation of the script engine, as it interprets all objects from the engine as `java.util.Map` instances, unless they are mapped to another Java type, as it is the case for the `List` type. The primitive JavaScript types, like `int` or `string`, as well as object literals, are processed as expected and do not need any special mapping. This is further illustrated in the following example:
+All expressions starting with an escaped quotation mark (`\"`) are treated as string literals by this library. String literals are placed between `\"\"` and the value of them is copied to the value at the `resultPointer` (`sourcePointer` is ignored by the expressions containing only literals of any type). Only the string literals are supported this way. Other types of literals, as shown in the example below, can be expressed in the `script` function as JavaScript literals. Notice the wrapping of the JavaScript array literal between `[]` in the `List` type (that is mapped to the `java.util.ArrayList` Java type, as explained in the [next section](#java-types-inside-the-javascript-expressions)). This wrapping is needed when using the `nashorn` implementation of the script engine, as it interprets all objects from the engine as `java.util.Map` instances, unless they are mapped to another Java type, as it is the case for the `List` type. The primitive JavaScript types, like `int` or `string`, as well as object literals, are processed as expected and do not need any special mapping. This is further illustrated in the following example:
 
 Transformer:
 ```json
@@ -481,7 +481,7 @@ All [functions](#functions) that use JavaScript have access to the Java types ma
     engine.eval("Collectors = Java.type('java.util.stream.Collectors')");
 ```
 
-You can override these types, or add any Java type you need by simply adding an expression. For example:
+You can override these types, or add any Java type you need, by simply adding an expression. For example:
 
 ```json
 {
@@ -500,8 +500,8 @@ Note that the expression above does not set the `res` variable to any value. Thi
 #### Functions
 
 Expressions that are not starting with `\"` are treated as calls to functions that are registered in the transformer factory. The syntax of such an expression is the name of the function followed by the argument(s) between round brackets (`()`), that might be left empty, depending on the definition of the function that is being called. This library provides several built-in functions:
-- `copy(/fromPointer, /toPointer)`: copies a value from the `/fromPointer` (relative to the `sourcePointer`) in the source document to the `/toPointer` (relative to the `resultPointer`) in the resulting document. Notice that it is very similar to the default copy functionality when the expressions of the transformation are left empty. In fact, the default functionality is identical with `copy(, )` (or simply `copy()`, where both; the `/fromPointer` and the `/toPointer` are empty string pointers, and the value is copied from the `/sourcePointer` to the `resultPointer`).
-- `move(/fromPointer, /toPointer)`: moves a value from the `/fromPointer` (relative to the `sourcePointer`) to the `/toPointer` (relative to the `resultPointer`) in the resulting document (the source document is ignored by this function).
+- `copy(/fromPointer, /toPointer)`: copies a value from the `/fromPointer` (relative to the `sourcePointer`) in the source document to the `/toPointer` (relative to the `resultPointer`) in the resulting document. Notice that it is very similar to the default copy functionality when the expressions of the transformation are left empty. In fact, the default functionality is identical to `copy(, )` (or simply `copy()`, where both; the `/fromPointer` and the `/toPointer` are empty string pointers, and the value is copied from the `/sourcePointer` to the `resultPointer`).
+- `move(/fromPointer, /toPointer)`: moves a value from the `/fromPointer` (relative to the `sourcePointer`) in the resulting document to the `/toPointer` (relative to the `resultPointer`) in the resulting document (the source document is ignored by this function).
 - `remove(/atPointer)`: removes a value from the `/atPointer` (relative to the `resultPointer`) in the resulting document. The `\atPointer` cannot be an empty string pointer, as remove operations are not permitted on the root.
 - `generateUuid(/atPointer)`: generates a UUID at the `/atPointer` (relative to the `resultPointer`) in the resulting document.
 - `script(res = myFunction(x))`: executes the JavaScript script sent as an argument to this function. If the script writes a value to the `res` variable, that value is written at the `resultPointer` in the resulting document.
@@ -529,7 +529,8 @@ You can add functions (or even overwrite the built-in functions) to the transfor
     };
 ```
 
-The `source` and the `result` JsonValues are the values at the `sourcePointer` in the source document and the `resultPointer` in the resulting document, respectively. The `expression` is the string value between the round brackets (`()`) that is passed to this function in the expression of the transformation being executed. The `ctx` is the transformation context containing, a.o., the script engine constructed for the execution of the transform action of the transformer. You can also retrieve the `useResultAsSource` value from that context, which would indicate if you need to use the result as source, and then ignore the source document. It also provides access to the map of functions registered in the transformer factory. Other fields, namely `globalSource`, `globalResult`, `localSource` and `localResult`, are used mainly by the  framework itself and can be ignored for other than debugging purposes. You can then make that new function available to the expressions in the transformer by creating a new transformer factory with that new function registered (the built-in functions are registered as well in that factory):
+The `source` and the `result` JSON values are the values at the `sourcePointer` in the source document and the `resultPointer` in the resulting document, respectively. The `expression` is the string value between the round brackets (`()`) that is passed to this function in the expression of the transformation being executed. The `ctx` is the transformation context containing, a.o., the script engine constructed for the execution of the transform action of the transformer. You can also retrieve the `useResultAsSource` value from that context, which would indicate if you need to use the result as source, and then ignore the source document. It also provides access to the map of functions registered in the transformer factory. Other fields, namely `globalSource`, `globalResult`, `localSource` and `localResult`, are mainly used by the framework itself and can be ignored for other than debugging purposes. Finally, you can make a new function available to the expressions in the transformers by creating a new transformer factory with that new function registered:
+
 ```java
 public static final TransformerFactory FACTORY_WITH_LOGGER = TransformerFactory
         .factory(Map.of("withLogger", LOGGER));
@@ -540,7 +541,7 @@ You can then create new transformers using that new factory, e.g.:
 final Transformer transformer = FACTORY_WITH_LOGGER.createFromFile("example/transformer.json");
 ```
 
-Transformers created that way can then access the new function. For example:
+Transformers created that way can then access the new function. For example, you can now create this transformer:
 ```json
 {
     "transformations": [
@@ -554,7 +555,7 @@ Transformers created that way can then access the new function. For example:
 }
 ```
 
-The following example illustrates the usage of the functions as described in this section:
+The following example illustrates the usage of all functions as described in this section:
 
 Source:
 ```json
@@ -642,7 +643,7 @@ Result:
 }
 ```
 
-Where we can also see the debug output from the `withLogger` function in the console:
+Where we can also see the debug output from the new `withLogger` function in the console:
 ```
 *****
 
@@ -686,7 +687,7 @@ Source:
 }
 ```
 
-If the desired transformation would be having the files in a graph representation, where each object has a name (either a file name or a directory name), a reference to its parent directory, and a boolean indicating if it is a directory, then you might end up writing the following transformer:
+If we now want to transform that file list into a graph representation where each object has a name (either a file name or a directory name), a reference to its parent directory, and a boolean indicating if it is a directory, then you might end up writing the following transformer:
 
 Transformer:
 ```json
@@ -895,7 +896,7 @@ Result:
 
 #### Iterating over arrays with the `[i]` notation
 
-The [JavaScript Object Notation (JSON) Pointers](https://datatracker.ietf.org/doc/html/rfc6901) specification does support arrays, but only by addressing each array element by its specific zero-based index. This means that for copying the values from an array, you would need to know exactly how many elements are contained in the source document array and access each of these values by its specific index. This is a valid approach in this library, since the pointers using indexes are valid JSON pointers. However, this is counterproductive if we do not know on beforehand how many elements are in the source array, and we simply want to copy all of them. To address this issue, this library introduces a shorthand notation `[i]` indicating that we want to execute the same operation for each element from the source array. This is illustrated with the following example, that compares both approaches:
+The [JavaScript Object Notation (JSON) Pointers](https://datatracker.ietf.org/doc/html/rfc6901) specification does support arrays, but only by addressing each array element by its specific zero-based index. This means that for copying the values from an array, you would need to know exactly how many elements are contained in the source document array and access each of these values by its specific index. This is a valid approach in this library, since the pointers using indexes are valid JSON pointers. However, this is counterproductive if we do not know on beforehand how many elements are in the source array, and we simply want to copy all of them. To address this issue, this library introduces a shorthand notation `[i]` indicating that we want to execute the same operation for each element from the source array. This is illustrated with the following example that compares both approaches:
 
 Source:
 ```json
@@ -952,7 +953,7 @@ Result:
 }
 ```
 
-The same notation can be used for iterating over nested arrays, where we add `[i]` notation to each array we are iterating over. We can also use that notation in the `resultPointer`, where the library matches the `[i]` notations in the `resultPointer` to the same notations in the `sourcePointer` in order to preserve the structure. This means that the `resultPointer` can contain at most the same number of `[i]`'s as the `sourcePointer`. For each `[i]` that is missing in the `resultPointer` we flatten the most outer array from the source document, while maintaining the remaining structure. This is illustrated in the following example:
+The same notation can be used for iterating over nested arrays, where we add `[i]` notation to each array we are iterating over. We can also use that notation in the `resultPointer`, where the library matches the `[i]` notations in the `resultPointer` to the corresponding `[i]` notations in the `sourcePointer`. This means that the `resultPointer` can contain at most the same number of `[i]`'s as the `sourcePointer`. For each `[i]` that is missing in the `resultPointer` we flatten the most outer array from the source document, while maintaining the remaining structure. This is illustrated in the following example:
 
 Source:
 ```json
@@ -1049,7 +1050,7 @@ Result:
 
 #### Note on accessing parent objects
 
-A limitation of working with `jakarta.json` API is that you cannot access the parent of an object. The references to parent objects are not stored in the child objects for efficiency reasons. When the child object is not in an array, it does not cause any problems, as we can copy values from any JSON pointer to another JSON pointer. However, when we work with arrays, it might become tricky. Accessing the local and global source from the context object might be hard to understand, and a generic solution that would work in all cases does not exist at this moment. The best option is then to work on the parent object directly and either use a custom function or a script. The following example uses a script:
+A limitation of working with `jakarta.json` API is that you cannot access the parent of an object. The references to parent objects are not stored in the child objects for efficiency reasons. When the child object is not in an array, it does not cause any problems, as we can copy values from any JSON pointer to another JSON pointer. However, when we work with arrays, it might become difficult. Accessing the local and global source from the context object might be hard to understand, and a generic solution that would work in all cases does not exist at this moment. The best option is then to work on the parent object directly and either use a custom function or a script. The following example uses a script:
 
 Source:
 ```json
@@ -1146,8 +1147,8 @@ Result:
 
 All the examples from this documentation are provided as test cases. If you wish to run them yourself and experiment with this library, you can check out this repository and run the tests from the [TransformerTest.java](/src/test/java//io/github/erykkul/json/transformer/TransformerTest.java) class by running the `mvn test` command.
 
-The examples themselves can be found in the [examples](/examples/) directory, that next to JSON files from the examples in this documentation in the [documentation](/examples/documentation/) directory, contains an extra example and the [split_paths.js](/examples/split_paths.js) file, as used in the [importing javascript files](#importing-javascript-files) section.
+The examples themselves can be found in the [examples](/examples/) directory, that next to JSON files from the examples in this documentation in the [documentation](/examples/documentation/) directory, contains an extra example and the [split_paths.js](/examples/split_paths.js) file (used in the [importing javascript files](#importing-javascript-files) section).
 
 ## Thread safety
 
-Thread safety using this library is achieved by the concepts of immutability, and no synchronization is needed when using this library. The only mutable objects that are possibly exposed during the transformations are the JavaScript Engine instances. However, they are created for each transformation separately and should not be used outside that transformation scope.
+Thread safety using this library is achieved by the concepts of immutability and no synchronization is needed when using this library. The only mutable objects that are possibly exposed during the transformations are the JavaScript Engine instances. However, they are created for each transformation separately and should not be used outside that transformation scope.
