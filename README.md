@@ -1153,4 +1153,4 @@ The examples themselves can be found in the [examples](/examples/) directory, th
 
 ## Thread safety
 
-Thread safety using this library is achieved by the concepts of immutability and no synchronization is needed when using this library. The only mutable objects that are possibly exposed during the transformations are the JavaScript Engine instances. However, they are created for each transformation separately and should not be used outside that transformation scope.
+Thread safety using this library is achieved by the concepts of immutability and no synchronization is needed when using this library. The only mutable objects that are possibly exposed during the transformations are the JavaScript Engine instances. However, they are created for each transform execution separately and should not be used outside that scope.
