@@ -228,7 +228,7 @@ This can be implemented the following way, using the string representations of t
 
 This library is implemented using the [Jakarta JSON Processing](https://jakarta.ee/specifications/jsonp/) specification. An implementation of this specification, which is necessary for running the code of this library, can be chosen at runtime. This project uses (with the dependency scope `provided`) the following implementation: `pkg:maven/org.eclipse.parsson/parsson@1.1.5`.
 
-Some of the built-in functions provided in this project use JavaScript as expression language. If you are using these function, or you are adding your own functions using JavaScript as expression language, then you need to provide a [javax.script](https://docs.oracle.com/javase/6/docs/api/javax/script/package-summary.html) implementation. This project uses (with the dependency scope `provided`) the following implementation: `pkg:maven/org.openjdk.nashorn/nashorn-core@15.4`.
+Some of the built-in functions provided in this project use JavaScript as expression language. If you are using these functions, or you are adding your own functions using JavaScript as expression language, then you need to provide a [javax.script](https://docs.oracle.com/javase/6/docs/api/javax/script/package-summary.html) implementation. This project uses (with the dependency scope `provided`) the following implementation: `pkg:maven/org.openjdk.nashorn/nashorn-core@15.4`.
 
 ## Transformer
 
