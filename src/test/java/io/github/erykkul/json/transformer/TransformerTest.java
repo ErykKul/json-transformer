@@ -19,7 +19,21 @@ import jakarta.json.JsonObject;
 import jakarta.json.JsonReader;
 import jakarta.json.JsonValue;
 
+/**
+ * The tests on the examples from the documentation. See documentation: <a href=
+ * "https://github.com/ErykKul/json-transformer?tab=readme-ov-file#running-the-examples">Running
+ * the examples</a>
+ * 
+ * @author Eryk Kulikowski
+ * @version 1.0.0
+ * @since 1.0.0
+ */
 public class TransformerTest {
+    /**
+     * "withLogger" function as described in the documentation. See documentation:
+     * <a href=
+     * "https://github.com/ErykKul/json-transformer?tab=readme-ov-file#functions">Functions</a>
+     */
     public static final ExprFunction LOGGER = (ctx, source, result, expression) -> {
         System.out.println("*****\n");
         System.out.println("ctx -> " + ctx.toJsonObject() + "\n");
@@ -36,9 +50,17 @@ public class TransformerTest {
         return res;
     };
 
+    /**
+     * Transformer factory with the "withLogger" function registered.
+     */
     public static final TransformerFactory FACTORY_WITH_LOGGER = TransformerFactory
             .factory(Map.of("withLogger", LOGGER));
 
+    /**
+     * Extra example.
+     * 
+     * @throws IOException thrown when a file is not found.
+     */
     @Test
     public void testTransformer() throws IOException {
         final Transformer transformer = FACTORY_WITH_LOGGER.createFromFile("examples/transformer.json");
@@ -48,6 +70,11 @@ public class TransformerTest {
         assertEquals(result, Utils.asJsonValue(Utils.asObject(result)));
     }
 
+    /**
+     * Examples from the documentation.
+     * 
+     * @throws IOException thrown when a file is not found.
+     */
     @Test
     public void testExamples() throws IOException {
         final List<String> examples = Arrays.asList("quickStart", "merging1", "merging2", "merging3", "literals",
@@ -63,6 +90,9 @@ public class TransformerTest {
         }
     }
 
+    /**
+     * Test of the UUID generation.
+     */
     @Test
     public void testUuid() {
         final Transformer transformer = FACTORY_WITH_LOGGER
@@ -73,6 +103,13 @@ public class TransformerTest {
         assertEquals(95, result.toString().length());
     }
 
+    /**
+     * Parses a file into a JsonObject.
+     * 
+     * @param fileName the path and the name of the file
+     * @return the parsed JsonObject
+     * @throws FileNotFoundException thrown when a file is not found.
+     */
     public JsonObject parse(final String fileName) throws FileNotFoundException {
         final JsonReader jsonReader = Json.createReader(new FileReader(fileName));
         final JsonObject object = jsonReader.readObject();

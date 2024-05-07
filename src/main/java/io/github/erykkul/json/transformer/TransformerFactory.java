@@ -21,6 +21,14 @@ import jakarta.json.JsonReader;
 import jakarta.json.JsonString;
 import jakarta.json.JsonValue;
 
+/**
+ * The transformer factory. See documentation: <a href=
+ * "https://github.com/ErykKul/json-transformer?tab=readme-ov-file#transformer">Transformer</a>
+ * 
+ * @author Eryk Kulikowski
+ * @version 1.0.0
+ * @since 1.0.0
+ */
 public class TransformerFactory {
 
     private static final Logger logger = Logger.getLogger(TransformerFactory.class.getName());
@@ -40,10 +48,24 @@ public class TransformerFactory {
             "\r", "\\\\\\\\r",
             "\t", "\\\\\\\\t");
 
+    /**
+     * Creates a default transformer factory with only the built-in functions.
+     * 
+     * @return the default transformer factory
+     */
     public static TransformerFactory factory() {
         return new TransformerFactory();
     }
 
+    /**
+     * Creates a transformer factory that next to the default built-in functions
+     * also registers the functions as provided by the caller.
+     * 
+     * @param functions the new functions to be added (the functions using the same
+     *                  key as built-in function override these functions)
+     * @return the transformer factory with the built-in functions and the functions
+     *         passed as argument.
+     */
     public static TransformerFactory factory(final Map<String, ExprFunction> functions) {
         return new TransformerFactory(functions);
     }
@@ -60,6 +82,13 @@ public class TransformerFactory {
         this(Collections.emptyMap());
     }
 
+    /**
+     * Creates a new transformer from the String representation of the JSON document
+     * of the transformer.
+     * 
+     * @param json the String representation of the JSON document of the transformer
+     * @return the transformer
+     */
     public Transformer createFromJsonString(final String json) {
         final String content = importPattern.matcher(json).replaceAll(x -> {
             final String importFile = x.group()
@@ -81,13 +110,28 @@ public class TransformerFactory {
                         .collect(Collectors.toList()));
     }
 
+    /**
+     * Creates a new transformer from a file containing the JSON document of the
+     * transformer.
+     * 
+     * @param file the path and name of the file
+     * @return the transformer
+     * @throws IOException thrown when the file is not found
+     */
     public Transformer createFromFile(final String file) throws IOException {
         final String content = Files.readString(Paths.get(file));
         return createFromJsonString(content);
     }
 
-    public Transformation toTransformation(final JsonValue transformations) {
-        final JsonObject t = transformations.asJsonObject();
+    /**
+     * Creates a new Transformation object from the JsonValue of that transformation
+     * document.
+     * 
+     * @param transformation the JsonValue of the transformation document
+     * @return the transformation object
+     */
+    public Transformation toTransformation(final JsonValue transformation) {
+        final JsonObject t = transformation.asJsonObject();
         return new Transformation(TRUE.equals(t.get("append")),
                 TRUE.equals(t.get("useResultAsSource")),
                 t.get("sourcePointer") == null ? "" : t.getString("sourcePointer"),

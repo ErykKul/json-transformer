@@ -10,9 +10,28 @@ import jakarta.json.Json;
 import jakarta.json.JsonValue;
 import jakarta.json.JsonValue.ValueType;
 
+/**
+ * Interface for expression functions and the definitions for the built-in
+ * functions. See documentation: <a href=
+ * "https://github.com/ErykKul/json-transformer?tab=readme-ov-file#functions">Functions</a>
+ * 
+ * @author Eryk Kulikowski
+ * @version 1.0.0
+ * @since 1.0.0
+ */
 @FunctionalInterface
 public interface ExprFunction {
 
+    /**
+     * copy(/fromPointer, /toPointer): copies a value from the /fromPointer
+     * (relative to the sourcePointer) in the source document to the /toPointer
+     * (relative to the resultPointer) in the resulting document. Notice that it is
+     * very similar to the default copy functionality when the expressions of the
+     * transformation are left empty. In fact, the default functionality is
+     * identical to copy(, ) (or simply copy(), where both; the /fromPointer and the
+     * /toPointer are empty string pointers, and the value is copied from the
+     * /sourcePointer to the resultPointer).
+     */
     ExprFunction COPY = (ctx, source, result, expression) -> {
         final String[] args = expression.split(",");
         final String from = args.length > 0 ? args[0].trim() : "";
@@ -20,6 +39,12 @@ public interface ExprFunction {
         return Utils.replace(Utils.fixPath(result, ValueType.OBJECT, to), to, Utils.getValue(source, from));
     };
 
+    /**
+     * move(/fromPointer, /toPointer): moves a value from the /fromPointer (relative
+     * to the sourcePointer) in the resulting document to the /toPointer (relative
+     * to the resultPointer) in the resulting document (the source document is
+     * ignored by this function).
+     */
     ExprFunction MOVE = (ctx, source, result, expression) -> {
         final String[] args = expression.split(",");
         final String from = args.length > 0 ? args[0].trim() : "";
@@ -29,12 +54,26 @@ public interface ExprFunction {
         return Utils.remove(res, from);
     };
 
+    /**
+     * remove(/atPointer): removes a value from the /atPointer (relative to the
+     * resultPointer) in the resulting document. The \atPointer cannot be an empty
+     * string pointer, as remove operations are not permitted on the root.
+     */
     ExprFunction REMOVE = (ctx, source, result, expression) -> Utils.remove(result, expression);
 
+    /**
+     * generateUuid(/atPointer): generates a UUID at the /atPointer (relative to the
+     * resultPointer) in the resulting document.
+     */
     ExprFunction GENERATE_UUID = (ctx, source, result, expression) -> Utils.replace(
             Utils.fixPath(result, ValueType.OBJECT, expression), expression,
             Json.createValue(UUID.randomUUID().toString()));
 
+    /**
+     * script(res = myFunction(x)): executes the JavaScript script sent as an
+     * argument to this function. If the script writes a value to the res variable,
+     * that value is written at the resultPointer in the resulting document.
+     */
     ExprFunction SCRIPT = (ctx, source, result, expression) -> {
         Utils.eval(ctx.engine(), "res = null");
         Utils.eval(ctx.engine(), expression, source, "x");
@@ -45,6 +84,14 @@ public interface ExprFunction {
         return res;
     };
 
+    /**
+     * filter(res = x > 2): filters out values from an array (or fields in an
+     * object) at the sourcePointer in the source document that do not produce res =
+     * true in the JavaScript script provided as argument to this function. The
+     * values or fields being filtered are passed as x variables to the script
+     * engine by the library. The result of the expression is written at the
+     * resultPointer in the resulting document.
+     */
     ExprFunction FILTER = (ctx, source, result, expression) -> {
         if (Utils.isEmpty(source)) {
             return result;
@@ -57,6 +104,14 @@ public interface ExprFunction {
         return Json.createArrayBuilder(res).build();
     };
 
+    /**
+     * map(res = { a: x.field1, b: x.field2 }): maps values from an array (or fields
+     * in an object) at the sourcePointer in the source document to the values
+     * written in the res variable by the JavaScript script provided as argument to
+     * this function. The values or fields being mapped are passed as x variables to
+     * the script engine by the library. The result of the expression is written at
+     * the resultPointer in the resulting document.
+     */
     ExprFunction MAP = (ctx, source, result, expression) -> {
         if (Utils.isEmpty(source)) {
             return result;
@@ -69,6 +124,14 @@ public interface ExprFunction {
         return Json.createArrayBuilder(res).build();
     };
 
+    /**
+     * reduce(res = res + x): reduces values from an array (or fields in an object)
+     * at the sourcePointer in the source document to the values written in the res
+     * variable by the JavaScript script provided as argument to this function. The
+     * values or fields being reduced are passed as x variables to the script engine
+     * by the library. The result of the expression is written at the resultPointer
+     * in the resulting document.
+     */
     ExprFunction REDUCE = (ctx, source, result, expression) -> {
         if (Utils.isEmpty(source)) {
             return result;
@@ -78,5 +141,19 @@ public interface ExprFunction {
         return Utils.asJsonValue(Utils.getObject(ctx.engine(), "res"));
     };
 
+    /**
+     * The only method of this interface, see documentation: <a href=
+     * "https://github.com/ErykKul/json-transformer?tab=readme-ov-file#functions">Functions</a>
+     * 
+     * @param ctx        the transformation context object
+     * @param source     the JsonValue resolved from the source document at
+     *                   "sourcePointer"
+     * @param result     the JsonValue resolved from the resulting document at
+     *                   "resultPointer"
+     * @param expression the string value between the round brackets (()) that is
+     *                   passed to this function in the expression of the
+     *                   transformation being executed
+     * @return the expression execution result
+     */
     JsonValue execute(TransformationCtx ctx, JsonValue source, JsonValue result, String expression);
 }
