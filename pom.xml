@@ -9,7 +9,30 @@
   <version>1.0.0</version>
 
   <name>json-transformer</name>
+  <description>JSON Transformer is a small and expressive Java library that uses transformers defined in JSON documents for transformations of JSON structures (even complex structures containing nested arrays of objects) into other (complex) JSON structures.</description>
   <url>https://github.com/erykkul/json-transformer</url>
+
+  <licenses>
+    <license>
+      <name>The Apache License, Version 2.0</name>
+      <url>http://www.apache.org/licenses/LICENSE-2.0.txt</url>
+    </license>
+  </licenses>
+
+  <developers>
+    <developer>
+      <name>Eryk Kulikowski</name>
+      <email>eryk.kulikowski@gmail.com</email>
+      <url>https://github.com/erykkul</url>
+			<id>erykkul</id>
+    </developer>
+  </developers>
+
+  <scm>
+    <connection>scm:git:git://github.com/erykkul/json-transformer.git</connection>
+    <developerConnection>scm:git:ssh://github.com:erykkul/json-transformer.git</developerConnection>
+    <url>http://github.com/erykkul/json-transformer/tree/main</url>
+  </scm>
 
   <properties>
     <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
