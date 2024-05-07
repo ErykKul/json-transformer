@@ -8,9 +8,8 @@ import static jakarta.json.JsonValue.NULL;
 import static jakarta.json.JsonValue.ValueType.ARRAY;
 import static jakarta.json.JsonValue.ValueType.OBJECT;
 
-import java.math.BigDecimal;
-import java.math.BigInteger;
 import java.util.Collection;
+import java.util.Collections;
 import java.util.LinkedHashMap;
 import java.util.Map;
 import java.util.Map.Entry;
@@ -43,7 +42,7 @@ public class Utils {
             if (!"".equals(fields[i])) {
                 path = path + "/" + fields[i];
             }
-            if (!containsValue(result, path)) {
+            if (notContainsValue(result, path)) {
                 if (i < fields.length - 1 || OBJECT.equals(t)) {
                     result = add(result, path, EMPTY_JSON_OBJECT);
                 } else {
@@ -62,7 +61,7 @@ public class Utils {
         if ("".equals(pointer)) {
             return source;
         }
-        if (!containsValue(source, pointer)) {
+        if (notContainsValue(source, pointer)) {
             return EMPTY_JSON_OBJECT;
         }
         return Json.createPointer(pointer).getValue(asJsonStructure(source));
@@ -72,14 +71,14 @@ public class Utils {
         if ("".equals(at)) {
             return with;
         }
-        if (!containsValue(in, at)) {
+        if (notContainsValue(in, at)) {
             return add(in, at, with);
         }
         return Json.createPointer(at).replace(asJsonStructure(in), with);
     }
 
     public static JsonValue remove(final JsonValue in, final String at) {
-        if (!containsValue(in, at)) {
+        if (notContainsValue(in, at)) {
             return in;
         }
         return Json.createPointer(at).remove(asJsonStructure(in));
@@ -93,7 +92,7 @@ public class Utils {
             return in.asJsonArray().stream();
         }
         if (isObject(in)) {
-            in.asJsonObject().values().stream();
+            return in.asJsonObject().values().stream();
         }
         return Stream.of(in);
     }
@@ -155,21 +154,17 @@ public class Utils {
     @SuppressWarnings("unchecked")
     public static JsonValue asJsonValue(final Object o) {
         if (o instanceof Number) {
-            return Json.createValue(Number.class.cast(o));
+            return Json.createValue((Number) o);
         } else if (o instanceof String) {
-            return Json.createValue(String.class.cast(o));
-        } else if (o instanceof BigDecimal) {
-            return Json.createValue(BigDecimal.class.cast(o));
-        } else if (o instanceof BigInteger) {
-            return Json.createValue(BigInteger.class.cast(o));
+            return Json.createValue((String) o);
         } else if (o instanceof Map) {
             try {
-                return Json.createObjectBuilder(Map.class.cast(o)).build();
+                return Json.createObjectBuilder((Map<String, ?>) o).build();
             } catch (final ClassCastException e) {
                 return JsonValue.EMPTY_JSON_OBJECT;
             }
         } else if (o instanceof Collection) {
-            return Json.createArrayBuilder(Collection.class.cast(o)).build();
+            return Json.createArrayBuilder((Collection<?>) o).build();
         }
         return JsonValue.EMPTY_JSON_OBJECT;
     }
@@ -177,20 +172,20 @@ public class Utils {
     public static Object asObject(final JsonValue js) {
         final ValueType t = js.getValueType();
         if (ValueType.NUMBER.equals(t)) {
-            return JsonNumber.class.cast(js).numberValue();
+            return ((JsonNumber) js).numberValue();
         } else if (ValueType.STRING.equals(t)) {
-            return JsonString.class.cast(js).getString();
+            return ((JsonString) js).getString();
         } else if (ValueType.TRUE.equals(t)) {
             return true;
         } else if (ValueType.FALSE.equals(t)) {
             return false;
         } else if (ValueType.OBJECT.equals(t)) {
-            return JsonObject.class.cast(js).entrySet().stream().collect(
+            return ((JsonObject) js).entrySet().stream().collect(
                     Collectors.toMap(Entry::getKey, x -> asObject(x.getValue()), (x, y) -> y, LinkedHashMap::new));
         } else if (ValueType.ARRAY.equals(t)) {
-            return JsonArray.class.cast(js).stream().map(Utils::asObject).collect(Collectors.toList());
+            return ((JsonArray) js).stream().map(Utils::asObject).collect(Collectors.toList());
         }
-        return null;
+        return Collections.emptyMap();
     }
 
     private static JsonValue add(final JsonValue in, final String at, final JsonValue value) {
@@ -201,14 +196,14 @@ public class Utils {
         }
     }
 
-    private static boolean containsValue(final JsonValue in, final String at) {
+    private static boolean notContainsValue(final JsonValue in, final String at) {
         if (isEmpty(in)) {
-            return false;
+            return true;
         }
         try {
-            return Json.createPointer(at).containsValue(asJsonStructure(in));
+            return !Json.createPointer(at).containsValue(asJsonStructure(in));
         } catch (final JsonException e) {
-            return false;
+            return true;
         }
     }
 

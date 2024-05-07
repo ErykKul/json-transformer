@@ -88,8 +88,7 @@ public class TransformerFactory {
 
     public Transformation toTransformation(final JsonValue transformations) {
         final JsonObject t = transformations.asJsonObject();
-        System.out.println(transformations.toString());
-        final Transformation parsed = new Transformation(TRUE.equals(t.get("append")),
+        return new Transformation(TRUE.equals(t.get("append")),
                 TRUE.equals(t.get("useResultAsSource")),
                 t.get("sourcePointer") == null ? "" : t.getString("sourcePointer"),
                 t.get("resultPointer") == null ? "" : t.getString("resultPointer"),
@@ -97,8 +96,6 @@ public class TransformerFactory {
                         : t.getJsonArray("expressions").stream().map(x -> ((JsonString) x).getString())
                                 .collect(Collectors.toList()),
                 functions);
-        System.out.println(parsed.toJsonObject());
-        return parsed;
     }
 
     private Map<String, ExprFunction> builtin() {

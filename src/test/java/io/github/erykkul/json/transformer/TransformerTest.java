@@ -27,7 +27,7 @@ public class TransformerTest {
         System.out.println("result -> " + result + "\n");
         System.out.println("expression -> " + expression + "\n");
         final List<String> expressions = new ArrayList<>();
-        if (expression != null && !"".equals(expression)) {
+        if (expression != null && !expression.isEmpty()) {
             expressions.add(expression);
         }
         final JsonValue res = Transformation.executeExpressions(ctx, source, result, expressions);

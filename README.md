@@ -567,7 +567,7 @@ Source:
 }
 ```
 
-Tranformer:
+Transformer:
 ```json
 {
     "transformations": [

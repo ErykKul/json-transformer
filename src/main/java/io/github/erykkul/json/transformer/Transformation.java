@@ -25,25 +25,25 @@ public class Transformation {
         if (expressions != null && !expressions.isEmpty()) {
             JsonValue res = result;
             for (final String expression : expressions) {
-                res = executeExpresion(ctx, ctx.useResultAsSource() ? res : source, res, expression);
+                res = executeExpression(ctx, ctx.useResultAsSource() ? res : source, res, expression);
             }
             return res;
         }
         return source;
     }
 
-    private static JsonValue executeExpresion(final TransformationCtx ctx, final JsonValue source,
+    private static JsonValue executeExpression(final TransformationCtx ctx, final JsonValue source,
             final JsonValue result, final String expression) {
         if (expression.startsWith("\"")) {
             final String literal = expression.length() > 1 ? expression.substring(1, expression.length() - 1) : "";
             return Json.createValue(literal);
-        } else if (!"".equals(expression)) {
+        } else if (!expression.isEmpty()) {
             final String[] functionParts = expression.split("\\(");
             final String functionName = functionParts.length > 0 ? functionParts[0] : "";
             final String str = functionParts.length > 1
                     ? String.join("(", Arrays.copyOfRange(functionParts, 1, functionParts.length))
                     : "";
-            final String functionArg = str.length() > 0 ? str.substring(0, str.length() - 1) : "";
+            final String functionArg = !str.isEmpty() ? str.substring(0, str.length() - 1) : "";
             final ExprFunction func = ctx.getFunctions().get(functionName);
             return func == null ? result : func.execute(ctx, source, result, functionArg);
         }
@@ -147,7 +147,8 @@ public class Transformation {
             return Utils.replace(fixedResult, resultPointer,
                     Json.createArrayBuilder(resultArray.asJsonArray()).add(result).build());
         } else {
-            final JsonValue fixedResult = Utils.fixPath(ctx.getLocalResult(), sourceValue.getValueType(), resultPointer);
+            final JsonValue fixedResult = Utils.fixPath(ctx.getLocalResult(), sourceValue.getValueType(),
+                    resultPointer);
             final JsonValue result = executeExpressions(ctx, sourceValue, Utils.getValue(fixedResult, resultPointer),
                     expressions);
             if (Utils.isEmpty(fixedResult)) {

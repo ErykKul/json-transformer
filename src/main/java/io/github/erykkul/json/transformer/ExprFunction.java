@@ -29,14 +29,11 @@ public interface ExprFunction {
         return Utils.remove(res, from);
     };
 
-    ExprFunction REMOVE = (ctx, source, result, expression) -> {
-        return Utils.remove(result, expression);
-    };
+    ExprFunction REMOVE = (ctx, source, result, expression) -> Utils.remove(result, expression);
 
-    ExprFunction GENERATE_UUID = (ctx, source, result, expression) -> {
-        return Utils.replace(Utils.fixPath(result, ValueType.OBJECT, expression), expression,
-                Json.createValue(UUID.randomUUID().toString()));
-    };
+    ExprFunction GENERATE_UUID = (ctx, source, result, expression) -> Utils.replace(
+            Utils.fixPath(result, ValueType.OBJECT, expression), expression,
+            Json.createValue(UUID.randomUUID().toString()));
 
     ExprFunction SCRIPT = (ctx, source, result, expression) -> {
         Utils.eval(ctx.engine(), "res = null");
@@ -77,9 +74,7 @@ public interface ExprFunction {
             return result;
         }
         Utils.eval(ctx.engine(), "res = null");
-        Utils.stream(source).forEach(x -> {
-            Utils.eval(ctx.engine(), expression, x, "x");
-        });
+        Utils.stream(source).forEach(x -> Utils.eval(ctx.engine(), expression, x, "x"));
         return Utils.asJsonValue(Utils.getObject(ctx.engine(), "res"));
     };
 
