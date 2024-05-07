@@ -6,7 +6,7 @@
 
   <groupId>io.github.erykkul</groupId>
   <artifactId>json-transformer</artifactId>
-  <version>1.0</version>
+  <version>1.0.0</version>
 
   <name>json-transformer</name>
   <url>https://github.com/erykkul/json-transformer</url>
