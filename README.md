@@ -481,6 +481,7 @@ All [functions](#functions) that use JavaScript have access to the Java types ma
     engine.eval("Set = Java.type('java.util.LinkedHashSet')");
     engine.eval("List = Java.type('java.util.ArrayList')");
     engine.eval("Collectors = Java.type('java.util.stream.Collectors')");
+    engine.eval("JsonValue = Java.type('jakarta.json.JsonValue')");
 ```
 
 You can override these types, or add any Java type you need, by simply adding an expression. For example:
@@ -618,6 +619,27 @@ Transformer:
             "expressions": [
                 "reduce(res = (res ? res + ', ' : '') + x)"
             ]
+        },
+        {
+            "sourcePointer": "",
+            "resultPointer": "/undefined",
+            "expressions": [
+                "script(res = JsonValue.NULL)"
+            ]
+        },
+        {
+            "sourcePointer": "",
+            "resultPointer": "/empty",
+            "expressions": [
+                "script(res = {})"
+            ]
+        },
+        {
+            "sourcePointer": "",
+            "resultPointer": "/newResultPointer",
+            "expressions": [
+                "script()"
+            ]
         }
     ]
 }
@@ -641,7 +663,10 @@ Result:
         8.0
     ],
     "reduced": 6.0,
-    "concat": "1, 2, 3"
+    "concat": "1, 2, 3",
+    "undefined": null,
+    "empty": {},
+    "newResultPointer": {}
 }
 ```
 

@@ -9,7 +9,6 @@ import static jakarta.json.JsonValue.ValueType.ARRAY;
 import static jakarta.json.JsonValue.ValueType.OBJECT;
 
 import java.util.Collection;
-import java.util.Collections;
 import java.util.LinkedHashMap;
 import java.util.Map;
 import java.util.Map.Entry;
@@ -94,7 +93,7 @@ public class Utils {
             return source;
         }
         if (notContainsValue(source, pointer)) {
-            return EMPTY_JSON_OBJECT;
+            return NULL;
         }
         return Json.createPointer(pointer).getValue(asJsonStructure(source));
     }
@@ -188,6 +187,7 @@ public class Utils {
             engine.eval("Set = Java.type('java.util.LinkedHashSet')");
             engine.eval("List = Java.type('java.util.ArrayList')");
             engine.eval("Collectors = Java.type('java.util.stream.Collectors')");
+            engine.eval("JsonValue = Java.type('jakarta.json.JsonValue')");
         } catch (final Exception e) {
             logger.severe("Script engine for javascript not found: " + e);
         }
@@ -264,12 +264,12 @@ public class Utils {
             try {
                 return Json.createObjectBuilder((Map<String, ?>) o).build();
             } catch (final ClassCastException e) {
-                return JsonValue.EMPTY_JSON_OBJECT;
+                return JsonValue.NULL;
             }
         } else if (o instanceof Collection) {
             return Json.createArrayBuilder((Collection<?>) o).build();
         }
-        return JsonValue.EMPTY_JSON_OBJECT;
+        return JsonValue.NULL;
     }
 
     /**
@@ -295,7 +295,7 @@ public class Utils {
         } else if (ValueType.ARRAY.equals(t)) {
             return ((JsonArray) js).stream().map(Utils::asObject).collect(Collectors.toList());
         }
-        return Collections.emptyMap();
+        return JsonValue.NULL;
     }
 
     private static JsonValue add(final JsonValue in, final String at, final JsonValue value) {

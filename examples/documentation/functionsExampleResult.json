@@ -14,5 +14,8 @@
         8.0
     ],
     "reduced": 6.0,
-    "concat": "1, 2, 3"
+    "concat": "1, 2, 3",
+    "undefined": null,
+    "empty": {},
+    "newResultPointer": {}
 }

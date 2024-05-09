@@ -4,6 +4,7 @@ package io.github.erykkul.json.transformer;
 
 import static jakarta.json.JsonValue.EMPTY_JSON_ARRAY;
 import static jakarta.json.JsonValue.EMPTY_JSON_OBJECT;
+import static jakarta.json.JsonValue.NULL;
 import static jakarta.json.JsonValue.ValueType.ARRAY;
 import static jakarta.json.JsonValue.ValueType.OBJECT;
 
@@ -204,6 +205,9 @@ public class Transformation {
 
     private JsonValue doTransform(final TransformationCtx ctx, final String sourcePointer, final String resultPointer) {
         final JsonValue sourceValue = Utils.getValue(ctx.getLocalSource(), sourcePointer);
+        if (NULL.equals(sourceValue)) {
+            return ctx.getLocalResult();
+        }
         if (append) {
             final JsonValue fixedResult = Utils.fixPath(ctx.getLocalResult(), ARRAY, resultPointer);
             final JsonValue result = executeExpressions(ctx, sourceValue, EMPTY_JSON_OBJECT, expressions);

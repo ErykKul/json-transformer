@@ -110,6 +110,28 @@
                 "//map(ids.put(x.id, UUID.randomUUID().toString()); res = x)",
                 "//map(x.id = ids.get(x.id); if (typeof x.parent !== 'undefined') x.parent = ids.get(x.parent); res = x)"
             ]
+        },
+        {
+            "sourcePointer": "/oops",
+            "resultPointer": "/oops"
+        },
+        {
+            "sourcePointer": "",
+            "resultPointer": "/undefined",
+            "expressions": [
+                "script(res = JsonValue.NULL)"
+            ]
+        },
+        {
+            "sourcePointer": "",
+            "resultPointer": "/empty",
+            "expressions": [
+                "script(res = {})"
+            ]
+        },
+        {
+            "sourcePointer": "/empty",
+            "resultPointer": "/emptyCopy"
         }
     ]
 }

@@ -185,5 +185,8 @@
             "parent": "/a/ab",
             "isDir": false
         }
-    ]
+    ],
+    "undefined": null,
+    "empty": {},
+    "emptyCopy": {}
 }

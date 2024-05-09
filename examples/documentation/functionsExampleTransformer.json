@@ -47,6 +47,27 @@
             "expressions": [
                 "reduce(res = (res ? res + ', ' : '') + x)"
             ]
+        },
+        {
+            "sourcePointer": "",
+            "resultPointer": "/undefined",
+            "expressions": [
+                "script(res = JsonValue.NULL)"
+            ]
+        },
+        {
+            "sourcePointer": "",
+            "resultPointer": "/empty",
+            "expressions": [
+                "script(res = {})"
+            ]
+        },
+        {
+            "sourcePointer": "",
+            "resultPointer": "/newResultPointer",
+            "expressions": [
+                "script()"
+            ]
         }
     ]
 }

@@ -2,6 +2,8 @@
 
 package io.github.erykkul.json.transformer;
 
+import static jakarta.json.JsonValue.NULL;
+
 import java.util.List;
 import java.util.UUID;
 import java.util.stream.Collectors;
@@ -36,7 +38,11 @@ public interface ExprFunction {
         final String[] args = expression.split(",");
         final String from = args.length > 0 ? args[0].trim() : "";
         final String to = args.length > 1 ? args[1].trim() : "";
-        return Utils.replace(Utils.fixPath(result, ValueType.OBJECT, to), to, Utils.getValue(source, from));
+        final JsonValue sourceValue = Utils.getValue(source, from);
+        if (NULL.equals(sourceValue)) {
+            return result;
+        }
+        return Utils.replace(Utils.fixPath(result, ValueType.OBJECT, to), to, sourceValue);
     };
 
     /**
@@ -49,8 +55,11 @@ public interface ExprFunction {
         final String[] args = expression.split(",");
         final String from = args.length > 0 ? args[0].trim() : "";
         final String to = args.length > 1 ? args[1].trim() : "";
-        final JsonValue res = Utils.replace(Utils.fixPath(result, ValueType.OBJECT, to), to,
-                Utils.getValue(result, from));
+        final JsonValue resultValue = Utils.getValue(result, from);
+        if (NULL.equals(resultValue)) {
+            return result;
+        }
+        final JsonValue res = Utils.replace(Utils.fixPath(result, ValueType.OBJECT, to), to, resultValue);
         return Utils.remove(res, from);
     };
 
@@ -77,11 +86,11 @@ public interface ExprFunction {
     ExprFunction SCRIPT = (ctx, source, result, expression) -> {
         Utils.eval(ctx.engine(), "res = null");
         Utils.eval(ctx.engine(), expression, source, "x");
-        final JsonValue res = Utils.asJsonValue(Utils.getObject(ctx.engine(), "res"));
-        if (Utils.isEmpty(res)) {
+        Object resultObject = Utils.getObject(ctx.engine(), "res");
+        if (resultObject == null) {
             return result;
         }
-        return res;
+        return Utils.asJsonValue(resultObject);
     };
 
     /**
