@@ -136,10 +136,10 @@ public class TransformerFactory {
     }
 
     /**
-     * Creates a new Transformation object from the JsonValue of that transformation
-     * document.
+     * Creates a new transformer from a file containing the JSON document of the
+     * transformer.
      * 
-     * @param transformation the JsonValue of the transformation document
+     * @return the transformer
      * @return the transformation object
      */
     public Transformer createFromFile(final String file) throws IOException {
