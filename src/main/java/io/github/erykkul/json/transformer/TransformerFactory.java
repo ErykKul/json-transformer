@@ -26,7 +26,7 @@ import jakarta.json.JsonValue;
  * "https://github.com/ErykKul/json-transformer?tab=readme-ov-file#transformer">Transformer</a>
  * 
  * @author Eryk Kulikowski
- * @version 1.0.0
+ * @version 1.0.1
  * @since 1.0.0
  */
 public class TransformerFactory {
@@ -90,12 +90,23 @@ public class TransformerFactory {
      * @return the transformer
      */
     public Transformer createFromJsonString(final String json) {
+        return createFromJsonString(json, "");
+    }
+
+    /**
+     * 
+     * @param json       the String representation of the JSON document of the
+     *                   transformer
+     * @param importPath the path where JavaScript files can be imported from
+     * @return the transformer
+     */
+    public Transformer createFromJsonString(final String json, final String importPath) {
         final String content = importPattern.matcher(json).replaceAll(x -> {
             final String importFile = x.group()
                     .substring(importOpenTag.length(), x.group().length() - importEndTag.length())
                     .trim();
             try {
-                return escapePattern.matcher(Files.readString(Paths.get(importFile)))
+                return escapePattern.matcher(Files.readString(Paths.get(importPath + importFile)))
                         .replaceAll(y -> escapeMap.get(y.group()));
             } catch (final IOException e) {
                 logger.severe("Importing from file \"" + importFile + "\" failed: " + e);
@@ -114,9 +125,22 @@ public class TransformerFactory {
      * Creates a new transformer from a file containing the JSON document of the
      * transformer.
      * 
-     * @param file the path and name of the file
+     * @param file       the path and name of the file
+     * @param importPath the path where JavaScript files can be imported from
      * @return the transformer
      * @throws IOException thrown when the file is not found
+     */
+    public Transformer createFromFile(final String file, final String importPath) throws IOException {
+        final String content = Files.readString(Paths.get(file));
+        return createFromJsonString(content, importPath);
+    }
+
+    /**
+     * Creates a new Transformation object from the JsonValue of that transformation
+     * document.
+     * 
+     * @param transformation the JsonValue of the transformation document
+     * @return the transformation object
      */
     public Transformer createFromFile(final String file) throws IOException {
         final String content = Files.readString(Paths.get(file));

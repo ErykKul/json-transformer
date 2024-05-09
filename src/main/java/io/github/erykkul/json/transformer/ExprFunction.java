@@ -18,7 +18,7 @@ import jakarta.json.JsonValue.ValueType;
  * "https://github.com/ErykKul/json-transformer?tab=readme-ov-file#functions">Functions</a>
  * 
  * @author Eryk Kulikowski
- * @version 1.0.0
+ * @version 1.0.1
  * @since 1.0.0
  */
 @FunctionalInterface
