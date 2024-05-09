@@ -15,6 +15,8 @@ import java.util.logging.Logger;
 import java.util.regex.Pattern;
 import java.util.stream.Collectors;
 
+import javax.script.ScriptEngineFactory;
+
 import jakarta.json.Json;
 import jakarta.json.JsonObject;
 import jakarta.json.JsonReader;
@@ -26,7 +28,7 @@ import jakarta.json.JsonValue;
  * "https://github.com/ErykKul/json-transformer?tab=readme-ov-file#transformer">Transformer</a>
  * 
  * @author Eryk Kulikowski
- * @version 1.0.1
+ * @version 1.0.2
  * @since 1.0.0
  */
 public class TransformerFactory {
@@ -54,7 +56,17 @@ public class TransformerFactory {
      * @return the default transformer factory
      */
     public static TransformerFactory factory() {
-        return new TransformerFactory();
+        return new TransformerFactory(Collections.emptyMap(), null);
+    }
+
+    /**
+     * Creates a default transformer factory with only the built-in functions.
+     * 
+     * @param scriptEngineFactory the script engine factory
+     * @return the default transformer factory
+     */
+    public static TransformerFactory factory(final ScriptEngineFactory scriptEngineFactory) {
+        return new TransformerFactory(Collections.emptyMap(), scriptEngineFactory);
     }
 
     /**
@@ -67,19 +79,34 @@ public class TransformerFactory {
      *         passed as argument.
      */
     public static TransformerFactory factory(final Map<String, ExprFunction> functions) {
-        return new TransformerFactory(functions);
+        return new TransformerFactory(functions, null);
+    }
+
+    /**
+     * Creates a transformer factory that next to the default built-in functions
+     * also registers the functions as provided by the caller.
+     * 
+     * @param functions           the new functions to be added (the functions using
+     *                            the same
+     *                            key as built-in function override these functions)
+     * @param scriptEngineFactory the script engine factory
+     * @return the transformer factory with the built-in functions and the functions
+     *         passed as argument.
+     */
+    public static TransformerFactory factory(final Map<String, ExprFunction> functions,
+            final ScriptEngineFactory scriptEngineFactory) {
+        return new TransformerFactory(functions, scriptEngineFactory);
     }
 
     private final Map<String, ExprFunction> functions;
+    private final ScriptEngineFactory scriptEngineFactory;
 
-    private TransformerFactory(final Map<String, ExprFunction> functions) {
+    private TransformerFactory(final Map<String, ExprFunction> functions,
+            final ScriptEngineFactory scriptEngineFactory) {
         final Map<String, ExprFunction> result = builtin();
         result.putAll(functions);
         this.functions = Collections.unmodifiableMap(result);
-    }
-
-    private TransformerFactory() {
-        this(Collections.emptyMap());
+        this.scriptEngineFactory = scriptEngineFactory;
     }
 
     /**
@@ -118,7 +145,8 @@ public class TransformerFactory {
         jsonReader.close();
         return new Transformer(object.get("transformations") == null ? Collections.emptyList()
                 : object.getJsonArray("transformations").stream().map(this::toTransformation)
-                        .collect(Collectors.toList()));
+                        .collect(Collectors.toList()),
+                scriptEngineFactory);
     }
 
     /**

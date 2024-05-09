@@ -35,7 +35,7 @@ import jakarta.json.JsonValue.ValueType;
  * Transformer</a>
  * 
  * @author Eryk Kulikowski
- * @version 1.0.1
+ * @version 1.0.2
  * @since 1.0.0
  */
 public class Utils {
@@ -180,8 +180,13 @@ public class Utils {
         if (engineHolder.getEngine() != null) {
             return engineHolder.getEngine();
         }
-        final ScriptEngineManager manager = new ScriptEngineManager();
-        final ScriptEngine engine = manager.getEngineByName("javascript");
+        final ScriptEngine engine;
+        if (engineHolder.getScriptEngineFactory() != null) {
+            engine = engineHolder.getScriptEngineFactory().getScriptEngine();
+        } else {
+            final ScriptEngineManager manager = new ScriptEngineManager();
+            engine = manager.getEngineByName("javascript");
+        }
         try {
             engine.eval("Map = Java.type('java.util.LinkedHashMap')");
             engine.eval("Set = Java.type('java.util.LinkedHashSet')");

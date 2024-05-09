@@ -86,7 +86,7 @@ public interface ExprFunction {
     ExprFunction SCRIPT = (ctx, source, result, expression) -> {
         Utils.eval(ctx.engine(), "res = null");
         Utils.eval(ctx.engine(), expression, source, "x");
-        Object resultObject = Utils.getObject(ctx.engine(), "res");
+        final Object resultObject = Utils.getObject(ctx.engine(), "res");
         if (resultObject == null) {
             return result;
         }

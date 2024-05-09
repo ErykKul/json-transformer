@@ -6,7 +6,7 @@
 
   <groupId>io.github.erykkul</groupId>
   <artifactId>json-transformer</artifactId>
-  <version>1.0.1</version>
+  <version>1.0.2</version>
 
   <name>json-transformer</name>
   <description>JSON Transformer is a small and expressive Java library that uses transformers defined in JSON documents for transformations of JSON structures (even complex structures containing nested arrays of objects) into other (complex) JSON structures.</description>
