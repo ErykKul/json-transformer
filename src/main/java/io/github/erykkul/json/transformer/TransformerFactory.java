@@ -139,8 +139,9 @@ public class TransformerFactory {
      * Creates a new transformer from a file containing the JSON document of the
      * transformer.
      * 
+     * @param file the path and name of the file
      * @return the transformer
-     * @return the transformation object
+     * @throws IOException thrown when the file is not found
      */
     public Transformer createFromFile(final String file) throws IOException {
         final String content = Files.readString(Paths.get(file));
