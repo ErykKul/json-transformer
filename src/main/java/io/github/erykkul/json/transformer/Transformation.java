@@ -24,7 +24,7 @@ import jakarta.json.JsonValue;
  * "https://github.com/ErykKul/json-transformer?tab=readme-ov-file#transformer">Transformer</a>
  * 
  * @author Eryk Kulikowski
- * @version 1.0.1
+ * @version 1.0.2
  * @since 1.0.0
  */
 public class Transformation {
@@ -167,6 +167,9 @@ public class Transformation {
             return doTransform(ctx, sourcePointers.get(0), String.join("[i]", resultPointers));
         }
         final JsonValue sourceValue = Utils.getValue(ctx.getLocalSource(), sourcePointers.get(0));
+        if (NULL.equals(sourceValue)) {
+            return ctx.getLocalResult();
+        }
         final String rootOrResultPointer = resultPointers.isEmpty() ? "" : resultPointers.get(0);
         final JsonValue fixedResult = Utils.fixPath(ctx.getLocalResult(), append ? ARRAY : OBJECT, rootOrResultPointer);
         if (!Utils.isArray(sourceValue)) {
