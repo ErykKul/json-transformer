@@ -6,7 +6,6 @@ import static jakarta.json.JsonValue.EMPTY_JSON_ARRAY;
 import static jakarta.json.JsonValue.EMPTY_JSON_OBJECT;
 import static jakarta.json.JsonValue.NULL;
 import static jakarta.json.JsonValue.ValueType.ARRAY;
-import static jakarta.json.JsonValue.ValueType.OBJECT;
 
 import java.util.Arrays;
 import java.util.Collections;
@@ -171,7 +170,7 @@ public class Transformation {
             return ctx.getLocalResult();
         }
         final String rootOrResultPointer = resultPointers.isEmpty() ? "" : resultPointers.get(0);
-        final JsonValue fixedResult = Utils.fixPath(ctx.getLocalResult(), append ? ARRAY : OBJECT, rootOrResultPointer);
+        final JsonValue fixedResult = Utils.fixPath(ctx.getLocalResult(), ARRAY, rootOrResultPointer);
         if (!Utils.isArray(sourceValue)) {
             return fixedResult;
         }
