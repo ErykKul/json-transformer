@@ -11,6 +11,7 @@ import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
 import java.util.Map;
+import java.util.logging.Logger;
 
 import jakarta.json.Json;
 import jakarta.json.JsonArray;
@@ -27,6 +28,7 @@ import jakarta.json.JsonValue;
  * @since 1.0.0
  */
 public class Transformation {
+    private static final Logger logger = Logger.getLogger(Utils.class.getName());
 
     /**
      * Executes the expressions. You can call this, e.g., when wrapping a function.
@@ -66,7 +68,11 @@ public class Transformation {
                     : "";
             final String functionArg = !str.isEmpty() ? str.substring(0, str.length() - 1) : "";
             final ExprFunction func = ctx.getFunctions().get(functionName);
-            return func == null ? result : func.execute(ctx, source, result, functionArg);
+            if (func == null) {
+                logger.severe("function \"" + functionName + "\" not found");
+                return result;
+            }
+            return func.execute(ctx, source, result, functionArg);
         }
         return result;
     }
