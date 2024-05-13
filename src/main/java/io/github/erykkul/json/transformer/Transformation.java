@@ -171,15 +171,17 @@ public class Transformation {
         }
         final String rootOrResultPointer = resultPointers.isEmpty() ? "" : resultPointers.get(0);
         final JsonValue fixedResult = Utils.fixPath(ctx.getLocalResult(), ARRAY, rootOrResultPointer);
+        final JsonArray sourceArray;
         if (!Utils.isArray(sourceValue)) {
-            return fixedResult;
+            sourceArray = Json.createArrayBuilder().add(sourceValue).build();
+        } else {
+            sourceArray = sourceValue.asJsonArray();
         }
 
         final List<String> remainingSourcePointers = sourcePointers.subList(1, sourcePointers.size());
         final List<String> remainingResultPointers = resultPointers.isEmpty() ? Collections.emptyList()
                 : resultPointers.subList(1, resultPointers.size());
         final boolean doFlatten = flatten || resultPointers.size() == 1;
-        final JsonArray sourceArray = sourceValue.asJsonArray();
         JsonValue result = Utils.getValue(fixedResult, rootOrResultPointer);
         int flattenedMergeIdx = 0;
         for (int i = 0; i < sourceArray.size(); i++) {
