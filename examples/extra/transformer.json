@@ -1,0 +1,304 @@
+{
+    "transformations": [
+        {
+            "append": true,
+            "resultPointer": "/@context",
+            "expressions": [
+                "\"https://w3id.org/ro/crate/1.0/context\""
+            ]
+        },
+        {
+            "append": true,
+            "sourcePointer": "/config",
+            "resultPointer": "/@context",
+            "expressions": [
+                "script(res = { \"@vocab\": \"https://schema.org/\" })"
+            ]
+        },
+        {
+            "sourcePointer": "/preTransformed",
+            "resultPointer": "/Metadata/@id",
+            "expressions": [
+                "\"ro-crate-metadata.json\""
+            ]
+        },
+        {
+            "sourcePointer": "/preTransformed",
+            "resultPointer": "/Metadata/@type",
+            "expressions": [
+                "\"CreativeWork\""
+            ]
+        },
+        {
+            "resultPointer": "/Metadata/conformsTo/@id",
+            "expressions": [
+                "\"https://w3id.org/ro/crate/1.1\""
+            ]
+        },
+        {
+            "resultPointer": "/Metadata/about/@id",
+            "expressions": [
+                "\"./\""
+            ]
+        },
+        {
+            "sourcePointer": "/preTransformed",
+            "resultPointer": "/Root/@id",
+            "expressions": [
+                "\"./\""
+            ]
+        },
+        {
+            "sourcePointer": "/preTransformed",
+            "resultPointer": "/Root/@type",
+            "expressions": [
+                "\"Dataset\""
+            ]
+        },
+        {
+            "sourcePointer": "/preTransformed/persistentUrl[i]",
+            "resultPointer": "/Root/identifier[i]"
+        },
+        {
+            "sourcePointer": "/preTransformed/datasetVersion/metadataBlocks/citation/title[i]",
+            "resultPointer": "/Root/name[i]"
+        },
+        {
+            "sourcePointer": "/preTransformed/datasetVersion/metadataBlocks/citation/dsDescription[i]/dsDescriptionValue[i]",
+            "resultPointer": "/Root/description[i]"
+        },
+        {
+            "sourcePointer": "/preTransformed/datasetVersion/license[i]/uri[i]",
+            "resultPointer": "/Root/license[i]/@id"
+        },
+        {
+            "sourcePointer": "/preTransformed/datasetVersion/metadataBlocks/citation/author[i]/authorName[i]",
+            "resultPointer": "/Root/author[i]/@id"
+        },
+        {
+            "sourcePointer": "/preTransformed/datasetVersion/publicationDate[i]",
+            "resultPointer": "/Root/datePublished[i]"
+        },
+        {
+            "sourcePointer": "/preTransformed/datasetVersion/metadataBlocks/citation/keyword[i]/keywordValue[i]",
+            "resultPointer": "/Root/keywords[i]"
+        },
+        {
+            "sourcePointer": "/preTransformed/datasetVersion/metadataBlocks/citation/grantNumber[i]/grantNumberValue[i]",
+            "resultPointer": "/Root/funder[i]/@id"
+        },
+        {
+            "sourcePointer": "/preTransformed/datasetVersion/metadataBlocks/citation/author[i]/authorName[i]",
+            "resultPointer": "/Author[i]/@id[i]"
+        },
+        {
+            "sourcePointer": "/preTransformed/datasetVersion/metadataBlocks/citation/author[i]",
+            "resultPointer": "/Author[i]/@type",
+            "expressions": [
+                "\"Person\""
+            ]
+        },
+        {
+            "sourcePointer": "/preTransformed/datasetVersion/metadataBlocks/citation/author[i]/authorAffiliation[i]",
+            "resultPointer": "/Author[i]/affiliation[i]/@id"
+        },
+        {
+            "sourcePointer": "/preTransformed/datasetVersion/metadataBlocks/citation/author[i]/authorName[i]",
+            "resultPointer": "/Author[i]/name[i]"
+        },
+        {
+            "sourcePointer": "/preTransformed/datasetVersion/metadataBlocks/citation/author[i]/authorAffiliation[i]",
+            "resultPointer": "/AuthorAffiliation[i]/@id[i]"
+        },
+        {
+            "sourcePointer": "/preTransformed/datasetVersion/metadataBlocks/citation/author[i]",
+            "resultPointer": "/AuthorAffiliation[i]/@type",
+            "expressions": [
+                "\"Organization\""
+            ]
+        },
+        {
+            "sourcePointer": "/preTransformed/datasetVersion/metadataBlocks/citation/author[i]/authorAffiliation[i]",
+            "resultPointer": "/AuthorAffiliation[i]/name[i]"
+        },
+        {
+            "sourcePointer": "/preTransformed/datasetVersion/metadataBlocks/citation/author[i]/authorAffiliation[i]",
+            "resultPointer": "/AuthorAffiliation[i]/url[i]"
+        },
+        {
+            "sourcePointer": "/preTransformed/datasetVersion/license[i]/uri[i]",
+            "resultPointer": "/License[i]/@id[i]"
+        },
+        {
+            "sourcePointer": "/preTransformed/datasetVersion/license[i]",
+            "resultPointer": "/License[i]/@type",
+            "expressions": [
+                "\"CreativeWork\""
+            ]
+        },
+        {
+            "sourcePointer": "/preTransformed/datasetVersion/license[i]/name[i]",
+            "resultPointer": "/License[i]/name[i]"
+        },
+        {
+            "sourcePointer": "/preTransformed/datasetVersion/license[i]/name[i]",
+            "resultPointer": "/License[i]/description[i]"
+        },
+        {
+            "sourcePointer": "/preTransformed/datasetVersion/license[i]/uri[i]",
+            "resultPointer": "/License[i]/identifier[i]"
+        },
+        {
+            "sourcePointer": "/preTransformed/datasetVersion/metadataBlocks/citation/datasetContact[i]/datasetContactEmail[i]",
+            "resultPointer": "/DatasetContact[i]/@id[i]"
+        },
+        {
+            "sourcePointer": "/preTransformed/datasetVersion/metadataBlocks/citation/datasetContact[i]",
+            "resultPointer": "/DatasetContact[i]/@type",
+            "expressions": [
+                "\"Person\""
+            ]
+        },
+        {
+            "sourcePointer": "/preTransformed/datasetVersion/metadataBlocks/citation/datasetContact[i]/datasetContactName[i]",
+            "resultPointer": "/DatasetContact[i]/name[i]"
+        },
+        {
+            "sourcePointer": "/preTransformed/datasetVersion/metadataBlocks/citation/datasetContact[i]/datasetContactAffiliation[i]",
+            "resultPointer": "/DatasetContact[i]/affiliation[i]"
+        },
+        {
+            "sourcePointer": "/preTransformed/datasetVersion/metadataBlocks/citation/datasetContact[i]/datasetContactEmail[i]",
+            "resultPointer": "/DatasetContact[i]/contactPoint[i]/@id"
+        },
+        {
+            "sourcePointer": "/preTransformed/datasetVersion/metadataBlocks/citation/datasetContact[i]/datasetContactEmail[i]",
+            "resultPointer": "/DatasetContact[i]/identifier[i]"
+        },
+        {
+            "sourcePointer": "/preTransformed/datasetVersion/metadataBlocks/citation/datasetContact[i]/datasetContactEmail[i]",
+            "resultPointer": "/DatasetContactPoint[i]/@id[i]"
+        },
+        {
+            "sourcePointer": "/preTransformed/datasetVersion/metadataBlocks/citation/datasetContact[i]",
+            "resultPointer": "/DatasetContactPoint[i]/@type",
+            "expressions": [
+                "\"Person\""
+            ]
+        },
+        {
+            "sourcePointer": "/preTransformed/datasetVersion/metadataBlocks/citation/datasetContact[i]/datasetContactEmail[i]",
+            "resultPointer": "/DatasetContactPoint[i]/email[i]/@id"
+        },
+        {
+            "sourcePointer": "/preTransformed/datasetVersion/metadataBlocks/citation/grantNumber[i]/grantNumberValue[i]",
+            "resultPointer": "/Funder[i]/@id[i]"
+        },
+        {
+            "sourcePointer": "/preTransformed/datasetVersion/metadataBlocks/citation/grantNumber[i]",
+            "resultPointer": "/Funder[i]/@type",
+            "expressions": [
+                "\"Organization\""
+            ]
+        },
+        {
+            "append": true,
+            "useResultAsSource": true,
+            "sourcePointer": "/Metadata",
+            "resultPointer": "/@graph"
+        },
+        {
+            "expressions": [
+                "remove(/Metadata)"
+            ]
+        },
+        {
+            "append": true,
+            "useResultAsSource": true,
+            "sourcePointer": "/Root",
+            "resultPointer": "/@graph"
+        },
+        {
+            "expressions": [
+                "remove(/Root)"
+            ]
+        },
+        {
+            "append": true,
+            "useResultAsSource": true,
+            "sourcePointer": "/Author",
+            "resultPointer": "/@graph"
+        },
+        {
+            "expressions": [
+                "remove(/Author)"
+            ]
+        },
+        {
+            "append": true,
+            "useResultAsSource": true,
+            "sourcePointer": "/AuthorAffiliation",
+            "resultPointer": "/@graph"
+        },
+        {
+            "expressions": [
+                "remove(/AuthorAffiliation)"
+            ]
+        },
+        {
+            "append": true,
+            "useResultAsSource": true,
+            "sourcePointer": "/License",
+            "resultPointer": "/@graph"
+        },
+        {
+            "expressions": [
+                "remove(/License)"
+            ]
+        },
+        {
+            "append": true,
+            "useResultAsSource": true,
+            "sourcePointer": "/DatasetContact",
+            "resultPointer": "/@graph"
+        },
+        {
+            "expressions": [
+                "remove(/DatasetContact)"
+            ]
+        },
+        {
+            "append": true,
+            "useResultAsSource": true,
+            "sourcePointer": "/DatasetContactPoint",
+            "resultPointer": "/@graph"
+        },
+        {
+            "expressions": [
+                "remove(/DatasetContactPoint)"
+            ]
+        },
+        {
+            "append": true,
+            "useResultAsSource": true,
+            "sourcePointer": "/Funder",
+            "resultPointer": "/@graph"
+        },
+        {
+            "expressions": [
+                "remove(/Funder)"
+            ]
+        },
+        {
+            "append": true,
+            "sourcePointer": "/datasetSchemaDotOrg/distribution[i]",
+            "resultPointer": "/@graph"
+        },
+        {
+            "useResultAsSource": true,
+            "expressions": [
+                "script(importJS /js/flatten.js endImport)"
+            ]
+        }
+    ]
+}

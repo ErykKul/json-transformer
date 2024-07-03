@@ -1,0 +1,931 @@
+{
+    "@context": [
+        "https://w3id.org/ro/crate/1.0/context",
+        {
+            "@vocab": "https://schema.org/"
+        }
+    ],
+    "@graph": [
+        {
+            "@id": "ro-crate-metadata.json",
+            "@type": "CreativeWork",
+            "conformsTo": {
+                "@id": "https://w3id.org/ro/crate/1.1"
+            },
+            "about": {
+                "@id": "./"
+            }
+        },
+        {
+            "@id": "./",
+            "@type": "Dataset",
+            "identifier": [
+                "https://doi.org/10.80442/C1KSAM"
+            ],
+            "name": [
+                "test 3"
+            ],
+            "description": [
+                [
+                    "Lorem ipsum dolor sit amet. Est enim voluptas id nostrum sunt id voluptatem voluptate. Est incidunt harum vel delectus nostrum est nisi totam quo ipsum illo est autem praesentium qui iusto delectus qui quis possimus.\n\nEa velit internos ut dolores nihil et nihil labore qui ipsum temporibus et ducimus necessitatibus qui enim quidem sit nihil dolores. Qui temporibus quasi quo reiciendis quisquam quo nesciunt corrupti ea consequuntur deleniti et nisi tempora et commodi labore ut iure sequi.\n\nEum quasi pariatur et rerum quia id quaerat doloremque et molestiae necessitatibus ab veniam rerum non minima placeat aut eius beatae. Sed nobis rerum ut facere minus non sint rerum."
+                ]
+            ],
+            "license": [
+                {
+                    "@id": [
+                        "https://www.kuleuven.be/rdm/en/rdr/license-selection"
+                    ]
+                }
+            ],
+            "author": [
+                {
+                    "@id": [
+                        "Test Researcher, KU Leuven"
+                    ]
+                }
+            ],
+            "datePublished": [
+                "2023-11-09"
+            ],
+            "keywords": [
+                [
+                    "term"
+                ]
+            ]
+        },
+        [
+            {
+                "@id": [
+                    "Test Researcher, KU Leuven"
+                ],
+                "@type": "Person",
+                "affiliation": [
+                    {
+                        "@id": "KU Leuven"
+                    }
+                ],
+                "name": [
+                    "Test Researcher, KU Leuven"
+                ]
+            }
+        ],
+        [
+            {
+                "@id": [
+                    "KU Leuven"
+                ],
+                "@type": "Organization",
+                "name": [
+                    "KU Leuven"
+                ],
+                "url": [
+                    "KU Leuven"
+                ]
+            }
+        ],
+        [
+            {
+                "@id": [
+                    "https://www.kuleuven.be/rdm/en/rdr/license-selection"
+                ],
+                "@type": "CreativeWork",
+                "name": [
+                    "Please select a license"
+                ],
+                "description": [
+                    "Please select a license"
+                ],
+                "identifier": [
+                    "https://www.kuleuven.be/rdm/en/rdr/license-selection"
+                ]
+            }
+        ],
+        [
+            {
+                "@id": [
+                    "rdrResearcher@kuleuven.be"
+                ],
+                "@type": "Person",
+                "name": [
+                    "Test Researcher, KU Leuven"
+                ],
+                "affiliation": [
+                    "KU Leuven"
+                ],
+                "contactPoint": [
+                    {
+                        "@id": "rdrResearcher@kuleuven.be"
+                    }
+                ],
+                "identifier": [
+                    "rdrResearcher@kuleuven.be"
+                ]
+            }
+        ],
+        [
+            {
+                "@id": [
+                    "rdrResearcher@kuleuven.be"
+                ],
+                "@type": "Person",
+                "email": [
+                    {
+                        "@id": "rdrResearcher@kuleuven.be"
+                    }
+                ]
+            }
+        ],
+        {
+            "@type": "DataDownload",
+            "name": ".env",
+            "encodingFormat": "application/octet-stream",
+            "contentSize": 0,
+            "description": "",
+            "contentUrl": "https://localhost:7000/api/access/datafile/53352"
+        },
+        {
+            "@type": "DataDownload",
+            "name": ".gitignore",
+            "encodingFormat": "application/octet-stream",
+            "contentSize": 310,
+            "description": "",
+            "contentUrl": "https://localhost:7000/api/access/datafile/53421"
+        },
+        {
+            "@type": "DataDownload",
+            "name": "env.demo",
+            "encodingFormat": "application/octet-stream",
+            "contentSize": 99,
+            "description": "",
+            "contentUrl": "https://localhost:7000/api/access/datafile/53417"
+        },
+        {
+            "@type": "DataDownload",
+            "name": "env.dev",
+            "encodingFormat": "application/octet-stream",
+            "contentSize": 128,
+            "description": "",
+            "contentUrl": "https://localhost:7000/api/access/datafile/53411"
+        },
+        {
+            "@type": "DataDownload",
+            "name": "env.prod",
+            "encodingFormat": "application/octet-stream",
+            "contentSize": 81,
+            "description": "",
+            "contentUrl": "https://localhost:7000/api/access/datafile/53424"
+        },
+        {
+            "@type": "DataDownload",
+            "name": "LICENSE.txt",
+            "encodingFormat": "text/plain",
+            "contentSize": 11358,
+            "description": "",
+            "contentUrl": "https://localhost:7000/api/access/datafile/53441"
+        },
+        {
+            "@type": "DataDownload",
+            "name": "Makefile",
+            "encodingFormat": "text/x-makefile",
+            "contentSize": 5095,
+            "description": "",
+            "contentUrl": "https://localhost:7000/api/access/datafile/53374"
+        },
+        {
+            "@type": "DataDownload",
+            "name": "README.md",
+            "encodingFormat": "text/markdown",
+            "contentSize": 29592,
+            "description": "",
+            "contentUrl": "https://localhost:7000/api/access/datafile/53407"
+        },
+        {
+            "@type": "DataDownload",
+            "name": "backend_config.json",
+            "encodingFormat": "application/json",
+            "contentSize": 784,
+            "description": "",
+            "contentUrl": "https://localhost:7000/api/access/datafile/53366"
+        },
+        {
+            "@type": "DataDownload",
+            "name": "backend_config_demo.json",
+            "encodingFormat": "application/json",
+            "contentSize": 216,
+            "description": "",
+            "contentUrl": "https://localhost:7000/api/access/datafile/53350"
+        },
+        {
+            "@type": "DataDownload",
+            "name": "example_oath_secrets.json",
+            "encodingFormat": "application/json",
+            "contentSize": 419,
+            "description": "",
+            "contentUrl": "https://localhost:7000/api/access/datafile/53438"
+        },
+        {
+            "@type": "DataDownload",
+            "name": "frontend_config.json",
+            "encodingFormat": "application/json",
+            "contentSize": 6781,
+            "description": "",
+            "contentUrl": "https://localhost:7000/api/access/datafile/53398"
+        },
+        {
+            "@type": "DataDownload",
+            "name": "favicon.ico",
+            "encodingFormat": "image/x-icon",
+            "contentSize": 814,
+            "description": "",
+            "contentUrl": "https://localhost:7000/api/access/datafile/53367"
+        },
+        {
+            "@type": "DataDownload",
+            "name": "footer.html",
+            "encodingFormat": "text/html",
+            "contentSize": 414,
+            "description": "",
+            "contentUrl": "https://localhost:7000/api/access/datafile/53416"
+        },
+        {
+            "@type": "DataDownload",
+            "name": "header.html",
+            "encodingFormat": "text/html",
+            "contentSize": 755,
+            "description": "",
+            "contentUrl": "https://localhost:7000/api/access/datafile/53392"
+        },
+        {
+            "@type": "DataDownload",
+            "name": "dataverse-icon.svg",
+            "encodingFormat": "image/svg+xml",
+            "contentSize": 1107,
+            "description": "",
+            "contentUrl": "https://localhost:7000/api/access/datafile/53387"
+        },
+        {
+            "@type": "DataDownload",
+            "name": "dataverse_r_project.png",
+            "encodingFormat": "image/png",
+            "contentSize": 10253,
+            "description": "",
+            "contentUrl": "https://localhost:7000/api/access/datafile/53386"
+        },
+        {
+            "@type": "DataDownload",
+            "name": "header.html",
+            "encodingFormat": "text/html",
+            "contentSize": 756,
+            "description": "",
+            "contentUrl": "https://localhost:7000/api/access/datafile/53385"
+        },
+        {
+            "@type": "DataDownload",
+            "name": "Dockerfile",
+            "encodingFormat": "application/x-docker-file",
+            "contentSize": 861,
+            "description": "",
+            "contentUrl": "https://localhost:7000/api/access/datafile/53439"
+        },
+        {
+            "@type": "DataDownload",
+            "name": "go.mod",
+            "encodingFormat": "application/octet-stream",
+            "contentSize": 1156,
+            "description": "",
+            "contentUrl": "https://localhost:7000/api/access/datafile/53403"
+        },
+        {
+            "@type": "DataDownload",
+            "name": "go.sum",
+            "encodingFormat": "application/octet-stream",
+            "contentSize": 9783,
+            "description": "",
+            "contentUrl": "https://localhost:7000/api/access/datafile/53372"
+        },
+        {
+            "@type": "DataDownload",
+            "name": "USERTrust_RSA_Certification_Authority.pem",
+            "encodingFormat": "application/octet-stream",
+            "contentSize": 2094,
+            "description": "",
+            "contentUrl": "https://localhost:7000/api/access/datafile/53378"
+        },
+        {
+            "@type": "DataDownload",
+            "name": "main.go",
+            "encodingFormat": "application/octet-stream",
+            "contentSize": 829,
+            "description": "",
+            "contentUrl": "https://localhost:7000/api/access/datafile/53400"
+        },
+        {
+            "@type": "DataDownload",
+            "name": "compare.go",
+            "encodingFormat": "application/octet-stream",
+            "contentSize": 3444,
+            "description": "",
+            "contentUrl": "https://localhost:7000/api/access/datafile/53373"
+        },
+        {
+            "@type": "DataDownload",
+            "name": "dv_objects.go",
+            "encodingFormat": "application/octet-stream",
+            "contentSize": 1338,
+            "description": "",
+            "contentUrl": "https://localhost:7000/api/access/datafile/53415"
+        },
+        {
+            "@type": "DataDownload",
+            "name": "new_dataset.go",
+            "encodingFormat": "application/octet-stream",
+            "contentSize": 1240,
+            "description": "",
+            "contentUrl": "https://localhost:7000/api/access/datafile/53391"
+        },
+        {
+            "@type": "DataDownload",
+            "name": "oauth.go",
+            "encodingFormat": "application/octet-stream",
+            "contentSize": 1133,
+            "description": "",
+            "contentUrl": "https://localhost:7000/api/access/datafile/53394"
+        },
+        {
+            "@type": "DataDownload",
+            "name": "store.go",
+            "encodingFormat": "application/octet-stream",
+            "contentSize": 2256,
+            "description": "",
+            "contentUrl": "https://localhost:7000/api/access/datafile/53426"
+        },
+        {
+            "@type": "DataDownload",
+            "name": "backend_config.go",
+            "encodingFormat": "application/octet-stream",
+            "contentSize": 9594,
+            "description": "",
+            "contentUrl": "https://localhost:7000/api/access/datafile/53382"
+        },
+        {
+            "@type": "DataDownload",
+            "name": "frontend_config.go",
+            "encodingFormat": "application/octet-stream",
+            "contentSize": 2719,
+            "description": "",
+            "contentUrl": "https://localhost:7000/api/access/datafile/53348"
+        },
+        {
+            "@type": "DataDownload",
+            "name": "destination_plugin.go",
+            "encodingFormat": "application/octet-stream",
+            "contentSize": 1459,
+            "description": "",
+            "contentUrl": "https://localhost:7000/api/access/datafile/53353"
+        },
+        {
+            "@type": "DataDownload",
+            "name": "file_size_hash.go",
+            "encodingFormat": "application/octet-stream",
+            "contentSize": 592,
+            "description": "",
+            "contentUrl": "https://localhost:7000/api/access/datafile/53375"
+        },
+        {
+            "@type": "DataDownload",
+            "name": "io.go",
+            "encodingFormat": "application/octet-stream",
+            "contentSize": 7179,
+            "description": "",
+            "contentUrl": "https://localhost:7000/api/access/datafile/53406"
+        },
+        {
+            "@type": "DataDownload",
+            "name": "io_types.go",
+            "encodingFormat": "application/octet-stream",
+            "contentSize": 1430,
+            "description": "",
+            "contentUrl": "https://localhost:7000/api/access/datafile/53397"
+        },
+        {
+            "@type": "DataDownload",
+            "name": "job.go",
+            "encodingFormat": "application/octet-stream",
+            "contentSize": 3464,
+            "description": "",
+            "contentUrl": "https://localhost:7000/api/access/datafile/53377"
+        },
+        {
+            "@type": "DataDownload",
+            "name": "oath.go",
+            "encodingFormat": "application/octet-stream",
+            "contentSize": 6689,
+            "description": "",
+            "contentUrl": "https://localhost:7000/api/access/datafile/53408"
+        },
+        {
+            "@type": "DataDownload",
+            "name": "persisting.go",
+            "encodingFormat": "application/octet-stream",
+            "contentSize": 9567,
+            "description": "",
+            "contentUrl": "https://localhost:7000/api/access/datafile/53429"
+        },
+        {
+            "@type": "DataDownload",
+            "name": "quick_xor_hash.go",
+            "encodingFormat": "application/octet-stream",
+            "contentSize": 1272,
+            "description": "",
+            "contentUrl": "https://localhost:7000/api/access/datafile/53358"
+        },
+        {
+            "@type": "DataDownload",
+            "name": "rehashing.go",
+            "encodingFormat": "application/octet-stream",
+            "contentSize": 5047,
+            "description": "",
+            "contentUrl": "https://localhost:7000/api/access/datafile/53419"
+        },
+        {
+            "@type": "DataDownload",
+            "name": "tree.go",
+            "encodingFormat": "application/octet-stream",
+            "contentSize": 2061,
+            "description": "",
+            "contentUrl": "https://localhost:7000/api/access/datafile/53383"
+        },
+        {
+            "@type": "DataDownload",
+            "name": "utils.go",
+            "encodingFormat": "application/octet-stream",
+            "contentSize": 2473,
+            "description": "",
+            "contentUrl": "https://localhost:7000/api/access/datafile/53444"
+        },
+        {
+            "@type": "DataDownload",
+            "name": "dataverse_read.go",
+            "encodingFormat": "application/octet-stream",
+            "contentSize": 7057,
+            "description": "",
+            "contentUrl": "https://localhost:7000/api/access/datafile/53376"
+        },
+        {
+            "@type": "DataDownload",
+            "name": "dataverse_write.go",
+            "encodingFormat": "application/octet-stream",
+            "contentSize": 5395,
+            "description": "",
+            "contentUrl": "https://localhost:7000/api/access/datafile/53414"
+        },
+        {
+            "@type": "DataDownload",
+            "name": "sword.go",
+            "encodingFormat": "application/octet-stream",
+            "contentSize": 2024,
+            "description": "",
+            "contentUrl": "https://localhost:7000/api/access/datafile/53368"
+        },
+        {
+            "@type": "DataDownload",
+            "name": "version.go",
+            "encodingFormat": "application/octet-stream",
+            "contentSize": 3081,
+            "description": "",
+            "contentUrl": "https://localhost:7000/api/access/datafile/53410"
+        },
+        {
+            "@type": "DataDownload",
+            "name": "destination.go",
+            "encodingFormat": "application/octet-stream",
+            "contentSize": 850,
+            "description": "",
+            "contentUrl": "https://localhost:7000/api/access/datafile/53362"
+        },
+        {
+            "@type": "DataDownload",
+            "name": "config.go",
+            "encodingFormat": "application/octet-stream",
+            "contentSize": 1272,
+            "description": "",
+            "contentUrl": "https://localhost:7000/api/access/datafile/53430"
+        },
+        {
+            "@type": "DataDownload",
+            "name": "default_frontend_config.json",
+            "encodingFormat": "application/json",
+            "contentSize": 3919,
+            "description": "",
+            "contentUrl": "https://localhost:7000/api/access/datafile/53434"
+        },
+        {
+            "@type": "DataDownload",
+            "name": "frontend.go",
+            "encodingFormat": "application/octet-stream",
+            "contentSize": 559,
+            "description": "",
+            "contentUrl": "https://localhost:7000/api/access/datafile/53404"
+        },
+        {
+            "@type": "DataDownload",
+            "name": "main.go",
+            "encodingFormat": "application/octet-stream",
+            "contentSize": 5950,
+            "description": "",
+            "contentUrl": "https://localhost:7000/api/access/datafile/53390"
+        },
+        {
+            "@type": "DataDownload",
+            "name": "logger.go",
+            "encodingFormat": "application/octet-stream",
+            "contentSize": 125,
+            "description": "",
+            "contentUrl": "https://localhost:7000/api/access/datafile/53360"
+        },
+        {
+            "@type": "DataDownload",
+            "name": "registry.go",
+            "encodingFormat": "application/octet-stream",
+            "contentSize": 1947,
+            "description": "",
+            "contentUrl": "https://localhost:7000/api/access/datafile/53425"
+        },
+        {
+            "@type": "DataDownload",
+            "name": "compare.go",
+            "encodingFormat": "application/octet-stream",
+            "contentSize": 3493,
+            "description": "",
+            "contentUrl": "https://localhost:7000/api/access/datafile/53369"
+        },
+        {
+            "@type": "DataDownload",
+            "name": "copy_metadata.go",
+            "encodingFormat": "application/octet-stream",
+            "contentSize": 1893,
+            "description": "",
+            "contentUrl": "https://localhost:7000/api/access/datafile/53433"
+        },
+        {
+            "@type": "DataDownload",
+            "name": "options.go",
+            "encodingFormat": "application/octet-stream",
+            "contentSize": 1350,
+            "description": "",
+            "contentUrl": "https://localhost:7000/api/access/datafile/53442"
+        },
+        {
+            "@type": "DataDownload",
+            "name": "search.go",
+            "encodingFormat": "application/octet-stream",
+            "contentSize": 1483,
+            "description": "",
+            "contentUrl": "https://localhost:7000/api/access/datafile/53399"
+        },
+        {
+            "@type": "DataDownload",
+            "name": "streams.go",
+            "encodingFormat": "application/octet-stream",
+            "contentSize": 414,
+            "description": "",
+            "contentUrl": "https://localhost:7000/api/access/datafile/53413"
+        },
+        {
+            "@type": "DataDownload",
+            "name": "common.go",
+            "encodingFormat": "application/octet-stream",
+            "contentSize": 550,
+            "description": "",
+            "contentUrl": "https://localhost:7000/api/access/datafile/53354"
+        },
+        {
+            "@type": "DataDownload",
+            "name": "query.go",
+            "encodingFormat": "application/octet-stream",
+            "contentSize": 1516,
+            "description": "",
+            "contentUrl": "https://localhost:7000/api/access/datafile/53435"
+        },
+        {
+            "@type": "DataDownload",
+            "name": "search.go",
+            "encodingFormat": "application/octet-stream",
+            "contentSize": 1012,
+            "description": "",
+            "contentUrl": "https://localhost:7000/api/access/datafile/53436"
+        },
+        {
+            "@type": "DataDownload",
+            "name": "streams.go",
+            "encodingFormat": "application/octet-stream",
+            "contentSize": 822,
+            "description": "",
+            "contentUrl": "https://localhost:7000/api/access/datafile/53384"
+        },
+        {
+            "@type": "DataDownload",
+            "name": "options.go",
+            "encodingFormat": "application/octet-stream",
+            "contentSize": 1754,
+            "description": "",
+            "contentUrl": "https://localhost:7000/api/access/datafile/53364"
+        },
+        {
+            "@type": "DataDownload",
+            "name": "query.go",
+            "encodingFormat": "application/octet-stream",
+            "contentSize": 1545,
+            "description": "",
+            "contentUrl": "https://localhost:7000/api/access/datafile/53370"
+        },
+        {
+            "@type": "DataDownload",
+            "name": "search.go",
+            "encodingFormat": "application/octet-stream",
+            "contentSize": 1311,
+            "description": "",
+            "contentUrl": "https://localhost:7000/api/access/datafile/53437"
+        },
+        {
+            "@type": "DataDownload",
+            "name": "streams.go",
+            "encodingFormat": "application/octet-stream",
+            "contentSize": 1900,
+            "description": "",
+            "contentUrl": "https://localhost:7000/api/access/datafile/53440"
+        },
+        {
+            "@type": "DataDownload",
+            "name": "options.go",
+            "encodingFormat": "application/octet-stream",
+            "contentSize": 1647,
+            "description": "",
+            "contentUrl": "https://localhost:7000/api/access/datafile/53347"
+        },
+        {
+            "@type": "DataDownload",
+            "name": "query.go",
+            "encodingFormat": "application/octet-stream",
+            "contentSize": 2230,
+            "description": "",
+            "contentUrl": "https://localhost:7000/api/access/datafile/53349"
+        },
+        {
+            "@type": "DataDownload",
+            "name": "search.go",
+            "encodingFormat": "application/octet-stream",
+            "contentSize": 1178,
+            "description": "",
+            "contentUrl": "https://localhost:7000/api/access/datafile/53380"
+        },
+        {
+            "@type": "DataDownload",
+            "name": "streams.go",
+            "encodingFormat": "application/octet-stream",
+            "contentSize": 1542,
+            "description": "",
+            "contentUrl": "https://localhost:7000/api/access/datafile/53346"
+        },
+        {
+            "@type": "DataDownload",
+            "name": "checksum.go",
+            "encodingFormat": "application/octet-stream",
+            "contentSize": 747,
+            "description": "",
+            "contentUrl": "https://localhost:7000/api/access/datafile/53432"
+        },
+        {
+            "@type": "DataDownload",
+            "name": "client.go",
+            "encodingFormat": "application/octet-stream",
+            "contentSize": 7133,
+            "description": "",
+            "contentUrl": "https://localhost:7000/api/access/datafile/53405"
+        },
+        {
+            "@type": "DataDownload",
+            "name": "options.go",
+            "encodingFormat": "application/octet-stream",
+            "contentSize": 1220,
+            "description": "",
+            "contentUrl": "https://localhost:7000/api/access/datafile/53355"
+        },
+        {
+            "@type": "DataDownload",
+            "name": "query.go",
+            "encodingFormat": "application/octet-stream",
+            "contentSize": 1983,
+            "description": "",
+            "contentUrl": "https://localhost:7000/api/access/datafile/53443"
+        },
+        {
+            "@type": "DataDownload",
+            "name": "search.go",
+            "encodingFormat": "application/octet-stream",
+            "contentSize": 554,
+            "description": "",
+            "contentUrl": "https://localhost:7000/api/access/datafile/53412"
+        },
+        {
+            "@type": "DataDownload",
+            "name": "streams.go",
+            "encodingFormat": "application/octet-stream",
+            "contentSize": 1381,
+            "description": "",
+            "contentUrl": "https://localhost:7000/api/access/datafile/53361"
+        },
+        {
+            "@type": "DataDownload",
+            "name": "query.go",
+            "encodingFormat": "application/octet-stream",
+            "contentSize": 2957,
+            "description": "",
+            "contentUrl": "https://localhost:7000/api/access/datafile/53381"
+        },
+        {
+            "@type": "DataDownload",
+            "name": "streams.go",
+            "encodingFormat": "application/octet-stream",
+            "contentSize": 828,
+            "description": "",
+            "contentUrl": "https://localhost:7000/api/access/datafile/53371"
+        },
+        {
+            "@type": "DataDownload",
+            "name": "common.go",
+            "encodingFormat": "application/octet-stream",
+            "contentSize": 3562,
+            "description": "",
+            "contentUrl": "https://localhost:7000/api/access/datafile/53351"
+        },
+        {
+            "@type": "DataDownload",
+            "name": "options.go",
+            "encodingFormat": "application/octet-stream",
+            "contentSize": 1604,
+            "description": "",
+            "contentUrl": "https://localhost:7000/api/access/datafile/53422"
+        },
+        {
+            "@type": "DataDownload",
+            "name": "query.go",
+            "encodingFormat": "application/octet-stream",
+            "contentSize": 2001,
+            "description": "",
+            "contentUrl": "https://localhost:7000/api/access/datafile/53363"
+        },
+        {
+            "@type": "DataDownload",
+            "name": "streams.go",
+            "encodingFormat": "application/octet-stream",
+            "contentSize": 1157,
+            "description": "",
+            "contentUrl": "https://localhost:7000/api/access/datafile/53396"
+        },
+        {
+            "@type": "DataDownload",
+            "name": "common.go",
+            "encodingFormat": "application/octet-stream",
+            "contentSize": 4191,
+            "description": "",
+            "contentUrl": "https://localhost:7000/api/access/datafile/53388"
+        },
+        {
+            "@type": "DataDownload",
+            "name": "query.go",
+            "encodingFormat": "application/octet-stream",
+            "contentSize": 953,
+            "description": "",
+            "contentUrl": "https://localhost:7000/api/access/datafile/53420"
+        },
+        {
+            "@type": "DataDownload",
+            "name": "search.go",
+            "encodingFormat": "application/octet-stream",
+            "contentSize": 907,
+            "description": "",
+            "contentUrl": "https://localhost:7000/api/access/datafile/53379"
+        },
+        {
+            "@type": "DataDownload",
+            "name": "streams.go",
+            "encodingFormat": "application/octet-stream",
+            "contentSize": 1110,
+            "description": "",
+            "contentUrl": "https://localhost:7000/api/access/datafile/53365"
+        },
+        {
+            "@type": "DataDownload",
+            "name": "common.go",
+            "encodingFormat": "application/octet-stream",
+            "contentSize": 2504,
+            "description": "",
+            "contentUrl": "https://localhost:7000/api/access/datafile/53401"
+        },
+        {
+            "@type": "DataDownload",
+            "name": "options.go",
+            "encodingFormat": "application/octet-stream",
+            "contentSize": 887,
+            "description": "",
+            "contentUrl": "https://localhost:7000/api/access/datafile/53427"
+        },
+        {
+            "@type": "DataDownload",
+            "name": "query.go",
+            "encodingFormat": "application/octet-stream",
+            "contentSize": 1926,
+            "description": "",
+            "contentUrl": "https://localhost:7000/api/access/datafile/53428"
+        },
+        {
+            "@type": "DataDownload",
+            "name": "streams.go",
+            "encodingFormat": "application/octet-stream",
+            "contentSize": 1468,
+            "description": "",
+            "contentUrl": "https://localhost:7000/api/access/datafile/53356"
+        },
+        {
+            "@type": "DataDownload",
+            "name": "compare_request.go",
+            "encodingFormat": "application/octet-stream",
+            "contentSize": 499,
+            "description": "",
+            "contentUrl": "https://localhost:7000/api/access/datafile/53357"
+        },
+        {
+            "@type": "DataDownload",
+            "name": "hash_type.go",
+            "encodingFormat": "application/octet-stream",
+            "contentSize": 354,
+            "description": "",
+            "contentUrl": "https://localhost:7000/api/access/datafile/53418"
+        },
+        {
+            "@type": "DataDownload",
+            "name": "options_request.go",
+            "encodingFormat": "application/octet-stream",
+            "contentSize": 342,
+            "description": "",
+            "contentUrl": "https://localhost:7000/api/access/datafile/53431"
+        },
+        {
+            "@type": "DataDownload",
+            "name": "select_item.go",
+            "encodingFormat": "application/octet-stream",
+            "contentSize": 177,
+            "description": "",
+            "contentUrl": "https://localhost:7000/api/access/datafile/53402"
+        },
+        {
+            "@type": "DataDownload",
+            "name": "stream.go",
+            "encodingFormat": "application/octet-stream",
+            "contentSize": 171,
+            "description": "",
+            "contentUrl": "https://localhost:7000/api/access/datafile/53409"
+        },
+        {
+            "@type": "DataDownload",
+            "name": "stream_params.go",
+            "encodingFormat": "application/octet-stream",
+            "contentSize": 307,
+            "description": "",
+            "contentUrl": "https://localhost:7000/api/access/datafile/53395"
+        },
+        {
+            "@type": "DataDownload",
+            "name": "http_server.go",
+            "encodingFormat": "application/octet-stream",
+            "contentSize": 1960,
+            "description": "",
+            "contentUrl": "https://localhost:7000/api/access/datafile/53359"
+        },
+        {
+            "@type": "DataDownload",
+            "name": "node.go",
+            "encodingFormat": "application/octet-stream",
+            "contentSize": 1066,
+            "description": "",
+            "contentUrl": "https://localhost:7000/api/access/datafile/53389"
+        },
+        {
+            "@type": "DataDownload",
+            "name": "main.go",
+            "encodingFormat": "application/octet-stream",
+            "contentSize": 740,
+            "description": "",
+            "contentUrl": "https://localhost:7000/api/access/datafile/53423"
+        },
+        {
+            "@type": "DataDownload",
+            "name": "workers.go",
+            "encodingFormat": "application/octet-stream",
+            "contentSize": 844,
+            "description": "",
+            "contentUrl": "https://localhost:7000/api/access/datafile/53393"
+        }
+    ]
+}
