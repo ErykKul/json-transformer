@@ -71,6 +71,20 @@ public class TransformerTest {
     }
 
     /**
+     * Extra RO-Crate example.
+     * 
+     * @throws IOException thrown when a file is not found.
+     */
+    @Test
+    public void testRoCrateTransformer() throws IOException {
+        final Transformer transformer = FACTORY_WITH_LOGGER.createFromFile("examples/extra/transformer.json");
+        final JsonObject result = transformer.transform(parse("examples/extra/example.json"));
+        System.out.println(result);
+        assertEquals(parse("examples/extra/transformed.json"), result);
+        assertEquals(result, Utils.asJsonValue(Utils.asObject(result)));
+    }
+
+    /**
      * Examples from the documentation.
      * 
      * @throws IOException thrown when a file is not found.

@@ -193,7 +193,7 @@ public class Transformation {
         for (int i = 0; i < sourceArray.size(); i++) {
             result = Utils.isArray(result) ? result : EMPTY_JSON_ARRAY;
             final JsonArray resultArray = result.asJsonArray();
-            final JsonValue resultObject = resultArray.size() > i ? resultArray.get(i) : EMPTY_JSON_OBJECT;
+            final JsonValue resultObject = (!append && resultArray.size() > i) ? resultArray.get(i) : EMPTY_JSON_OBJECT;
             final TransformationCtx localContext = new TransformationCtx(ctx.getGlobalSource(), ctx.getGlobalResult(),
                     sourceArray.get(i), resultObject, this, engineHolder);
             final JsonValue transformed = transform(localContext, remainingSourcePointers, remainingResultPointers,
