@@ -24,7 +24,7 @@ import jakarta.json.JsonValue;
  * "https://github.com/ErykKul/json-transformer?tab=readme-ov-file#transformer">Transformer</a>
  * 
  * @author Eryk Kulikowski
- * @version 1.0.3
+ * @version 1.0.4
  * @since 1.0.0
  */
 public class Transformation {
